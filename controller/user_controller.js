@@ -13,3 +13,17 @@ exports.findByEmail = function(req, res){
         res.json(user);
     });
 }
+
+exports.userSignUp = function(req, res){
+    const { nickname, email, password, phone, authtype, usertype } = req.body;
+    User.create(nickname, email, password, phone, authtype, usertype, (err, user)=>{
+        if (err) res.send(err);
+        res.json({
+            isSuccess: true,
+            result : [
+                user
+            ]
+        });
+    });
+
+}
