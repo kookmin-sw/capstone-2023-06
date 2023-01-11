@@ -19,8 +19,8 @@ exports.userSignUp = function(req, res){
     User.create(nickname, email, password, phone, authtype, usertype, (err, user)=>{
         if (err) res.send(err);
         res.json({
-            isSuccess: true,
-            result : [
+            "isSuccess": true,
+            "result" : [
                 user
             ]
         });

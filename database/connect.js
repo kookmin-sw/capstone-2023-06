@@ -1,11 +1,9 @@
-const mysql = require('mysql');
-const dotenv = require('dotenv');
+const mysql = require('mysql2');
 const config = require('./config');
-dotenv.config();
 
 // 현재 test 연결
 const conn = mysql.createConnection(
-    config['test']  
+    config['dev']  
 );
 
 conn.connect((err)=>{

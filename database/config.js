@@ -1,19 +1,21 @@
 const dotenv = require("dotenv");
-
-dotenv.config();
+const path = require("path");
+dotenv.config({path:path.join(__dirname,"/./../enviroment/.env")});
 
 const config = {
-    development: {
+    release: {
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
-        database: 'project_a'
+        port: process.env.DB_PORT,
+        database: process.env.DB_NAME
     },
-    test: {
-        host: process.env.DB_HOST,
+    dev: {
+        host: "dev_db_container",
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
-        database: 'project_a_test'
+        port: process.env.DB_PORT,
+        database: process.env.DB_TEST_NAME
     }
   };
 

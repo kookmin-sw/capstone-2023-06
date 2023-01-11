@@ -138,6 +138,8 @@ User.create = function(nickname, email, password, phone, authtype, usertype, res
             console.log("error: ", err);
             result(err, null);
         } else {
+            console.log(res);
+            result(null, res);
             console.log(`Create New User: ${uid}`)
         }
     });
