@@ -2,7 +2,9 @@
 
 ## 개발환경 구성
 docker-compose로 db / node 컨테이너로 구성되어 있음
+
 mysql 버전: 8.0.31
+
 node 버전: 19.4.0
 ## 구성 방법
 ### 1. git clone
