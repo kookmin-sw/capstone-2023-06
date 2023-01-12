@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  dev-nodejs:
+    image: node:19.4.0
+    container_name: dev_nodejs
+    ports:
+      - "${TEST_SERVER_PORT}:${TEST_SERVER_PORT}"
+    volumes:
+      - "../:/dev-workspace"
+    working_dir: "/dev-workspace"
+    env_file:
+      - .env
+    environment:
+      TZ: "Asia/Seoul"
+    stdin_open: true # `-i`
+    tty: true # `-t`
+    networks:
+      - default
+      - dev_net
+    depends_on:
+      - dev-database
+    
+  dev-database:
+    image: mysql:8.0.31
+    container_name: dev_db_container
+    ports:
+      - "${DB_HOST_PORT}:3306"
+    volumes:
+      - ../database/sql/init_user.sql:/docker-entrypoint-initdb.d/init_user.sql
+    environment:
+      MYSQL_DATABASE: "${DB_TEST_NAME}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASS}"
+      TZ: "Asia/Seoul"
+    stdin_open: true # `-i`
+    tty: true # `-t`
+    networks:
+      - default
+      - dev_net
+
+networks:
+  dev_net:
+    driver: bridge

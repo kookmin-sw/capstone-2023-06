@@ -6,6 +6,9 @@ var bodyParser = require("body-parser");
 var swaggerJsdoc = require("swagger-jsdoc");
 var swaggerUi = require("swagger-ui-express");
 const swaggerOption = require("./swagger/swagger.js")
+const dotenv = require("dotenv");
+const path = require("path");
+dotenv.config({path:path.join(__dirname,"/./../enviroment/.env")});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
@@ -24,4 +27,4 @@ app.use("/api-docs",
     swaggerUi.setup(specs, {explorer: true})
 );
 
-app.listen(3000, () => console.log("server start"));
+app.listen(process.env.TEST_SERVER_PORT, () => console.log("server start"));

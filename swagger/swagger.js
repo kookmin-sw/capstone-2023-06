@@ -1,3 +1,7 @@
+const dotenv = require("dotenv");
+const path = require("path");
+dotenv.config({path:path.join(__dirname,"/./../enviroment/.env")});
+
 const options = {
     definition: {
         openapi: "3.0.0",
@@ -20,7 +24,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:3000/api",
+                url: `http://localhost:${process.env.TEST_SERVER_PORT}/api`,
             },
         ],
     },
