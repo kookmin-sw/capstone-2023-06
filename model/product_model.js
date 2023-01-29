@@ -99,7 +99,19 @@ const Product = function(product){
     this.modify_at = product.modify_at;
 }
 
-Product.findById = function(id, result){
+Product.findTagByProductId = function(id, result) {
+    mysql.query(`select * from product_tag where id = ${id}`, (err, res)=>{
+        if(err){
+            console.log("error: ", err);
+            result(err, null);
+        } else {
+            console.log(result);
+            result(null, res);
+        }
+    });
+}
+
+Product.findById = function(id, result) {
     mysql.query(`select * from product where id = ${id}`, (err, res)=>{
         if(err){
             console.log("error: ", err);
@@ -111,8 +123,8 @@ Product.findById = function(id, result){
     });
 }
 
-Product.createTag = function(x, y, product_id, picture_id, result) {
-    mysql.query(`insert into product_tag values (null, ${x}, ${y}, ${product_id}, ${picture_id})`, (err, res)=>{
+Product.createTag = function(x, y, product_id, target_product_id, picture_id,result) {
+    mysql.query(`insert into product_tag values (null, ${x}, ${y}, ${product_id}, ${target_product_id}, ${picture_id})`, (err, res)=>{
         if (err) {
             console.log("error: ", err);
             result(err, null);
@@ -135,4 +147,4 @@ Product.create = function(author_id, title, content, create_at, modify_at, resul
     });
 }
 
-module.exports = User;
+module.exports = Product;

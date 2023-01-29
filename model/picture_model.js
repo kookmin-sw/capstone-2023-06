@@ -5,6 +5,12 @@ const Picture = function(picture) {
     this.url = picture.url;
 }
 
+Picture.findById = function(id, result) {
+    
+}
+
 Picture.create = function(img, result) {
 
 }
+
+module.exports = Picture;
