@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const UserRoute = require("./routes/user_routes.js");
+const ProductRoute = require("./routes/product_routes.js");
 var bodyParser = require("body-parser");
 var swaggerJsdoc = require("swagger-jsdoc");
 var swaggerUi = require("swagger-ui-express");
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
 app.use("/api/user", UserRoute);
+app.use("/api/product", ProductRoute);
 
 app.get("/api", (req, res) => {
     res.json({

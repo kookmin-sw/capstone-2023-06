@@ -100,7 +100,7 @@ const Product = function(product){
 }
 
 Product.findTagByProductId = function(id, result) {
-    mysql.query(`select * from product_tag where id = ${id}`, (err, res)=>{
+    mysql.query(`select * from product_tag where product_id = ${id}`, (err, res)=>{
         if(err){
             console.log("error: ", err);
             result(err, null);
@@ -124,6 +124,7 @@ Product.findById = function(id, result) {
 }
 
 Product.createTag = function(x, y, product_id, target_product_id, picture_id,result) {
+    
     mysql.query(`insert into product_tag values (null, ${x}, ${y}, ${product_id}, ${target_product_id}, ${picture_id})`, (err, res)=>{
         if (err) {
             console.log("error: ", err);
@@ -135,8 +136,8 @@ Product.createTag = function(x, y, product_id, target_product_id, picture_id,res
     });
 }
 
-Product.create = function(author_id, title, content, create_at, modify_at, result){
-    mysql.query(`insert into product values (null, ${author_id}, "${title}", "${content}", ${create_at}, ${modify_at})`, (err, res)=>{
+Product.create = function(author_id, title, content, created_at, result){
+    mysql.query(`insert into product values (null, ${author_id},'${title}', '${content}', '${created_at}', '${created_at}')`, (err, res)=>{
         if (err) {
             console.log("error: ", err);
             result(err, null);
