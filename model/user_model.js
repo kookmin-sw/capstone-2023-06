@@ -12,7 +12,7 @@ const User = function(user){
 }
 
 User.findByEmail = function (email, result) {
-    mysql.query(`Select * from ${table} where email = ?`, email, (err, res) =>{
+    mysql.query(`Select * from ${table} where email = '${email}'`, email, (err, res) =>{
         if (err) {
             result(err, null);
         } else {

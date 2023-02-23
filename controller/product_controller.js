@@ -58,10 +58,23 @@ exports.findById = function (req, res) {
 }
 
 exports.create = async function (req, res) {
+    if (!req.session || !req.session.isLogin) {
+        console.log('logouted')
+        res.status(401).json({
+            "isSuccess": false,
+            "result": [
+                ''
+            ]
+        });
+        return;
+    }
     const { author_id, title, content, tags } = req.body;
     const tagsJson = JSON.parse(tags)
     const imgIds = []
 
+    console.log('req.session.user', req.session.user)
+    //author_id 를 user로 변경
+    return
     Product.create(author_id, title, content, new Date().toISOString().slice(0, 19).replace('T', ' '), async (err, product) => {
         for (let i = 0; i < req.files.length; i++) {
             const id = await new Promise((resolve, reject) => {
