@@ -1,19 +1,30 @@
 {
-  "name": "project_a_api",
+  "name": "desksetup_project",
   "version": "1.0.0",
   "description": "first make",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node main.js",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
     "express": "^4.18.1",
+    "multer": "^1.4.5-lts.1",
+    "express-session": "^1.17.3",
     "mysql2": "^2.3.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.5.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^29.4.1"
   }
 }

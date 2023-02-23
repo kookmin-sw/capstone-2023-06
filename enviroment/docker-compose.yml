@@ -27,7 +27,7 @@ services:
     ports:
       - "${DB_HOST_PORT}:3306"
     volumes:
-      - ../database/sql/init:/docker-entrypoint-initdb.d
+      - ../database/sql/init:/docker-entrypoint-initdb.d/
     environment:
       MYSQL_DATABASE: "${DB_TEST_NAME}"
       MYSQL_ROOT_PASSWORD: "${DB_PASS}"

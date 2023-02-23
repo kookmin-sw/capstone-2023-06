@@ -1,35 +1,17 @@
 const express = require("express");
 var router = express.Router();
 var userController = require("../controller/user_controller.js");
-
 /**
  * @swagger
  * tags:
  *  name: User
  *  description: 유저 관리
  */
-/**
- * @swagger
- * paths:
- *  /user/get-all:
- *   get:
- *      tags: [User]
- *      summary: 유저 정보 모두 가져오기
- *      description: 모든 유저 정보 가져오기
- *      responses: 
- *          "200":
- *            description: 모든 유저 정보 가져오기 성공
- *            content: 
- *              application/json:
- *                  schema: 
- *                      $ref: '#/components/schemas/User'
- */
-router.get("/get-all", userController.findAll);
 
 /**
  * @swagger
  * paths:
- *  /user/findByEmail/{email}:
+ *  /user/{email}:
  *   get:
  *      tags: [User]
  *      summary: 특정 이메일을 가진 유저 가져오기
@@ -43,33 +25,37 @@ router.get("/get-all", userController.findAll);
  *            content: 
  *              application/json:
  *                  schema: 
- *                      $ref: '#/components/schemas/User'
+ *                      $ref: '#/components/responses/UserResponse'
  */
-router.get("/findByEmail/:email", userController.findByEmail);
+router.get("/:email", userController.findByEmail);
 
 /**
  * @swagger
  * paths:
  *  /user/sign-up:
- *    post:
+ *   post:
  *      tags: [User]
- *      sumary: 유저 가입(POST)
+ *      summary: 유저 생성하기
  *      requestBody:
- *        description: 사용자 정보를 기반으로 회원가입
- *        required: true
- *        content: 
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/PostUser'
- *      responses:
- *          "200":
- *              description: 유저 추가 완료
- *              content:
- *                application/json:
+ *          required: true
+ *          content:
+ *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/User'
+ *                      $ref: '#/components/requests/UserSignUpRequest'
+
+ *                          
+ *      responses: 
+ *          "201":
+ *            description: 특정 이메일 유저 정보 가져오기 성공
+ *            content: 
+ *              application/json:
+ *                  schema: 
+ *                      $ref: '#/components/responses/UserResponse'
  */
 router.post("/sign-up", userController.userSignUp);
+router.post("/login", userController.login);
+router.get("/auto-login", userController.autologin);
+router.get("/logout", userController.logout);
 
 module.exports = router;
 

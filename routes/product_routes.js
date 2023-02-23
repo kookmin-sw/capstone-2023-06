@@ -2,9 +2,12 @@ const express = require("express");
 var router = express.Router();
 var productController = require("../controller/product_controller.js");
 
-router.get("/product/:id", productController.findById);
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
-router.post("/product", productController.create);
+router.get("/:id", productController.findById);
+
+router.post("/", upload.array("imgs"), productController.create);
 
 module.exports = router;
 
