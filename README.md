@@ -1,34 +1,77 @@
-# Node JS Project-A
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=10390430&assignment_repo_type=AssignmentRepo)
+# Welcome to GitHub
 
-## 개발환경 구성
-docker-compose로 db / node 컨테이너로 구성되어 있음
+캡스톤 팀 생성을 축하합니다.
 
-mysql 버전: 8.0.31
+## 팀소개 및 페이지를 꾸며주세요.
 
-node 버전: 19.4.0
-## 구성 방법
-### 1. git clone
-### 2. Docker 다운로드
-### 3. Visual Studio Code Extension
-<img width="206" alt="스크린샷 2023-01-12 오전 9 32 26" src="https://user-images.githubusercontent.com/63653473/211947713-86694dd0-187e-4e6e-8e09-c1670d429d41.png">
+- 프로젝트 소개
+  - 프로젝트 설치방법 및 데모, 사용방법, 프리뷰등을 readme.md에 작성.
+  - Api나 사용방법등 내용이 많을경우 wiki에 꾸미고 링크 추가.
+
+- 팀페이지 꾸미기
+  - 프로젝트 소개 및 팀원 소개
+  - index.md 예시보고 수정.
+
+- GitHub Pages 리파지토리 Settings > Options > GitHub Pages 
+  - Source를 marster branch
+  - Theme Chooser에서 태마선택
+  - 수정후 팀페이지 확인하여 점검.
+
+**팀페이지 주소** -> https://kookmin-sw.github.io/ '{{자신의 리파지토리 아이디}}'
+
+**예시)** 2023년 0조  https://kookmin-sw.github.io/capstone-2023-00/
 
 
-Visual Studio Code Extension으로 Docker와 Dev Containers 다운로드
-### 3. .env 파일
-.env 파일을 노션의 백엔드 세션에서 찾아 다운로드 받고
-프로젝트의 **/enviroment** 폴더에 복사 붙여넣기
-### 4. envioment 폴더 진입
-> cd enviroment
-### 5. docker-compose로 빌드
-> docker compose up -d --build
-### 6. 개발
-<img width="354" alt="스크린샷 2023-01-12 오전 9 37 33" src="https://user-images.githubusercontent.com/63653473/211948341-5ec69891-bf0b-4cdc-bd6a-cd8083ddeadd.png">
+## 내용에 아래와 같은 내용들을 추가하세요.
 
-Viusal Studio Code에서 도커 탭 클릭 후 다루고 다룰 컨테이너 우클릭하고 Attach Shell 혹은 Attach Visual Studio Code 클릭하여 개발
-### 7. 실행
-node 컨테이너에서 아래의 명령어를 입력하면 서버 실행됨
-> node main.js
+### 1. 프로잭트 소개
 
-### 추가 사항
-1. DB를 Workbench 등의 툴에 연결하고 싶으면 Host는 localhost, User와 Password, Port는 .env 참고 (DB_USER / DB_PASS / DB_HOST_PORT)
-2. docker build 전에 **/database/sql/init** 에 Create Table 쿼리을 추가하여 테이블 생성 가능 (Create Table 쿼리만 가능 / build시에만 작동)
+프로젝트
+
+### 2. 소개 영상
+
+프로젝트 소개하는 영상을 추가하세요
+
+### 3. 팀 소개
+
+팀을 소개하세요.
+
+팀원정보 및 담당이나 사진 및 SNS를 이용하여 소개하세요.
+
+### 4. 사용법
+
+소스코드제출시 설치법이나 사용법을 작성하세요.
+
+### 5. 기타
+
+추가적인 내용은 자유롭게 작성하세요.
+
+
+## Markdown을 사용하여 내용꾸미기
+
+Markdown은 작문을 스타일링하기위한 가볍고 사용하기 쉬운 구문입니다. 여기에는 다음을위한 규칙이 포함됩니다.
+
+```markdown
+Syntax highlighted code block
+
+# Header 1
+## Header 2
+### Header 3
+
+- Bulleted
+- List
+
+1. Numbered
+2. List
+
+**Bold** and _Italic_ and `Code` text
+
+[Link](url) and ![Image](src)
+```
+
+자세한 내용은 [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+
+### Support or Contact
+
+readme 파일 생성에 추가적인 도움이 필요하면 [도움말](https://help.github.com/articles/about-readmes/) 이나 [contact support](https://github.com/contact) 을 이용하세요.
