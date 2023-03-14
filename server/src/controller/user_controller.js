@@ -4,6 +4,16 @@ const validEmailCheck = (email) =>{
     const pattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     return pattern.test(email)
 }
+// 비밀번호를 안보이게 하기 위해서
+const userToResponse = (user) => {
+    return {
+        "id": user.ID,
+        "nickname": user.NICKNAME,
+        "email": user.EMAIL,
+        "picture": user.PICTURE,
+        "user_role": user.USER_ROLE
+    };
+}
 
 exports.findByEmail = function (req, res) {
     User.findByEmail(req.params.email, (err, user) => {
@@ -52,17 +62,17 @@ exports.userSignUp = async function (req, res) {
 }
 
 exports.login = function (req, res) {
-    console.log('req.user', req.user)
-    req.session.user = req.user;
+    const user = userToResponse(req.user);
+    req.session.user = user;
     req.session.isLogin = true;
-    res.json({ success: true, message: "login success", result: req.user })
+    res.json({ success: true, message: "login success", result: user })
 };
 
 exports.autologin = function (req, res) {
     if (req.isAuthenticated() && req.user) {
         res.json({
             success: true,
-            user: req.user
+            user: userToResponse(req.user)
         });
         return;
     }

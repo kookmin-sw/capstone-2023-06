@@ -1,7 +1,6 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const mysql = require("../../database/connect.js");
 const User = require("../model/user_model.js");
 const { Decryption } = require("../utils/crypto-util/crypto_util.js");
 
@@ -33,8 +32,9 @@ module.exports = () => {
 
                     if (!user) return done(null, false, { message: `No User email by ${email}` });
 
-                    if (await Decryption(password, user[0].password)) return done(null, false, { message: "Not Correct Password" });
-                    return done(null, user);
+                    if (!await Decryption(password, user[0].PASSWORD)) return done(null, false, { message: "Not Correct Password" });
+                    
+                    return done(null, user[0]);
                 });
             }
         )
