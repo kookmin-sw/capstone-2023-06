@@ -1,7 +1,7 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const mysql = require("../database/connect.js");
+const mysql = require("../../database/connect.js");
 const User = require("../model/user_model.js");
 const { Decryption } = require("../utils/crypto-util/crypto_util.js");
 
