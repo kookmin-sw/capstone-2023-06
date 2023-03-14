@@ -7,9 +7,14 @@ export const Button = styled.button`
     color: white;
     background: ${({theme} ) => theme.colors.primary};
     font-size: 1rem;
-    cursor: pointer;
     outline: none;
 `;
 export const SecondaryButton = styled(Button)`
     background: ${({theme} ) => theme.colors.secondary};
+`;
+
+export const PrimaryRoundButton = styled.button`
+    background-color: ${({theme} ) => theme.colors.primary};
+    border: none;
+    border-radius: 1rem;
 `;

@@ -1,53 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { LINE_TYPE } from './type';
+
+import EditLineBlock from './EditLineBlock';
 
 export const EditorContainer = styled.div`
-    border: 1px solid black;
-    
+    background-color: #ecffeb;
+    padding: 1rem;
 `;
+
 
 const cid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   };
 
-type LineType = {
-    text: string,
-    line: Line,
-    updateContent: (e:Line)=>void,
-    addBlockHandler: (curLine:Line)=>void
-}
-const EditLine = ({ text, line, updateContent, addBlockHandler } : LineType) => {
-    const ref = React.useRef<HTMLParagraphElement>(null);
-    const [content, setContent] = React.useState<string | undefined>('');
-
-    React.useEffect(() => {
-        ref.current?.focus();
-    }, []);
-
-    function typing(e: React.FormEvent<HTMLParagraphElement>) {
-        setContent(e?.currentTarget.textContent || '');
-        setContent(ref.current?.innerHTML);
-
-        line.html = ref.current?.innerHTML || '';
-        // updateContent(line);
-    }
-
-    function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
-        if (e.key === 'Enter') {
-            // 새 EditLine 생성하고 focus 이동
-            e.preventDefault();
-            addBlockHandler(line);
-        } else if (e.key === 'Backspace' && content === '') {
-            // 현재 EditLine 삭제하고 이전 focus 이동
-            e.preventDefault();
-            ref.current?.remove();
-        }
-    }
-
-    return (
-        <p ref={ref} onInput={typing} onKeyDown={keyHandler} contentEditable suppressContentEditableWarning={true}></p>
-    )
-}
 
 type ToolButtonProps =  {
     name: string,
@@ -73,17 +39,7 @@ const ToolButton = ({ name, commandId, value = undefined } : ToolButtonProps) =>
     )
 }
 
-type Line = {
-    id: string,
-    html: string,
-    tag: string,
-    flag: Number,
-}
-
 const Editor = () => {
-
-
-
     const tools = [
         {
             name: '강조',
@@ -131,7 +87,7 @@ const Editor = () => {
         },
     ];
     
-    const [content, setContent] = React.useState<Line[]>([{ 
+    const [content, setContent] = React.useState<LINE_TYPE[]>([{ 
         id: cid(),
         html: 'aaaa',
         tag: 'p',
@@ -161,11 +117,11 @@ const Editor = () => {
         }
     }
 
-    function updateContentHandler(line: Line) {
+    function updateContentHandler(line: LINE_TYPE) {
 
     }
 
-    function addBlockHandler(curline: Line) {
+    function addBlockHandler(curline: LINE_TYPE) {
         const idx = content.findIndex(line => line.id === curline.id);
 
         // setContent([...content, {
@@ -225,13 +181,15 @@ const Editor = () => {
             <EditorContainer onKeyDown={keyHandler}>
                 {
                     content?.map(e => {
-                        return <EditLine
-                                    key={e.id} 
-                                    text={e.html}
-                                    line={e}
-                                    updateContent={updateContentHandler}
-                                    addBlockHandler={addBlockHandler}
-                                ></EditLine>
+                        return <>
+                                    <EditLineBlock
+                                        key={e.id} 
+                                        text={e.html}
+                                        line={e}
+                                        updateContent={updateContentHandler}
+                                        addBlockHandler={addBlockHandler}
+                                    ></EditLineBlock>
+                                </>
                     })
                 }
                 {/* <EditLine></EditLine> */}
@@ -243,5 +201,7 @@ const Editor = () => {
         </>
     )
 }
+
+
 
 export default Editor;

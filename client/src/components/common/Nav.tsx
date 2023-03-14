@@ -15,6 +15,7 @@ export const NavBar = ({ children } : { children: React.ReactNode}) => {
 }
 
 export const NavBarStyle = styled.nav`
+    height: 5rem;
     display: flex;
     padding-left: 0;
     margin-top: 0;
@@ -27,6 +28,7 @@ const NavBarCollapse = styled(NavBarStyle)`
     flex-basis: auto;
     flex-grow: 1;
     justify-content: end;
+    font-weight: bold;
 `;
 
 export const NavLinkItem = styled(NavLink)`

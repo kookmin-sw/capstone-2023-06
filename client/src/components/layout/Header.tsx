@@ -7,6 +7,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../modules';
 import { setUser, resetUser } from '../../modules/users';
 
+import styled from 'styled-components';
+
+const NavHeader = styled.header`
+    border-bottom: 1px solid #dfdfdf;
+`;
+
 const Header = () => {
     const nickname = useSelector((state: RootState) => state.users.nickname);
     const dispatch = useDispatch();
@@ -42,7 +48,7 @@ const Header = () => {
     }, [checkIsLoggin]);
 
     return (
-        <header className="App-header">
+        <NavHeader>
             <Container>
                 <NavBar>
                     <NavLinkItem to="/">메인</NavLinkItem>
@@ -55,7 +61,7 @@ const Header = () => {
                     {/* <PrimaryButton onClick={logoutHandler}>로그아웃</PrimaryButton> */}
                 </NavBar>
             </Container>
-        </header>
+        </NavHeader>
     )
 }
 
