@@ -1,4 +1,4 @@
-const mysql = require("../database/connect.js");
+const mysql = require("../../database/connect.js");
 const uuid = require("uuid");
 
 
