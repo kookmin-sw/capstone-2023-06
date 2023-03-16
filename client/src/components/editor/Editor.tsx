@@ -9,11 +9,9 @@ export const EditorContainer = styled.div`
     padding: 1rem;
 `;
 
-
 const cid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   };
-
 
 type ToolButtonProps =  {
     name: string,
@@ -87,12 +85,13 @@ const Editor = () => {
         },
     ];
     
-    const [content, setContent] = React.useState<LINE_TYPE[]>([{ 
+    const initialLine : LINE_TYPE = { 
         id: cid(),
-        html: 'aaaa',
+        html: '',
         tag: 'p',
         flag: 0
-    }]);
+    };
+    const [content, setContent] = React.useState<LINE_TYPE[]>([initialLine]);
     
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
         if (e.key === 'Enter') {
@@ -117,51 +116,28 @@ const Editor = () => {
         }
     }
 
-    function updateContentHandler(line: LINE_TYPE) {
+    function updateContentHandler(curline: LINE_TYPE) {
+        const idx = content.findIndex(line => line.id === curline.id);
 
+        setContent((prev) => {
+            prev[idx] = curline;
+
+            return [...prev];
+        })
     }
 
     function addBlockHandler(curline: LINE_TYPE) {
         const idx = content.findIndex(line => line.id === curline.id);
 
-        // setContent([...content, {
-        //     id: cid(),
-        //     html: 'aaa22a',
-        //     tag: 'p',
-        //     flag: 0
-        // }]);
-
         setContent((prev) => {
-            console.log(idx);
-            console.log(prev);
-            console.log(prev.splice(idx + 1, 0, {
-                id: cid(),
-                html: 'aaa22a',
-                tag: 'p',
-                flag: 0
-            }));
-            console.log(prev);
-            // prev.push({
-            //     id: cid(),
-            //     html: 'aaa22a',
-            //     tag: 'p',
-            //     flag: 0
-            // })
+            prev.splice(idx + 1, 0, initialLine);
+            
             return [
                 ...prev
-                // prev.splice(idx, 0, {
-                //     id: cid(),
-                //     html: 'aaa22a',
-                //     tag: 'p',
-                //     flag: 0
-                // })
             ]
         });
     }
-
-    // function kkk(e : React.FormEvent<HTMLDivElement>) {
-    //     e.target.nextSibling.focus();
-    // }
+    
     return (
         <>
         
@@ -181,15 +157,14 @@ const Editor = () => {
             <EditorContainer onKeyDown={keyHandler}>
                 {
                     content?.map(e => {
-                        return <>
-                                    <EditLineBlock
-                                        key={e.id} 
-                                        text={e.html}
-                                        line={e}
-                                        updateContent={updateContentHandler}
-                                        addBlockHandler={addBlockHandler}
-                                    ></EditLineBlock>
-                                </>
+                        return <EditLineBlock
+                            key={e.id} 
+                            text={e.html}
+                            line={e}
+                            updateContent={updateContentHandler}
+                            addBlockHandler={addBlockHandler}
+                            // tag={'p'}
+                        ></EditLineBlock>
                     })
                 }
                 {/* <EditLine></EditLine> */}
@@ -201,7 +176,5 @@ const Editor = () => {
         </>
     )
 }
-
-
 
 export default Editor;

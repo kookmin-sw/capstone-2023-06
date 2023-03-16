@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { IconH1 } from '@tabler/icons-react';
+import { IconH1, IconH2, IconH3, IconAbc } from '@tabler/icons-react';
+// 아이콘 : https://tabler-icons.io/
 
 const EditMenuBlock = styled.div`
     position: absolute;
-    bottom: 2rem;
+    bottom: 3rem;
     left: -2rem;
     display: flex;
     flex-direction: column;
@@ -29,22 +30,60 @@ const Menu = styled.button`
         margin-right: 0.5rem;
     }
 `
+type EditMenuProps = {
+    onClickHandler: (e:React.ElementType) => void;
+}
+type MenusType =  {
+    text: string,
+    icon: React.ReactNode,
+    ret: React.ElementType
+}
+export const EditMenu = ({ onClickHandler } : EditMenuProps) => {
+    const menus : MenusType[] = [
+        {
+            text: 'header 1',
+            icon: <IconH1/>,
+            ret: 'h1',
+        },
+        {
+            text: 'header 2',
+            icon: <IconH2/>,
+            ret: 'h2',
+        },
+        {
+            text: 'header 2',
+            icon: <IconH3/>,
+            ret: 'h3',
+        },
+        {
+            text: '일반',
+            icon: <IconAbc/>,
+            ret: 'p',
+        },
+    ];
 
-export const EditMenu = () => {
+    // function ff(e: any) {
+    //     onClickHandler()
+    // }
+
     return (
         <EditMenuBlock>
-            <Menu>
-                <IconH1 />
-                header
-            </Menu>
-            <Menu>
-                <IconH1 />
-                header
-            </Menu>
-            <Menu>
-                <IconH1 />
-                header
-            </Menu>
+            {
+                menus.map((m, idx)  => {
+                    return (
+                        <Menu
+                            key={idx}
+                            onClick={(e)=>{
+                                e.preventDefault();
+                                onClickHandler(m.ret);
+                            }}
+                        >
+                            { m.icon }
+                            { m.text }
+                        </Menu>
+                    )
+                })
+            }
         </EditMenuBlock>
     )
 }
