@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { LINE_TYPE } from './type';
 
 import EditLineBlock from './EditLineBlock';
+import SelectMenu from './SelectMenu';
 
 export const EditorContainer = styled.div`
     background-color: #ecffeb;
@@ -92,6 +93,9 @@ const Editor = () => {
         flag: 0
     };
     const [content, setContent] = React.useState<LINE_TYPE[]>([initialLine]);
+
+    const [openMenu, setOpenMenu] = React.useState<boolean>(false);
+    const [curTargetIdx, setCurTargetIdx] = React.useState<number>(0);
     
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
         if (e.key === 'Enter') {
@@ -138,6 +142,22 @@ const Editor = () => {
         });
     }
     
+    function changeCurLine(id: string) {
+        const idx = content.findIndex(line => line.id === id);
+        console.log(" +++++++++ " + idx);
+        setCurTargetIdx(idx);
+    }
+
+    function changeTagStyle(e: React.ElementType) {
+        setContent((prev) => {
+            prev[curTargetIdx].tag = e;
+            console.log(curTargetIdx);
+            return [
+                ...prev
+            ]
+        });
+    }
+
     return (
         <>
         
@@ -154,6 +174,11 @@ const Editor = () => {
                 <ToolButton name='폰트 크기' commandId='Undo'></ToolButton>
             </div>
 
+            {
+                openMenu &&
+                <SelectMenu onClickHandler={changeTagStyle}/>
+            }
+
             <EditorContainer onKeyDown={keyHandler}>
                 {
                     content?.map(e => {
@@ -163,6 +188,9 @@ const Editor = () => {
                             line={e}
                             updateContent={updateContentHandler}
                             addBlockHandler={addBlockHandler}
+                            tagStyle={e.tag}
+                            setOpenMenu={setOpenMenu}
+                            changeCurLine={changeCurLine}
                             // tag={'p'}
                         ></EditLineBlock>
                     })

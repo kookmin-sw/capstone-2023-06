@@ -18,42 +18,54 @@ type LineBlockType = {
     text: string,
     line: LINE_TYPE,
     updateContent: (e:LINE_TYPE)=>void,
+    tagStyle: React.ElementType,
+    setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>,
+    changeCurLine: (e:string)=>void,
     addBlockHandler: (curLine:LINE_TYPE)=>void
 }
-const EditLineBlock = ({ text, line, updateContent, addBlockHandler } : LineBlockType) => {
+const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, changeCurLine, addBlockHandler } : LineBlockType) => {
     const ref = React.useRef<HTMLParagraphElement>(null);
     const [focusing, setFocusing] = React.useState<boolean>(false);
-    const [openMenu, setOpenMenu] = React.useState<boolean>(false);
 
     // const [content, setContent] = React.useState<string | undefined>('');
-    const [tagStyle, setTagStyle] = React.useState<React.ElementType>('p');
+    // const [tagStyle, setTagStyle] = React.useState<React.ElementType>('p');
 
     React.useEffect(() => {
-        ref.current?.focus();
-        console.log("!!!!!!!!!!!");
+        console.log("---")
+        focusSelf();
     }, [ref]);
 
-    React.useEffect(() => {        
-        line.tag = tagStyle.toString();
+    // tagStyle 변경되서 컴포넌트 재렌더링된 이후
+    React.useEffect(() => {
+        // 태그 변경됨 알림
+        line.tag = tagStyle;
         updateContent(line);
+        
+        // 열려있던 메뉴 창 닫기
         setOpenMenu(false);
+
+        // 기존에 입력 되어 있던 내용 다시 넣기
+        if (ref.current && line.html !== '') {
+            ref.current.innerHTML = line.html;
+        }
+        
+        // 포커스
+        focusSelf();
     }, [tagStyle])
 
     function typing(e: React.FormEvent<HTMLParagraphElement>) {
-        // setContent(e?.currentTarget.textContent || '');
-        // setContent(ref.current?.innerHTML);
-
         line.html = ref.current?.innerHTML || '';
         updateContent(line);
     }
 
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
+        // 새 EditLine 생성하고 focus 이동
         if (e.key === 'Enter') {
-            // 새 EditLine 생성하고 focus 이동
             e.preventDefault();
             addBlockHandler(line);
-        } else if (e.key === 'Backspace' && line.html === '') {
-            // 현재 EditLine 삭제하고 이전 focus 이동
+        }
+        // 현재 EditLine 삭제하고 이전 focus 이동
+        else if (e.key === 'Backspace' && line.html === '') {
             e.preventDefault();
             ref.current?.remove();
         }
@@ -62,6 +74,7 @@ const EditLineBlock = ({ text, line, updateContent, addBlockHandler } : LineBloc
     function clickedSettingBT(e: any) {
         e.preventDefault();
 
+        changeCurLine(line.id);
         setOpenMenu(prev => !prev);
     }
 
@@ -72,22 +85,35 @@ const EditLineBlock = ({ text, line, updateContent, addBlockHandler } : LineBloc
         setFocusing(false);
     }
 
+    /**
+     * Line 포커스 시키기
+     */
+    function focusSelf() {
+        if (ref.current?.innerText.length === 0) {
+            ref.current.focus();
+            return;
+        }
 
+        if (ref.current) {
+            const selection = window.getSelection();
+            const newRange = document.createRange();
+            newRange.selectNodeContents(ref.current);
+            newRange.collapse(false);
+            selection?.removeAllRanges();
+            selection?.addRange(newRange);
+        }
+    }
 
     return (
         <Line
-        onMouseEnter={editOnHandler}
-        // onMouseLeave={editExitHandler}
+            onMouseEnter={editOnHandler}
+            // onMouseLeave={editExitHandler}
         >
             {
                 focusing &&
                 <SelectButton
                     onClick={clickedSettingBT}
                 >+</SelectButton>
-            }
-            {
-                openMenu &&
-                <SelectMenu onClickHandler={setTagStyle}/>
             }
             <DynamicTag 
                 // onFocus={(e)=>setFocusing(true)}

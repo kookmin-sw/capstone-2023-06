@@ -13,6 +13,7 @@ const EditMenuBlock = styled.div`
     border-radius: 0.5rem;
     -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.3); 
     box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.3);
+    z-index: 100;
 `;
 
 const Menu = styled.button`

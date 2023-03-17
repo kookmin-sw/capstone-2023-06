@@ -60,6 +60,10 @@ export const GlobalStyle = createGlobalStyle`
         button {
             cursor: pointer;
         }
+
+        .primary {
+            color: ${theme.colors.primary};
+        }
         `
     }}
     

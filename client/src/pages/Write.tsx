@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { FluidLayout } from "../components/layout/Layout";
 import { Container } from "../components/common/Grid";
-
 import { Button } from "../components/common/Button";
 import Editor from "../components/editor/Editor";
 
@@ -21,6 +22,9 @@ background-repeat: no-repeat;
 `;
 
 const Write = () => {
+
+    const [tags, setTags] = React.useState<string[]>(['어쩌구', '저쩌구', 'ABC']);
+
     return (
         <FluidLayout>
             <ImageUpload>
@@ -28,7 +32,13 @@ const Write = () => {
                 <Button>업로드</Button>
             </ImageUpload>
             <Container>
-                <p>#어쩌구, #저쩌구, #ABC</p>
+                <p>
+                    {
+                        tags.map(tag => {
+                            return <strong className='primary' key={tag}>#{tag} </strong>
+                        })
+                    }
+                </p>
                 <h1>제목을 입력해주세요.</h1>
                 <hr/>
                 <Editor></Editor>
