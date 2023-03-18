@@ -20,7 +20,7 @@ type LineBlockType = {
     updateContent: (e:LINE_TYPE)=>void,
     tagStyle: React.ElementType,
     setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>,
-    changeCurLine: (e:string)=>void,
+    changeCurLine: (line_id:string, posX:number, posY:number)=>void,
     addBlockHandler: (curLine:LINE_TYPE)=>void
 }
 const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, changeCurLine, addBlockHandler } : LineBlockType) => {
@@ -71,10 +71,12 @@ const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, chang
         }
     }
 
-    function clickedSettingBT(e: any) {
+    function clickedSettingBT(e: React.MouseEvent<HTMLElement>) {
+        const { left, top } = e.currentTarget.getBoundingClientRect();
+        
         e.preventDefault();
 
-        changeCurLine(line.id);
+        changeCurLine(line.id, left + 24, top + 16);
         setOpenMenu(prev => !prev);
     }
 

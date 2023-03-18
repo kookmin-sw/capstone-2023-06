@@ -11,6 +11,8 @@ type Props = {
 const DynamicTag = React.forwardRef(({ as: Tag = "p", children, onInput, onKeyDown } : Props, ref: React.Ref<HTMLDivElement>) => {
     return (
         <Tag
+            className='outline-none'
+            spellCheck='false'
             ref={ref}
             onInput={onInput}
             onKeyDown={onKeyDown}

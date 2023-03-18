@@ -1,11 +1,19 @@
 import styled from 'styled-components';
 import { IconH1, IconH2, IconH3, IconAbc } from '@tabler/icons-react';
+import React from 'react';
 // 아이콘 : https://tabler-icons.io/
+
+interface EditMenuType {
+    posX: number;
+    posY: number;
+}
 
 const EditMenuBlock = styled.div`
     position: absolute;
-    bottom: 3rem;
-    left: -2rem;
+
+    top: ${(props: EditMenuType) => props.posY}px;
+    left: ${(props: EditMenuType) => props.posX}px;
+
     display: flex;
     flex-direction: column;
     background: #FFF;
@@ -33,13 +41,15 @@ const Menu = styled.button`
 `
 type EditMenuProps = {
     onClickHandler: (e:React.ElementType) => void;
+    posX: number,
+    posY: number
 }
 type MenusType =  {
     text: string,
     icon: React.ReactNode,
     ret: React.ElementType
 }
-export const EditMenu = ({ onClickHandler } : EditMenuProps) => {
+export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
     const menus : MenusType[] = [
         {
             text: 'header 1',
@@ -68,7 +78,10 @@ export const EditMenu = ({ onClickHandler } : EditMenuProps) => {
     // }
 
     return (
-        <EditMenuBlock>
+        <EditMenuBlock
+            posX={posX}
+            posY={posY}
+        >
             {
                 menus.map((m, idx)  => {
                     return (

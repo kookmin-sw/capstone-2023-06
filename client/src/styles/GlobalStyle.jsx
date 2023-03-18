@@ -56,6 +56,12 @@ export const GlobalStyle = createGlobalStyle`
         h6 {
             font-size: 0.75em;
         }
+        b, strong {
+            font-weight: bold;
+        }
+        i, em {
+            font-style: italic;
+        }
 
         button {
             cursor: pointer;
@@ -63,6 +69,9 @@ export const GlobalStyle = createGlobalStyle`
 
         .primary {
             color: ${theme.colors.primary};
+        }
+        .outline-none {
+            outline: none;
         }
         `
     }}

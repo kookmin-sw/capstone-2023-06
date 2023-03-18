@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { LINE_TYPE } from './type';
 
 import EditLineBlock from './EditLineBlock';
-import SelectMenu from './SelectMenu';
+import EditMenu from './SelectMenu';
+
+import Dragond from './Dragond';
 
 export const EditorContainer = styled.div`
     background-color: #ecffeb;
@@ -12,80 +14,14 @@ export const EditorContainer = styled.div`
 
 const cid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
-  };
+};
 
-type ToolButtonProps =  {
-    name: string,
-    commandId: string,
-    value?: string | undefined
-}
-
-const ToolButton = ({ name, commandId, value = undefined } : ToolButtonProps) => {
-    function clickEvent(e: React.MouseEvent<HTMLButtonElement>) {
-        e.preventDefault();
-        document.execCommand(commandId, false, value);
-        console.log(value);
-    }
-
-    return (
-        <button 
-            key={name}
-            type="button"
-            onClick={clickEvent}
-        >
-            { name }
-        </button>
-    )
+type POS = {
+    posX: number,
+    posY: number
 }
 
 const Editor = () => {
-    const tools = [
-        {
-            name: '강조',
-            commandId: 'bold'
-        },
-        {
-            name: '기울이기',
-            commandId: 'Italic'
-        },
-        {
-            name: '밑줄',
-            commandId: 'Underline'
-        },
-        {
-            name: '중간줄',
-            commandId: 'StrikeThrough'
-        },
-        {
-            name: '내어쓰기',
-            commandId: 'outdent'
-        },
-        {
-            name: '들여쓰기',
-            commandId: 'indent'
-        },
-        {
-            name: '왼쪽정렬',
-            commandId: 'justifyleft'
-        },
-        {
-            name: '가운데정렬',
-            commandId: 'justifycenter'
-        },
-        {
-            name: '오른쪽정렬',
-            commandId: 'justifyright'
-        },
-        {
-            name: '글번호 매기기',
-            commandId: 'insertorderedList'
-        },
-        {
-            name: '글머리 매기기',
-            commandId: 'insertunorderdList'
-        },
-    ];
-    
     const initialLine : LINE_TYPE = { 
         id: cid(),
         html: '',
@@ -96,6 +32,7 @@ const Editor = () => {
 
     const [openMenu, setOpenMenu] = React.useState<boolean>(false);
     const [curTargetIdx, setCurTargetIdx] = React.useState<number>(0);
+    const [menuPos, setMenuPos] =  React.useState<POS>({ posX: 0, posY: 0 });
     
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
         if (e.key === 'Enter') {
@@ -142,9 +79,9 @@ const Editor = () => {
         });
     }
     
-    function changeCurLine(id: string) {
+    function changeCurLine(id: string, posX: number, posY: number) {
         const idx = content.findIndex(line => line.id === id);
-        console.log(" +++++++++ " + idx);
+        setMenuPos({posX, posY});
         setCurTargetIdx(idx);
     }
 
@@ -161,22 +98,15 @@ const Editor = () => {
     return (
         <>
         
-            <div>
-                {
-                    tools.map(tool => {
-                        return <ToolButton key={tool.name} name={tool.name} commandId={tool.commandId}></ToolButton>
-                    })
-                }
-                <ToolButton name='폰트 크기' commandId='fontSize' value='20px'></ToolButton>
-                <ToolButton name='폰트 크기' commandId='fontSize' value='10px'></ToolButton>
-                <ToolButton name='폰트 크기' commandId='foreColor' value='#ee00ff'></ToolButton>
-                <ToolButton name='폰트 크기' commandId='hiliteColor' value='#ff0000'></ToolButton>
-                <ToolButton name='폰트 크기' commandId='Undo'></ToolButton>
-            </div>
+            <Dragond/>
 
             {
                 openMenu &&
-                <SelectMenu onClickHandler={changeTagStyle}/>
+                <EditMenu
+                    onClickHandler={changeTagStyle}
+                    posX={menuPos.posX}
+                    posY={menuPos.posY}
+                />
             }
 
             <EditorContainer onKeyDown={keyHandler}>
