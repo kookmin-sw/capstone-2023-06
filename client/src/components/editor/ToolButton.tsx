@@ -1,4 +1,6 @@
 
+import { Button } from "../common/Button";
+
 export type ToolButtonProps =  {
     icon: JSX.Element,
     commandId: string,
@@ -12,11 +14,11 @@ export const ToolButton = ({ icon, commandId, value = undefined } : ToolButtonPr
     }
 
     return (
-        <button
-            type="button"
+        <Button
+            padding="0.25rem 0.5rem"
             onClick={clickEvent}
         >
             { icon }
-        </button>
+        </Button>
     )
 }

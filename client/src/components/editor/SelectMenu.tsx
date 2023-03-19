@@ -2,18 +2,12 @@ import styled from 'styled-components';
 import { IconH1, IconH2, IconH3, IconAbc } from '@tabler/icons-react';
 import React from 'react';
 // 아이콘 : https://tabler-icons.io/
-
-interface EditMenuType {
-    posX: number;
-    posY: number;
-}
+import { POSITION } from './type';
 
 const EditMenuBlock = styled.div`
     position: absolute;
-
-    top: ${(props: EditMenuType) => props.posY}px;
-    left: ${(props: EditMenuType) => props.posX}px;
-
+    top: ${(props: POSITION) => props.posY}px;
+    left: ${(props: POSITION) => props.posX}px;
     display: flex;
     flex-direction: column;
     background: #FFF;
@@ -21,7 +15,7 @@ const EditMenuBlock = styled.div`
     border-radius: 0.5rem;
     -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.3); 
     box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.3);
-    z-index: 100;
+    z-index: ${({theme} ) => theme.zIndex.editMenuIndex};
 `;
 
 const Menu = styled.button`
@@ -39,10 +33,8 @@ const Menu = styled.button`
         margin-right: 0.5rem;
     }
 `
-type EditMenuProps = {
+type EditMenuProps = POSITION & {
     onClickHandler: (e:React.ElementType) => void;
-    posX: number,
-    posY: number
 }
 type MenusType =  {
     text: string,

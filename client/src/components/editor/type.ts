@@ -6,3 +6,8 @@ export type LINE_TYPE = {
     tag: React.ElementType,
     flag: Number,
 }
+
+export type POSITION = {
+    posX: number,
+    posY: number
+}

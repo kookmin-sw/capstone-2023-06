@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FluidLayout } from "../components/layout/Layout";
 import { Container } from "../components/common/Grid";
-import { Button } from "../components/common/Button";
+import { PrimaryButton } from "../components/common/Button";
 import Editor from "../components/editor/Editor";
 
 import styled from "styled-components";
@@ -29,7 +29,7 @@ const Write = () => {
         <FluidLayout>
             <ImageUpload>
                 <p>썸네일을 추가해주세요.</p>
-                <Button>업로드</Button>
+                <PrimaryButton>업로드</PrimaryButton>
             </ImageUpload>
             <Container>
                 <p>

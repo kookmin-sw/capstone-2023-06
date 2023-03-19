@@ -6,6 +6,7 @@ import {
     IconTextSize, IconPalette, IconTexture
 } from '@tabler/icons-react';
 import { ToolButton } from './ToolButton';
+import { POSITION } from './type';
 
 type Tool = {
     icon: JSX.Element,
@@ -13,7 +14,20 @@ type Tool = {
     value?: string
 }
 
-const Dragond = ({}) => {
+const DragondContainer = styled.div`
+    position: absolute;
+    background-color: white;
+    padding: 0.5rem;
+    top: ${(props: POSITION) => props.posY}px;
+    left: ${(props: POSITION) => props.posX}px;
+    border-radius: 0.5rem;
+    z-index: ${({theme} ) => theme.zIndex.editDragond};
+    box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
+`;
+
+const Dragond = ({ posX, posY } : POSITION) => {
     const tools : Tool[] = [
         {
             icon: <IconBold/>,
@@ -77,7 +91,10 @@ const Dragond = ({}) => {
     ];
 
     return (
-        <div>
+        <DragondContainer
+            posX={posX}
+            posY={posY}
+        >
             {
                 tools.map(tool => 
                     <ToolButton 
@@ -89,7 +106,7 @@ const Dragond = ({}) => {
                 )
             }
 
-        </div>
+        </DragondContainer>
     );
 }
 

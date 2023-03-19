@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LINE_TYPE } from './type';
+import { LINE_TYPE, POSITION } from './type';
 
 import EditLineBlock from './EditLineBlock';
 import EditMenu from './SelectMenu';
@@ -16,10 +16,6 @@ const cid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
-type POS = {
-    posX: number,
-    posY: number
-}
 
 const Editor = () => {
     const initialLine : LINE_TYPE = { 
@@ -28,12 +24,19 @@ const Editor = () => {
         tag: 'p',
         flag: 0
     };
+
+    // 전체 내용
     const [content, setContent] = React.useState<LINE_TYPE[]>([initialLine]);
 
+    // 선의 속성을 변경 시켜줄 메뉴 state
     const [openMenu, setOpenMenu] = React.useState<boolean>(false);
     const [curTargetIdx, setCurTargetIdx] = React.useState<number>(0);
-    const [menuPos, setMenuPos] =  React.useState<POS>({ posX: 0, posY: 0 });
-    
+    const [menuPos, setMenuPos] =  React.useState<POSITION>({ posX: 0, posY: 0 });
+
+    // Dragond(드래그 후 띄워줄 수정 메뉴) state
+    const [openDragond, setOpenDragond] = React.useState<boolean>(false);
+    const [dragondPos, setDragondPos] = React.useState<POSITION>({ posX: 0, posY: 0 });
+
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
         if (e.key === 'Enter') {
             // 새 EditLine 생성하고 focus 이동
@@ -95,10 +98,45 @@ const Editor = () => {
         });
     }
 
+    function mouseDown(e: React.MouseEvent<HTMLDivElement>) {
+        // e.preventDefault();
+        
+        window.getSelection()?.removeAllRanges();
+    }
+
+    function mouseUp(e: React.MouseEvent<HTMLDivElement>) {
+        // e.preventDefault();
+
+        const sel = window.getSelection();
+        if (sel?.toString().length === undefined || sel.toString().length === 0) {
+            setOpenDragond(false);
+            return;
+        }
+
+        const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    
+        let selectionRect = sel.getRangeAt(0).getBoundingClientRect();
+        const posX = selectionRect.x +
+                        (selectionRect.right - selectionRect.left) / 2 +
+                        0;
+        const posY = selectionRect.bottom +
+                        16 +
+                        scrollTop +
+                        0;
+
+        setDragondPos({posX, posY});
+        setOpenDragond(true);
+    }
+
     return (
         <>
-        
-            <Dragond/>
+            {
+                openDragond &&
+                <Dragond
+                    posX={dragondPos.posX}
+                    posY={dragondPos.posY}
+                />
+            }
 
             {
                 openMenu &&
@@ -109,7 +147,7 @@ const Editor = () => {
                 />
             }
 
-            <EditorContainer onKeyDown={keyHandler}>
+            <EditorContainer onKeyDown={keyHandler} onMouseDown={mouseDown} onMouseUp={mouseUp}>
                 {
                     content?.map(e => {
                         return <EditLineBlock
