@@ -1,11 +1,12 @@
 import React from 'react';
 
+import styled from "styled-components";
+
 import { FluidLayout } from "../components/layout/Layout";
 import { Container } from "../components/common/Grid";
 import { PrimaryButton } from "../components/common/Button";
 import Editor from "../components/editor/Editor";
-
-import styled from "styled-components";
+import { TagInput, TitleInput } from '../components/common/Input';
 
 const ImageUpload = styled.div`
 height: 30rem;
@@ -23,7 +24,9 @@ background-repeat: no-repeat;
 
 const Write = () => {
 
-    const [tags, setTags] = React.useState<string[]>(['어쩌구', '저쩌구', 'ABC']);
+    const [title, setTitle] = React.useState<string>('');
+    // const [tags, setTags] = React.useState<string[]>(['어쩌구', '저쩌구', 'ABC']);
+    const [tags, setTags] = React.useState<string>('');     // 만약 분리식으로 저장해야 한다면 윗줄식으로로 변경
 
     return (
         <FluidLayout>
@@ -32,15 +35,24 @@ const Write = () => {
                 <PrimaryButton>업로드</PrimaryButton>
             </ImageUpload>
             <Container>
-                <p>
+                {/* <p>
                     {
                         tags.map(tag => {
                             return <strong className='primary' key={tag}>#{tag} </strong>
                         })
                     }
-                </p>
-                <h1>제목을 입력해주세요.</h1>
-                <hr/>
+                </p> */}
+                <TagInput
+                    className='outline-none'
+                    spellCheck='false'
+                    type='text' placeholder='#태그입력' onChange={(e)=>{setTags(e.target.value)}}
+                />
+                <TitleInput
+                    className='outline-none'
+                    spellCheck='false'
+                    type='text' placeholder='제목을 입력해주세요.' onChange={(e)=>{setTitle(e.target.value)}}
+                />
+                {/* <hr/> */}
                 <Editor></Editor>
             </Container>
         </FluidLayout>

@@ -15,23 +15,22 @@ const Line = styled.div`
 `;
 
 type LineBlockType = {
-    text: string,
+    curLineId: string,
     line: LINE_TYPE,
     updateContent: (e:LINE_TYPE)=>void,
     tagStyle: React.ElementType,
     setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>,
-    changeCurLine: (line_id:string, posX:number, posY:number)=>void,
+    changeCurLine: (line_id:string, posX?:number, posY?:number)=>void,
     addBlockHandler: (curLine:LINE_TYPE)=>void
 }
-const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, changeCurLine, addBlockHandler } : LineBlockType) => {
+const EditLineBlock = ({ curLineId, line, updateContent, tagStyle, setOpenMenu, changeCurLine, addBlockHandler } : LineBlockType) => {
     const ref = React.useRef<HTMLParagraphElement>(null);
-    const [focusing, setFocusing] = React.useState<boolean>(false);
+    // const [focusing, setFocusing] = React.useState<boolean>(false);
 
     // const [content, setContent] = React.useState<string | undefined>('');
     // const [tagStyle, setTagStyle] = React.useState<React.ElementType>('p');
 
     React.useEffect(() => {
-        console.log("---")
         focusSelf();
     }, [ref]);
 
@@ -68,6 +67,11 @@ const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, chang
         else if (e.key === 'Backspace' && line.html === '') {
             e.preventDefault();
             ref.current?.remove();
+        } else if (e.key === 'ArrowDown') {
+            // firstChild 에는 + 버튼이 들어갈 수 있음
+            (ref.current?.parentElement?.nextSibling?.lastChild as HTMLElement).focus();
+        } else if (e.key === 'ArrowUp') {
+            (ref.current?.parentElement?.previousSibling?.lastChild as HTMLElement).focus();
         }
     }
 
@@ -81,11 +85,13 @@ const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, chang
     }
 
     function editOnHandler(e: any) {
-        setFocusing(true);
+        // setFocusing(true);
+
+        changeCurLine(line.id);
     }
-    function editExitHandler(e: any) {
-        setFocusing(false);
-    }
+    // function editExitHandler(e: any) {
+    //     setFocusing(false);
+    // }
 
     /**
      * Line 포커스 시키기
@@ -112,7 +118,7 @@ const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, chang
             // onMouseLeave={editExitHandler}
         >
             {
-                focusing &&
+                curLineId === line.id &&
                 <SelectButton
                     onClick={clickedSettingBT}
                 >+</SelectButton>
@@ -124,6 +130,9 @@ const EditLineBlock = ({ text, line, updateContent, tagStyle, setOpenMenu, chang
                 ref={ref}
                 onInput={typing}
                 onKeyDown={keyHandler}
+
+            
+                // onFocus={()=>{setFocusing(true)}} onBlur={()=>{setFocusing(false)}} 
             >
             </DynamicTag>
         </Line>

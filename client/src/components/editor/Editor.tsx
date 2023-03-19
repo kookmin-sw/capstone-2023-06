@@ -30,7 +30,7 @@ const Editor = () => {
 
     // 선의 속성을 변경 시켜줄 메뉴 state
     const [openMenu, setOpenMenu] = React.useState<boolean>(false);
-    const [curTargetIdx, setCurTargetIdx] = React.useState<number>(0);
+    const [curTargetId, setCurTargetId] = React.useState<string>('');
     const [menuPos, setMenuPos] =  React.useState<POSITION>({ posX: 0, posY: 0 });
 
     // Dragond(드래그 후 띄워줄 수정 메뉴) state
@@ -82,16 +82,18 @@ const Editor = () => {
         });
     }
     
-    function changeCurLine(id: string, posX: number, posY: number) {
-        const idx = content.findIndex(line => line.id === id);
-        setMenuPos({posX, posY});
-        setCurTargetIdx(idx);
+    function changeCurLine(id: string, posX?: number, posY?: number) {
+        // const idx = content.findIndex(line => line.id === id);
+        if (posX !== undefined && posY !== undefined)
+            setMenuPos({posX, posY});
+        setCurTargetId(id);
     }
 
-    function changeTagStyle(e: React.ElementType) {
+    function changeElementTagStyle(tag: React.ElementType) {
         setContent((prev) => {
-            prev[curTargetIdx].tag = e;
-            console.log(curTargetIdx);
+            const idx = prev.findIndex(line => line.id === curTargetId);
+            if (idx !== -1)
+                prev[idx].tag = tag;
             return [
                 ...prev
             ]
@@ -141,7 +143,7 @@ const Editor = () => {
             {
                 openMenu &&
                 <EditMenu
-                    onClickHandler={changeTagStyle}
+                    onClickHandler={changeElementTagStyle}
                     posX={menuPos.posX}
                     posY={menuPos.posY}
                 />
@@ -152,7 +154,8 @@ const Editor = () => {
                     content?.map(e => {
                         return <EditLineBlock
                             key={e.id} 
-                            text={e.html}
+                            // text={e.html}
+                            curLineId={curTargetId}
                             line={e}
                             updateContent={updateContentHandler}
                             addBlockHandler={addBlockHandler}

@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
             box-sizing: border-box;
         }
     
-        body {
+        body, input {
             margin: 0px;
             font-family: ${theme.fonts.family.base};
             line-height: 1.5;
@@ -40,21 +40,27 @@ export const GlobalStyle = createGlobalStyle`
         h1 {
             font-size: 2em;
             font-weight: bold;
+            line-height: 1.2;
         }
         h2 {
             font-size: 1.5em;
+            line-height: 1.2;
         }
         h3 {
             font-size: 1.17em;
+            line-height: 1.2;
         }
         h4 {
             font-size: 1em;
+            line-height: 1.2;
         }
         h5 {
             font-size: 0.83em;
+            line-height: 1.2;
         }
         h6 {
             font-size: 0.75em;
+            line-height: 1.2;
         }
         b, strong {
             font-weight: bold;
