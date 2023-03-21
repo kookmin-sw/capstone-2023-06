@@ -1,8 +1,7 @@
 # 캡스톤 디자인 6조 - DESKSETUP(가명) 
 <p align="center">
-  <img width="300" alt="김동원" src="https://user-images.githubusercontent.com/63653473/226567182-03aff492-e902-4a0e-91b8-11cabbd80377.jpeg">
+  <img width="300" alt="김동원" src="https://user-images.githubusercontent.com/63653473/226588260-40accbaf-8d6c-42c8-8479-99e6d8f5631d.png">
 </p>
-
 
 ## 👋 안녕 DESKSETUP!
 우리는 책상에서 많은 시간을 보냅니다. 하루의 대부분을 책상에서 작업을 하거나 혹은 개인 여가 시간을 보내기도 하죠. 특히 최근부터 개인 공간에 대한 관심도가 올라가면서 자신만의 책상(작업 공간)을 설계하는 **데스크 셋업**이란 문화가 발전하게 되었습니다.  
