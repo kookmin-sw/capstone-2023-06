@@ -1,77 +1,39 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=10390430&assignment_repo_type=AssignmentRepo)
-# Welcome to GitHub
+# 캡스톤 디자인 6조 - DESKSETUP(가명) 
+<p align="center">
+  <img src='.github/src/logo.png', height=70>
+</p>
 
-캡스톤 팀 생성을 축하합니다.
+## 👋 안녕 DESKSETUP!
+우리는 책상에서 많은 시간을 보냅니다. 하루의 대부분을 책상에서 작업을 하거나 혹은 개인 여가 시간을 보내기도 하죠. 특히 최근부터 개인 공간에 대한 관심도가 올라가면서 자신만의 책상(작업 공간)을 설계하는 **데스크 셋업**이란 문화가 발전하게 되었습니다.  
 
-## 팀소개 및 페이지를 꾸며주세요.
+하지만 커진 관심도에 비해 많은 사람들은이 데스크 셋업을 어려워합니다. 여러 인테리어 플랫폼들은 모든 인테리어를 포함하기 때문에 정확한 니즈를 만족시키기 어렵고, 데스크 셋업 관련 사이트들은 그저 커뮤니티 기능만 수행하기 때문에 다양한 디자인을 기대하기 어렵고 접근성이 좋지 않습니다.
 
-- 프로젝트 소개
-  - 프로젝트 설치방법 및 데모, 사용방법, 프리뷰등을 readme.md에 작성.
-  - Api나 사용방법등 내용이 많을경우 wiki에 꾸미고 링크 추가.
+그러면 저희 **DESKSETUP**을 사용하시는 건 어떨까요? 저희는 아래와 같은 서비스를 제공합니다.
+1. 유저 맞춤형 추천
+2. 다양한 디자인을 볼 수 있는 커뮤니티
+3. 다른 유저의 게시물에서 바로 상품 구매 페이지로 갈 수 있는 접근성
+> **저희는 개인의 공간과 취향을 존중합니다.**
 
-- 팀페이지 꾸미기
-  - 프로젝트 소개 및 팀원 소개
-  - index.md 예시보고 수정.
+## 👋 Hello DESKSETUP!
+We spend a lot of time at the desk. We work at our desk most of the day, or own free time. Especially, as interest in personal space has increased recently, the culture of **Desk Setup** that designs your own desk (work space) has developed.
 
-- GitHub Pages 리파지토리 Settings > Options > GitHub Pages 
-  - Source를 marster branch
-  - Theme Chooser에서 태마선택
-  - 수정후 팀페이지 확인하여 점검.
+However, despite the increased interest, many people find desk setup difficult. Many interior platforms include all interiors, making it difficult to meet the exact needs, and desk setup-related sites simply perform community functions, making it difficult to expect various designs and difficult to access.
 
-**팀페이지 주소** -> https://kookmin-sw.github.io/ '{{자신의 리파지토리 아이디}}'
+How about using **DESKSETUP**? We offer the following services.
+1. Custom Recommendations
+2. A community where you can see various designs
+3. Access to product purchase pages directly from other user's posts
+> **We respect your personal space and taste**
 
-**예시)** 2023년 0조  https://kookmin-sw.github.io/capstone-2023-00/
-
-
-## 내용에 아래와 같은 내용들을 추가하세요.
-
-### 1. 프로잭트 소개
-
-프로젝트
-
-### 2. 소개 영상
-
-프로젝트 소개하는 영상을 추가하세요
-
-### 3. 팀 소개
-
-팀을 소개하세요.
-
-팀원정보 및 담당이나 사진 및 SNS를 이용하여 소개하세요.
-
-### 4. 사용법
-
-소스코드제출시 설치법이나 사용법을 작성하세요.
-
-### 5. 기타
-
-추가적인 내용은 자유롭게 작성하세요.
-
-
-## Markdown을 사용하여 내용꾸미기
-
-Markdown은 작문을 스타일링하기위한 가볍고 사용하기 쉬운 구문입니다. 여기에는 다음을위한 규칙이 포함됩니다.
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-자세한 내용은 [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Support or Contact
-
-readme 파일 생성에 추가적인 도움이 필요하면 [도움말](https://help.github.com/articles/about-readmes/) 이나 [contact support](https://github.com/contact) 을 이용하세요.
+<br></br>
+## 📹 DESKSETUP 소개 영상
+현재는 공란입니다.
+<br></br>
+## 🏃 올바른 데스크셋업 문화를 만들어가는 사람들 
+|프로필|이름|학번|역할|
+|:---:|:---:|:---:|:---------------:|
+|<img width="100" alt="김동원" src="https://user-images.githubusercontent.com/63653473/226567182-03aff492-e902-4a0e-91b8-11cabbd80377.jpeg">|김동원|****1580|팀장 / 메인 백엔드|
+|<img width="100" alt="강예찬" src="https://user-images.githubusercontent.com/63653473/226567131-26e7d4d1-2ed7-45a1-bfec-28370cef7ee0.png">|강예찬|****1568|메인 프론트|
+|<img width="100" alt="강민수" src="https://user-images.githubusercontent.com/63653473/226567105-0aab73c7-7de3-4903-9265-e25140f1110d.png">|강민수|****1567|기획 / 프론트 / 디자인| 
+|<img width="100" alt="김도엽" src="https://user-images.githubusercontent.com/63653473/226566766-dc5e9c3c-eff9-4f6e-97a8-0746ddcbc04a.png">|김도엽|****1579|백엔드|
+|<img width="100" alt="정나영" src="https://user-images.githubusercontent.com/63653473/226567166-2e1e0972-a943-4ad2-84ac-4de7790df521.png">|정나영|****3131|프론트|
