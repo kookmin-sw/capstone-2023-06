@@ -31,7 +31,7 @@ How about using **DESKSETUP**? We offer the following services.
 <br></br>
 ## 🏃 올바른 데스크셋업 문화를 만들어가는 사람들 
 |프로필|이름|학번|역할|
-|:---:|:---:|:---:|:---------------:|
+|:---:|:---:|:----:|:---------------:|
 |<img width="100" alt="김동원" src="https://user-images.githubusercontent.com/63653473/226567182-03aff492-e902-4a0e-91b8-11cabbd80377.jpeg">|김동원|****1580|팀장 / 메인 백엔드|
 |<img width="100" alt="강예찬" src="https://user-images.githubusercontent.com/63653473/226567131-26e7d4d1-2ed7-45a1-bfec-28370cef7ee0.png">|강예찬|****1568|메인 프론트|
 |<img width="100" alt="강민수" src="https://user-images.githubusercontent.com/63653473/226567105-0aab73c7-7de3-4903-9265-e25140f1110d.png">|강민수|****1567|기획 / 프론트 / 디자인| 
