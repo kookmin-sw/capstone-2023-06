@@ -4,6 +4,7 @@ const validEmailCheck = (email) =>{
     const pattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     return pattern.test(email)
 }
+
 const USER_ROLE = 1;
 
 // 비밀번호를 안보이게 하기 위해서

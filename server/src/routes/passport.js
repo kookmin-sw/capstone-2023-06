@@ -1,6 +1,7 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+
 const User = require("../model/user_model.js");
 const { Decryption } = require("../utils/crypto-util/crypto_util.js");
 
