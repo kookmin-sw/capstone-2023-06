@@ -6,8 +6,9 @@ services:
     container_name: dev_nodejs
     ports:
       - "${TEST_SERVER_PORT}:${TEST_SERVER_PORT}"
+      - "3907:3907"
     volumes:
-      - "../:/dev-workspace"
+      - "../../:/dev-workspace"
     working_dir: "/dev-workspace"
     env_file:
       - .env

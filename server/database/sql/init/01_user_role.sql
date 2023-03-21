@@ -1,5 +1,5 @@
-CREATE TABLE USER_ROLE(
-    ID INT NOT NULL,
-    ROLE VARCHAR(45) NOT NULL UNIQUE,
-    PRIMARY KEY (ID)
+CREATE TABLE user_role(
+    id int not null,
+    role VARCHAR(45) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
 );

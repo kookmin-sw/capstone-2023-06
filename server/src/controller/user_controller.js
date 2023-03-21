@@ -5,17 +5,33 @@ const validEmailCheck = (email) =>{
     return pattern.test(email)
 }
 
+const USER_ROLE = 1;
+
+// 비밀번호를 안보이게 하기 위해서
+const userToResponse = (user) => {
+    return {
+        "id": user.id,
+        "nickname": user.nickname,
+        "email": user.email,
+        "picture": user.picture,
+        "user_role": user.user_role
+    };
+}
+
 exports.findByEmail = function (req, res) {
     User.findByEmail(req.params.email, (err, user) => {
         if (err) {
-            console.log(err);
             res.status(400).send({
                 success: false,
                 message: err.code,
             });
             return;
         }
-        res.json(user);
+        
+        res.status(200).send({
+            success:true,
+            user: userToResponse(user[0])
+        });
     });
 }
 
@@ -32,7 +48,6 @@ exports.userSignUp = async function (req, res) {
 
     
     const hashedPassword = await Encryption(password);
-    const USER_ROLE = 1;
     User.create(nickname, hashedPassword, email, picture, USER_ROLE, (err, user) => {
         if (err) {
             res.status(400).send({
@@ -52,17 +67,17 @@ exports.userSignUp = async function (req, res) {
 }
 
 exports.login = function (req, res) {
-    console.log('req.user', req.user)
-    req.session.user = req.user;
+    const user = userToResponse(req.user);
+    req.session.user = user;
     req.session.isLogin = true;
-    res.json({ success: true, message: "login success", result: req.user })
+    res.json({ success: true, message: "login success", result: user })
 };
 
 exports.autologin = function (req, res) {
     if (req.isAuthenticated() && req.user) {
         res.json({
             success: true,
-            user: req.user
+            user: userToResponse(req.user)
         });
         return;
     }
