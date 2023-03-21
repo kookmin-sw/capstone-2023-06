@@ -1,4 +1,5 @@
 const mysql = require("../../database/connect.js");
+
 const table = "user";
 
 const User = function(user){
