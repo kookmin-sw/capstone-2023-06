@@ -73,6 +73,17 @@ export const GlobalStyle = createGlobalStyle`
             cursor: pointer;
         }
 
+        ol {
+            display: block;
+            list-style-type: decimal;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 40px;
+        }
+        ul {
+            list-style: disc;
+        }
+
         .primary {
             color: ${theme.colors.primary};
         }

@@ -11,6 +11,8 @@ import { IItemProps } from 'react-movable';
 
 const Line = styled.div`
     position: relative;
+    margin-bottom: 10px;
+    margin-top: 10px;
     :focus-visible {
         outline: 3px solid #aaa;
     }
@@ -20,10 +22,10 @@ type LineBlockType = IItemProps & {
     curLineId: string,
     line: LINE_TYPE,
     updateContent: (e:LINE_TYPE)=>void,
-    tagStyle: React.ElementType,
     setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>,
     changeCurLine: (line_id:string, posX?:number, posY?:number)=>void,
-    addBlockHandler: (curLine:LINE_TYPE)=>void
+    addBlockHandler: (curLine:LINE_TYPE)=>void,
+    getBeforeLineData: (curLine:LINE_TYPE)=>LINE_TYPE | undefined,
 }
 const EditLineBlock = React.forwardRef(
     (
@@ -31,26 +33,45 @@ const EditLineBlock = React.forwardRef(
         ref: React.Ref<HTMLDivElement>
     ) => {
     
-    const { curLineId, line, updateContent, tagStyle, setOpenMenu, changeCurLine, addBlockHandler } = props;
+    const { curLineId, line, updateContent, setOpenMenu, changeCurLine, addBlockHandler } = props;
     const lineRef = React.useRef<HTMLParagraphElement>(null);
     // const [focusing, setFocusing] = React.useState<boolean>(false);
 
     // const [content, setContent] = React.useState<string | undefined>('');
-    // const [tagStyle, setTagStyle] = React.useState<React.ElementType>('p');
+    // const [line.tag, setline.tag] = React.useState<React.ElementType>('p');
 
     React.useEffect(() => {
         if (lineRef.current)
             lineRef.current.innerHTML = line.html;
+
+            console.log('chg');
+        
     }, [line]);
+
+    React.useEffect(() => {
+        if (lineRef.current)
+            lineRef.current.innerHTML = line.html;
+            console.log('chg333333333');
+        
+    }, [line.html]);
 
     React.useEffect(() => {
         focusSelf();
     }, [lineRef]);
 
-    // tagStyle 변경되서 컴포넌트 재렌더링된 이후
+    // line.tag 변경되서 컴포넌트 재렌더링된 이후
     React.useEffect(() => {
         // 태그 변경됨 알림
-        line.tag = tagStyle;
+        if (line.tag === 'ol' || line.tag === 'ul') {
+            // 만약 ol, ul 형태가 된다면 이전 태그도 그런지 확인, 만약 그렇다면 flag 값이 변경되어야 함
+            const prevLineData = props.getBeforeLineData(line);
+
+            if (prevLineData?.tag === line.tag) {
+                line.flag = prevLineData.flag + 1;
+            } else {
+                line.flag = 0;
+            }
+        }
         updateContent(line);
         
         // 열려있던 메뉴 창 닫기
@@ -63,7 +84,8 @@ const EditLineBlock = React.forwardRef(
         
         // 포커스
         focusSelf();
-    }, [tagStyle])
+
+    }, [line.tag])
 
     function typing(e: React.FormEvent<HTMLParagraphElement>) {
         line.html = lineRef.current?.innerHTML || '';
@@ -71,16 +93,31 @@ const EditLineBlock = React.forwardRef(
     }
 
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
+        console.log(window.getSelection());
         // 새 EditLine 생성하고 focus 이동
         if (e.key === 'Enter') {
             e.preventDefault();
             addBlockHandler(line);
         }
         // 현재 EditLine 삭제하고 이전 focus 이동
-        else if (e.key === 'Backspace' && line.html === '') {
-            e.preventDefault();
-            lineRef.current?.remove();
-        } else if (e.key === 'ArrowDown') {
+        else if (e.key === 'Backspace') {
+            if (line.html === '') {
+                e.preventDefault();
+                lineRef.current?.remove();
+            }
+            else if (window.getSelection()?.focusOffset === 0 && window.getSelection()?.anchorOffset === 0) {
+                e.preventDefault();
+
+                lineRef.current?.remove();
+
+                let prevLine = props.getBeforeLineData(line);
+                if (prevLine) {
+                    prevLine.html += line.html;
+                    updateContent(prevLine);
+                }
+            }
+        }
+        else if (e.key === 'ArrowDown') {
             // firstChild 에는 + 버튼이 들어갈 수 있음
             (lineRef.current?.parentElement?.nextSibling?.lastChild as HTMLElement).focus();
         } else if (e.key === 'ArrowUp') {
@@ -133,26 +170,43 @@ const EditLineBlock = React.forwardRef(
                 <>
                     <SelectButton
                         onClick={clickedSettingBT}
-                    ><IconPlus/></SelectButton>
-                    
+                    >
+                        <IconPlus/>
+                    </SelectButton>
                     <MoveButton
-                        data-movable-handle
-                        
+                        data-movable-handle    
                         tabIndex={-1}
-                    ><IconGripVertical/></MoveButton>
-                     
+                    >
+                        <IconGripVertical/>
+                    </MoveButton>
                 </>
             }
-            <DynamicTag 
-                // onFocus={(e)=>setFocusing(true)}
-                // onBlur={blurEv}
-                as={tagStyle}
-                ref={lineRef}
-                onInput={typing}
-                onKeyDown={keyHandler}
-                // onFocus={()=>{setFocusing(true)}} onBlur={()=>{setFocusing(false)}} 
-            >
-            </DynamicTag>
+            {
+                line.tag !== 'ol' ?
+                <DynamicTag 
+                    // onFocus={(e)=>setFocusing(true)}
+                    // onBlur={blurEv}
+                    as={line.tag}
+                    ref={lineRef}
+                    onInput={typing}
+                    onKeyDown={keyHandler}
+                    // onFocus={()=>{setFocusing(true)}} onBlur={()=>{setFocusing(false)}} 
+                >
+                </DynamicTag>
+                :
+                <ol start={line.flag}>
+                <DynamicTag 
+                    // onFocus={(e)=>setFocusing(true)}
+                    // onBlur={blurEv}
+                    as={'li'}
+                    ref={lineRef}
+                    onInput={typing}
+                    onKeyDown={keyHandler}
+                    // onFocus={()=>{setFocusing(true)}} onBlur={()=>{setFocusing(false)}} 
+                >
+                </DynamicTag>
+                </ol>
+            }
         </Line>
     )
 });

@@ -63,6 +63,11 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
             icon: <IconAbc/>,
             ret: 'p',
         },
+        {
+            text: 'ol',
+            icon: <IconAbc/>,
+            ret: 'ol',
+        },
     ];
 
     // function ff(e: any) {

@@ -17,19 +17,19 @@ const DynamicTag = React.forwardRef(
     ) => {
 
     return (
-        <Tag
-            className='outline-none'
-            spellCheck='false'
-            ref={ref}
-            onInput={onInput}
-            onKeyDown={onKeyDown}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            contentEditable
-            suppressContentEditableWarning={true}
-        >
-            { children }
-        </Tag>
+            <Tag
+                className='outline-none'
+                spellCheck='false'
+                ref={ref}
+                onInput={onInput}
+                onKeyDown={onKeyDown}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                contentEditable
+                suppressContentEditableWarning={true}
+            >
+                { children }
+            </Tag>
     );
 });
 

@@ -92,6 +92,10 @@ const Editor = () => {
     
     function changeCurLine(id: string, posX?: number, posY?: number) {
         // const idx = content.findIndex(line => line.id === id);
+
+        if (openMenu)
+            return;
+
         if (posX !== undefined && posY !== undefined)
             setMenuPos({posX, posY});
         setCurTargetId(id);
@@ -112,6 +116,15 @@ const Editor = () => {
         // e.preventDefault();
         
         window.getSelection()?.removeAllRanges();
+    }
+
+    function getBeforeLineData(curline: LINE_TYPE) {
+        const idx = content.findIndex(line => line.id === curline.id);
+
+        if (idx <= 0)
+            return undefined;
+
+        return content[idx - 1];
     }
 
     function mouseUp(_e: React.MouseEvent<HTMLDivElement>) {
@@ -177,9 +190,9 @@ const Editor = () => {
                         line={value}
                         updateContent={updateContentHandler}
                         addBlockHandler={addBlockHandler}
-                        tagStyle={value.tag}
                         setOpenMenu={setOpenMenu}
                         changeCurLine={changeCurLine}
+                        getBeforeLineData={getBeforeLineData}
                         style={{
                           ...props.style,
                         }}
