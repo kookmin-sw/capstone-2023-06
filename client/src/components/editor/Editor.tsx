@@ -7,34 +7,21 @@ import EditMenu from './SelectMenu';
 
 import Dragond from './Dragond';
 
+import { List as MovableContainer , arrayMove, arrayRemove } from 'react-movable';
 
-import { List  , arrayMove, arrayRemove } from 'react-movable';
-
-import { IItemProps } from 'react-movable';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../modules';
+import { addLine, changeTag, updateContent } from '../../modules/editor';
 
 export const EditorContainer = styled.div`
     background-color: #ecffeb;
     padding: 1rem;
 `;
-// export const EditorContainer = React.forwardRef((props : any, ref: React.Ref<HTMLDivElement>) => {
-//     return <EditorContainerProvider {...props}></EditorContainerProvider>
-// });
-
-const cid = () => {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
-};
-
 
 const Editor = () => {
-    const initialLine : LINE_TYPE = { 
-        id: cid(),
-        html: '',
-        tag: 'p',
-        flag: 0
-    };
-
     // 전체 내용
-    const [content, setContent] = React.useState<LINE_TYPE[]>([initialLine]);
+    const dispatch = useDispatch();
+    const content = useSelector((state: RootState) => state.editor);
 
     // 선의 속성을 변경 시켜줄 메뉴 state
     const [openMenu, setOpenMenu] = React.useState<boolean>(false);
@@ -45,54 +32,7 @@ const Editor = () => {
     const [openDragond, setOpenDragond] = React.useState<boolean>(false);
     const [dragondPos, setDragondPos] = React.useState<POSITION>({ posX: 0, posY: 0 });
 
-    function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
-        if (e.key === 'Enter') {
-            // 새 EditLine 생성하고 focus 이동
-            e.preventDefault();
-
-
-            // const idx = content.findIndex(line => line.id === )
-
-            // setContent((prev) => [...prev,
-            //     {
-            //         id: cid(),
-            //         html: 'aaaa',
-            //         tag: 'p',
-            //         flag: 0
-            //     }
-            // ]);
-
-
-
-            // e.target.nextSibling.focus();
-        }
-    }
-
-    function updateContentHandler(curline: LINE_TYPE) {
-        const idx = content.findIndex(line => line.id === curline.id);
-
-        setContent((prev) => {
-            prev[idx] = curline;
-
-            return [...prev];
-        })
-    }
-
-    function addBlockHandler(curline: LINE_TYPE) {
-        const idx = content.findIndex(line => line.id === curline.id);
-
-        setContent((prev) => {
-            prev.splice(idx + 1, 0, initialLine);
-            
-            return [
-                ...prev
-            ]
-        });
-    }
-    
     function changeCurLine(id: string, posX?: number, posY?: number) {
-        // const idx = content.findIndex(line => line.id === id);
-
         if (openMenu)
             return;
 
@@ -102,29 +42,13 @@ const Editor = () => {
     }
 
     function changeElementTagStyle(tag: React.ElementType) {
-        setContent((prev) => {
-            const idx = prev.findIndex(line => line.id === curTargetId);
-            if (idx !== -1)
-                prev[idx].tag = tag;
-            return [
-                ...prev
-            ]
-        });
+        dispatch(changeTag(curTargetId, tag));
     }
 
     function mouseDown(_e: React.MouseEvent<HTMLDivElement>) {
         // e.preventDefault();
         
         window.getSelection()?.removeAllRanges();
-    }
-
-    function getBeforeLineData(curline: LINE_TYPE) {
-        const idx = content.findIndex(line => line.id === curline.id);
-
-        if (idx <= 0)
-            return undefined;
-
-        return content[idx - 1];
     }
 
     function mouseUp(_e: React.MouseEvent<HTMLDivElement>) {
@@ -141,11 +65,10 @@ const Editor = () => {
         let selectionRect = sel.getRangeAt(0).getBoundingClientRect();
         const posX = selectionRect.x +
                         (selectionRect.right - selectionRect.left) / 2 +
-                        0;
+                        0;      // offset 값
         const posY = selectionRect.bottom +
-                        16 +
                         scrollTop +
-                        0;
+                        16;     // offset 값
 
         setDragondPos({posX, posY});
         setOpenDragond(true);
@@ -170,13 +93,14 @@ const Editor = () => {
                 />
             }
 
-            <List
+            <MovableContainer
+                lockVertically
                 values={content}
                 onChange={({ oldIndex, newIndex }) => {
-                    return setContent(arrayMove(content, oldIndex, newIndex))
+                    return dispatch(updateContent( arrayMove(content, oldIndex, newIndex) ))
                 }}
                 renderList={({ children, props, isDragged }) => (
-                    <EditorContainer onKeyDown={keyHandler} onMouseDown={mouseDown} onMouseUp={mouseUp}
+                    <EditorContainer onMouseDown={mouseDown} onMouseUp={mouseUp}
                         {...props}
                     >
                         {children}
@@ -188,15 +112,13 @@ const Editor = () => {
                         {...props}
                         curLineId={curTargetId}
                         line={value}
-                        updateContent={updateContentHandler}
-                        addBlockHandler={addBlockHandler}
                         setOpenMenu={setOpenMenu}
                         changeCurLine={changeCurLine}
-                        getBeforeLineData={getBeforeLineData}
                         style={{
                           ...props.style,
+                          marginTop: '10px',
+                          marginBottom: '10px',
                         }}
-                        // tag={'p'}
                     ></EditLineBlock>
                 )}
             />

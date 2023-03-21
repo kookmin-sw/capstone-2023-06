@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { IconH1, IconH2, IconH3, IconAbc } from '@tabler/icons-react';
+import {
+    IconH1, IconH2, IconH3, IconAbc, 
+    IconList, IconListNumbers } from '@tabler/icons-react';
 import React from 'react';
 // 아이콘 : https://tabler-icons.io/
 import { POSITION } from './type';
@@ -65,8 +67,13 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
         },
         {
             text: 'ol',
-            icon: <IconAbc/>,
+            icon: <IconListNumbers/>,
             ret: 'ol',
+        },
+        {
+            text: 'ul',
+            icon: <IconList/>,
+            ret: 'ul',
         },
     ];
 

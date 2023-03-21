@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { LINE_TYPE } from './type';
 
-import DynamicTag from './DynamicTag';
-import { SelectButton, MoveButton } from './EditorButton';
-import SelectMenu from './SelectMenu';
-
 import { IconPlus, IconGripVertical } from '@tabler/icons-react';
 import { IItemProps } from 'react-movable';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../modules';
+import { addLine, changeTag, removeLine, updateHtml } from '../../modules/editor';
+
+import DynamicTag from './DynamicTag';
+import { SelectButton, MoveButton } from './EditorButton';
 
 const Line = styled.div`
     position: relative;
@@ -21,50 +23,40 @@ const Line = styled.div`
 type LineBlockType = IItemProps & {
     curLineId: string,
     line: LINE_TYPE,
-    updateContent: (e:LINE_TYPE)=>void,
     setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>,
     changeCurLine: (line_id:string, posX?:number, posY?:number)=>void,
-    addBlockHandler: (curLine:LINE_TYPE)=>void,
-    getBeforeLineData: (curLine:LINE_TYPE)=>LINE_TYPE | undefined,
 }
-const EditLineBlock = React.forwardRef(
-    (
-        props : LineBlockType,
-        ref: React.Ref<HTMLDivElement>
-    ) => {
-    
-    const { curLineId, line, updateContent, setOpenMenu, changeCurLine, addBlockHandler } = props;
+const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<HTMLDivElement> ) => {
+    const dispatch = useDispatch();
+    const content = useSelector((state: RootState) => state.editor);
+        
+    const { curLineId, line, /*updateContent, */ setOpenMenu, changeCurLine  /*, addBlockHandler*/ } = props;
     const lineRef = React.useRef<HTMLParagraphElement>(null);
-    // const [focusing, setFocusing] = React.useState<boolean>(false);
 
-    // const [content, setContent] = React.useState<string | undefined>('');
-    // const [line.tag, setline.tag] = React.useState<React.ElementType>('p');
-
+    /**
+     * 라인이 삭제 되어서 그 아래 컴포넌트들이 다시 렌더링 되어야 할때 필요함.
+     */
     React.useEffect(() => {
         if (lineRef.current)
             lineRef.current.innerHTML = line.html;
-
-            console.log('chg');
         
     }, [line]);
 
-    React.useEffect(() => {
-        if (lineRef.current)
-            lineRef.current.innerHTML = line.html;
-            console.log('chg333333333');
-        
-    }, [line.html]);
-
+    /**
+     * 라인 새로 생성 되었을때 포커싱 하기
+     */
     React.useEffect(() => {
         focusSelf();
     }, [lineRef]);
 
-    // line.tag 변경되서 컴포넌트 재렌더링된 이후
+    /**
+     * line.tag 변경되서 컴포넌트 재렌더링된 이후 설정 필요
+     */
     React.useEffect(() => {
         // 태그 변경됨 알림
         if (line.tag === 'ol' || line.tag === 'ul') {
             // 만약 ol, ul 형태가 된다면 이전 태그도 그런지 확인, 만약 그렇다면 flag 값이 변경되어야 함
-            const prevLineData = props.getBeforeLineData(line);
+            const prevLineData = getBeforeLineData(line);
 
             if (prevLineData?.tag === line.tag) {
                 line.flag = prevLineData.flag + 1;
@@ -72,7 +64,7 @@ const EditLineBlock = React.forwardRef(
                 line.flag = 0;
             }
         }
-        updateContent(line);
+        dispatch(changeTag(line.id, line.tag));
         
         // 열려있던 메뉴 창 닫기
         setOpenMenu(false);
@@ -87,44 +79,77 @@ const EditLineBlock = React.forwardRef(
 
     }, [line.tag])
 
-    function typing(e: React.FormEvent<HTMLParagraphElement>) {
-        line.html = lineRef.current?.innerHTML || '';
-        updateContent(line);
+    /**
+     * 입력(수정)
+     * @param _e 입력 이벤트
+     */
+    function typing(_e: React.FormEvent<HTMLParagraphElement>) {
+        dispatch(updateHtml(line.id, lineRef.current?.innerHTML || ''));
     }
 
+    /**
+     * 현재 Line 기준으로 위에 있는 Line 데이터 가져오기
+     * @param {LINE_TYPE} curLine 현재 라인 데이터
+     * @returns {LINE_TYPE || undefined} 위에 있는 라인 데이터
+     */
+    function getBeforeLineData(curLine: LINE_TYPE) {
+        const idx = content.findIndex(line => line.id === curLine.id);
+
+        if (idx <= 0)
+            return undefined;
+
+        return content[idx - 1];
+    }
+
+    /**
+     * 키 입력 핸들러
+     * @param e 입력 키 이벤트
+     */
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
-        console.log(window.getSelection());
+        // console.log(window.getSelection());
+
         // 새 EditLine 생성하고 focus 이동
         if (e.key === 'Enter') {
             e.preventDefault();
-            addBlockHandler(line);
+            
+            dispatch(addLine(line.id));
         }
-        // 현재 EditLine 삭제하고 이전 focus 이동
-        else if (e.key === 'Backspace') {
+        // 현재 EditLine 삭제하고 이전 focus 이동 (첫째 줄이라면 제거 되어선 안되므로 무시)
+        else if (e.key === 'Backspace' && content[0].id !== line.id) {
             if (line.html === '') {
                 e.preventDefault();
-                lineRef.current?.remove();
+
+                dispatch(removeLine(line.id));
             }
             else if (window.getSelection()?.focusOffset === 0 && window.getSelection()?.anchorOffset === 0) {
                 e.preventDefault();
 
-                lineRef.current?.remove();
-
-                let prevLine = props.getBeforeLineData(line);
+                // 내 위에 라인이 남아있다면 내 뒤에 있는 내용들을 그 위에 붙여 줘야 함.
+                let prevLine = getBeforeLineData(line);
                 if (prevLine) {
                     prevLine.html += line.html;
-                    updateContent(prevLine);
+                    
+                    (lineRef.current?.parentElement?.previousSibling?.lastChild as HTMLElement).innerHTML = prevLine.html;
+                    
+                    dispatch(updateHtml(prevLine.id, prevLine.html));
                 }
+                
+                // 현재 줄 삭제
+                dispatch(removeLine(line.id));
             }
         }
         else if (e.key === 'ArrowDown') {
-            // firstChild 에는 + 버튼이 들어갈 수 있음
+            // firstChild 에는 + 버튼이 들어갈 수 있기 때문에 lastChild로 찾아야 함
             (lineRef.current?.parentElement?.nextSibling?.lastChild as HTMLElement).focus();
         } else if (e.key === 'ArrowUp') {
             (lineRef.current?.parentElement?.previousSibling?.lastChild as HTMLElement).focus();
         }
     }
 
+    /**
+     * 라인의 속성을 변경하려 함 (설정창 열기와 현재 타겟 line id를 변경)
+     * @param e 클릭 이벤트
+     */
     function clickedSettingBT(e: React.MouseEvent<HTMLElement>) {
         const { left, top } = e.currentTarget.getBoundingClientRect();
         
@@ -134,11 +159,13 @@ const EditLineBlock = React.forwardRef(
         setOpenMenu(prev => !prev);
     }
 
-    function editOnHandler(e: any) {
-        // setFocusing(true);
-
+    /**
+     * Line 에 마우스 올려둠
+     */
+    function onMouseEnterHandler(_e: any) {
         changeCurLine(line.id);
     }
+
     /**
      * Line 포커스 시키기
      */
@@ -162,7 +189,7 @@ const EditLineBlock = React.forwardRef(
         <Line
             style={props.style}
             ref={ref}
-            onMouseEnter={editOnHandler}
+            onMouseEnter={onMouseEnterHandler}
             // onMouseLeave={editExitHandler}
         >
             {
@@ -182,30 +209,13 @@ const EditLineBlock = React.forwardRef(
                 </>
             }
             {
-                line.tag !== 'ol' ?
-                <DynamicTag 
-                    // onFocus={(e)=>setFocusing(true)}
-                    // onBlur={blurEv}
-                    as={line.tag}
-                    ref={lineRef}
-                    onInput={typing}
-                    onKeyDown={keyHandler}
-                    // onFocus={()=>{setFocusing(true)}} onBlur={()=>{setFocusing(false)}} 
-                >
-                </DynamicTag>
-                :
-                <ol start={line.flag}>
-                <DynamicTag 
-                    // onFocus={(e)=>setFocusing(true)}
-                    // onBlur={blurEv}
-                    as={'li'}
-                    ref={lineRef}
-                    onInput={typing}
-                    onKeyDown={keyHandler}
-                    // onFocus={()=>{setFocusing(true)}} onBlur={()=>{setFocusing(false)}} 
-                >
-                </DynamicTag>
-                </ol>
+                    <DynamicTag 
+                        as={line.tag}
+                        ref={lineRef}
+                        onInput={typing}
+                        onKeyDown={keyHandler}
+                    >
+                    </DynamicTag>
             }
         </Line>
     )

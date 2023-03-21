@@ -2,7 +2,7 @@ import { createGlobalStyle, css } from "styled-components"
 import reset from 'styled-reset'    // normalize쓸지 고민하다가 reset 으로 결정
 
 export const GlobalStyle = createGlobalStyle`
-    ${ reset }
+    
     
     ${({ theme }) => {
         return css`
@@ -79,9 +79,6 @@ export const GlobalStyle = createGlobalStyle`
             margin-inline-start: 0px;
             margin-inline-end: 0px;
             padding-inline-start: 40px;
-        }
-        ul {
-            list-style: disc;
         }
 
         .primary {

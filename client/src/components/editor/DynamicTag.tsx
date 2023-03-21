@@ -1,4 +1,4 @@
-import React, { FC, FunctionComponent, PropsWithoutRef, PropsWithRef, RefObject } from 'react';
+import React from 'react';
 
 type Props = {
     as?: React.ElementType;
@@ -16,20 +16,32 @@ const DynamicTag = React.forwardRef(
         ref: React.Ref<HTMLDivElement>
     ) => {
 
+    const props = {
+        className:'outline-none',
+        spellCheck:'false',
+        // ref:{ref},
+        // onInput:{onInput},
+        // onKeyDown:{onKeyDown},
+        // onFocus:{onFocus},
+        // onBlur:{onBlur},
+    }
+
+
     return (
-            <Tag
-                className='outline-none'
-                spellCheck='false'
-                ref={ref}
-                onInput={onInput}
-                onKeyDown={onKeyDown}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                contentEditable
-                suppressContentEditableWarning={true}
-            >
-                { children }
-            </Tag>
+        <Tag
+            // className='outline-none'
+            // spellCheck='false'
+            ref={ref}
+            onInput={onInput}
+            onKeyDown={onKeyDown}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            contentEditable
+            suppressContentEditableWarning={true}
+            {...props}
+        >
+            { children }
+        </Tag>
     );
 });
 
