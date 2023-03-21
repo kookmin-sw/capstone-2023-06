@@ -29,10 +29,39 @@ How about using **DESKSETUP**? We offer the following services.
 현재는 공란입니다.
 
 ## 🏃 올바른 데스크셋업 문화를 만들어가는 사람들 
-|프로필|이름|학번|역할|
-|:---:|:---:|:----:|:---------------:|
-|<img width="100" alt="김동원" src="https://user-images.githubusercontent.com/63653473/226567182-03aff492-e902-4a0e-91b8-11cabbd80377.jpeg">|김동원|****1580|팀장 / 메인 백엔드|
-|<img width="100" alt="강예찬" src="https://user-images.githubusercontent.com/63653473/226567131-26e7d4d1-2ed7-45a1-bfec-28370cef7ee0.png">|강예찬|****1568|메인 프론트|
-|<img width="100" alt="강민수" src="https://user-images.githubusercontent.com/63653473/226567105-0aab73c7-7de3-4903-9265-e25140f1110d.png">|강민수|****1567|기획 / 프론트 / 디자인| 
-|<img width="100" alt="김도엽" src="https://user-images.githubusercontent.com/63653473/226566766-dc5e9c3c-eff9-4f6e-97a8-0746ddcbc04a.png">|김도엽|****1579|백엔드|
-|<img width="100" alt="정나영" src="https://user-images.githubusercontent.com/63653473/226567166-2e1e0972-a943-4ad2-84ac-4de7790df521.png">|정나영|****3131|프론트|
+<table>
+	<th>프로픨</th>
+	<th>이름</th>
+  <th>학번</th>
+  <th>역할</th>
+	<tr>
+	    <td><img width="100" alt="김동원" src="https://user-images.githubusercontent.com/63653473/226567182-03aff492-e902-4a0e-91b8-11cabbd80377.jpeg"></td>
+	    <td>김동원</td>
+      <td>****1580</td>
+      <td>팀장 / 메인 백엔드</td>
+	</tr>
+	<tr>
+	    <td><img width="100" alt="강예찬" src="https://user-images.githubusercontent.com/63653473/226567131-26e7d4d1-2ed7-45a1-bfec-28370cef7ee0.png"></td>
+	    <td>강예찬</td>
+      <td>****1568</td>
+      <td>메인 프론트</td>
+	</tr>
+	<tr>
+	    <td><img width="100" alt="강민수" src="https://user-images.githubusercontent.com/63653473/226567105-0aab73c7-7de3-4903-9265-e25140f1110d.png"></td>
+	    <td>강민수</td>
+      <td>****1567</td>
+      <td>기획 / 프론트 / 디자인</td>
+	</tr>
+	<tr>
+	    <td><img width="100" alt="김도엽" src="https://user-images.githubusercontent.com/63653473/226566766-dc5e9c3c-eff9-4f6e-97a8-0746ddcbc04a.png"></td>
+	    <td>김도엽</td>
+      <td>****1579</td>
+      <td>백엔드</td>
+	</tr>
+	<tr>
+	    <td><img width="100" alt="정나영" src="https://user-images.githubusercontent.com/63653473/226567166-2e1e0972-a943-4ad2-84ac-4de7790df521.png"></td>
+	    <td>정나영</td>
+      <td>****3131</td>
+      <td>프론트</td>
+	</tr>
+</table>
