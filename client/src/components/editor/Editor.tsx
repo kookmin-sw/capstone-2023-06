@@ -7,10 +7,18 @@ import EditMenu from './SelectMenu';
 
 import Dragond from './Dragond';
 
+
+import { List  , arrayMove, arrayRemove } from 'react-movable';
+
+import { IItemProps } from 'react-movable';
+
 export const EditorContainer = styled.div`
     background-color: #ecffeb;
     padding: 1rem;
 `;
+// export const EditorContainer = React.forwardRef((props : any, ref: React.Ref<HTMLDivElement>) => {
+//     return <EditorContainerProvider {...props}></EditorContainerProvider>
+// });
 
 const cid = () => {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
@@ -100,13 +108,13 @@ const Editor = () => {
         });
     }
 
-    function mouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    function mouseDown(_e: React.MouseEvent<HTMLDivElement>) {
         // e.preventDefault();
         
         window.getSelection()?.removeAllRanges();
     }
 
-    function mouseUp(e: React.MouseEvent<HTMLDivElement>) {
+    function mouseUp(_e: React.MouseEvent<HTMLDivElement>) {
         // e.preventDefault();
 
         const sel = window.getSelection();
@@ -149,25 +157,43 @@ const Editor = () => {
                 />
             }
 
-            <EditorContainer onKeyDown={keyHandler} onMouseDown={mouseDown} onMouseUp={mouseUp}>
-                {
-                    content?.map(e => {
-                        return <EditLineBlock
-                            key={e.id} 
-                            // text={e.html}
-                            curLineId={curTargetId}
-                            line={e}
-                            updateContent={updateContentHandler}
-                            addBlockHandler={addBlockHandler}
-                            tagStyle={e.tag}
-                            setOpenMenu={setOpenMenu}
-                            changeCurLine={changeCurLine}
-                            // tag={'p'}
-                        ></EditLineBlock>
-                    })
-                }
-                {/* <EditLine></EditLine> */}
-            </EditorContainer>
+            <List
+                values={content}
+                onChange={({ oldIndex, newIndex }) => {
+                    return setContent(arrayMove(content, oldIndex, newIndex))
+                }}
+                renderList={({ children, props, isDragged }) => (
+                    <EditorContainer onKeyDown={keyHandler} onMouseDown={mouseDown} onMouseUp={mouseUp}
+                        {...props}
+                    >
+                        {children}
+                    </EditorContainer>
+
+                )}
+                renderItem={({ value, props, isDragged, isSelected }) => (
+                    <EditLineBlock
+                        {...props}
+                        curLineId={curTargetId}
+                        line={value}
+                        updateContent={updateContentHandler}
+                        addBlockHandler={addBlockHandler}
+                        tagStyle={value.tag}
+                        setOpenMenu={setOpenMenu}
+                        changeCurLine={changeCurLine}
+                        style={{
+                          ...props.style,
+                        }}
+                        // tag={'p'}
+                    ></EditLineBlock>
+                )}
+            />
+
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
 
             <div>
                 { content.map(e => JSON.stringify(e)) }

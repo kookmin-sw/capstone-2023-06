@@ -10,7 +10,12 @@ type Props = {
     onBlur?: (e:React.FocusEvent<HTMLInputElement>)=>void;
 };
 
-const DynamicTag = React.forwardRef(({ as: Tag = "p", children, onInput, onKeyDown, onFocus, onBlur } : Props, ref: React.Ref<HTMLDivElement>) => {
+const DynamicTag = React.forwardRef(
+    (
+        { as: Tag = "p", children, onInput, onKeyDown, onFocus, onBlur } : Props, 
+        ref: React.Ref<HTMLDivElement>
+    ) => {
+
     return (
         <Tag
             className='outline-none'
