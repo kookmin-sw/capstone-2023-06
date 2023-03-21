@@ -1,6 +1,5 @@
 const mysql = require("../../database/connect.js");
-const table = "USER";
-const passport = require('passport');
+const table = "user";
 
 const User = function(user){
     this.uid = user.uid;
@@ -33,7 +32,7 @@ User.findByNickname = function (nickname, result) {
 
 User.create = function(nickname, password, email, picture, userRoleId, result){
     const INSERT_QUERY = `
-        INSERT INTO ${table} (NICKNAME, PASSWORD, EMAIL, PICTURE, USER_ROLE_ID) 
+        INSERT INTO ${table} (nickname, password, email, picture, user_role_id) 
         VALUES('${nickname}', '${password}', '${email}', '${picture}', ${userRoleId});
     `;
     mysql.query(INSERT_QUERY, (err, res)=>{

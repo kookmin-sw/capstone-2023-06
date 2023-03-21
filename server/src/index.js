@@ -7,7 +7,6 @@ const passport = require('passport');
 const passportConfig = require('./routes/passport');
 const UserRoute = require("./routes/user_routes.js");
 const ProductRoute = require("./routes/product_routes.js");
-var bodyParser = require("body-parser");
 
 var cookieParser = require('cookie-parser');
 const dotenv = require("dotenv");
