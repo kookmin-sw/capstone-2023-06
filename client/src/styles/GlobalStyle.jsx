@@ -81,6 +81,22 @@ export const GlobalStyle = createGlobalStyle`
             padding-inline-start: 40px;
         }
 
+        .ol-li {
+            list-style-type: decimal;
+        }
+        .ul-li {
+            list-style-type: disc;
+        }
+
+        blockquote {
+            margin: 0 0 1rem;
+            padding-top: 5px;
+            padding-bottom: 2px;
+            padding-left: 14px;
+            border-left: ${theme.colors.primary} 4px solid;
+            background-color: #f6fff5;
+        }
+
         .primary {
             color: ${theme.colors.primary};
         }

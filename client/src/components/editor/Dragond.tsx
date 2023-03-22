@@ -7,6 +7,7 @@ import {
 } from '@tabler/icons-react';
 import { ToolButton } from './ToolButton';
 import { POSITION } from './type';
+import React from 'react';
 
 type Tool = {
     icon: JSX.Element,
@@ -28,6 +29,8 @@ const DragondContainer = styled.div`
 `;
 
 const Dragond = ({ posX, posY } : POSITION) => {
+    const [openSubDragond, setOpenSubDragond] = React.useState<boolean>(false);
+    
     const tools : Tool[] = [
         {
             icon: <IconBold/>,
@@ -104,6 +107,13 @@ const Dragond = ({ posX, posY } : POSITION) => {
                         value={tool.value || undefined}
                     ></ToolButton>
                 )
+            }
+
+            {
+                openSubDragond &&
+                <div>
+
+                </div>
             }
 
         </DragondContainer>

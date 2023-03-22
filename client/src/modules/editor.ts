@@ -17,9 +17,10 @@ export const changeTag = (id:string, tag: ElementType<any>) => ({
     id: id,
     payload: tag,
 });
-export const addLine = (id:string) => ({
+export const addLine = (id:string, content: string = '') => ({
     type: ADD_LINE,
     id: id,
+    payload: content
 });
 export const removeLine = (id:string) => ({
     type: REMOVE_LINE,
@@ -69,13 +70,15 @@ function editor(
 
         case ADD_LINE:
             idx = state.findIndex(line => line.id === action.id);
-            if (idx > -1)
+            if (idx > -1) {
+                const newTag = state[idx].tag === 'ol' || state[idx].tag === 'ul' ? state[idx].tag : 'p';
                 state.splice(idx + 1, 0, {
                     id: generateRandomID(),
-                    html: '',
-                    tag: 'p',
+                    html: action.payload,
+                    tag: newTag,
                     flag: 0
                 });
+            }
             return [...state];
 
         case REMOVE_LINE:

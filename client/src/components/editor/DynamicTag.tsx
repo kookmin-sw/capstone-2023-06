@@ -16,21 +16,10 @@ const DynamicTag = React.forwardRef(
         ref: React.Ref<HTMLDivElement>
     ) => {
 
-    const props = {
-        className:'outline-none',
-        spellCheck:'false',
-        // ref:{ref},
-        // onInput:{onInput},
-        // onKeyDown:{onKeyDown},
-        // onFocus:{onFocus},
-        // onBlur:{onBlur},
-    }
-
-
     return (
         <Tag
-            // className='outline-none'
-            // spellCheck='false'
+            className={`outline-none`}
+            spellCheck='false'
             ref={ref}
             onInput={onInput}
             onKeyDown={onKeyDown}
@@ -38,7 +27,6 @@ const DynamicTag = React.forwardRef(
             onBlur={onBlur}
             contentEditable
             suppressContentEditableWarning={true}
-            {...props}
         >
             { children }
         </Tag>

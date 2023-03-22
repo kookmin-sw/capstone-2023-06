@@ -6,7 +6,7 @@ import { IconPlus, IconGripVertical } from '@tabler/icons-react';
 import { IItemProps } from 'react-movable';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
-import { addLine, changeTag, removeLine, updateHtml } from '../../modules/editor';
+import { addLine, changeTag, removeLine, updateContent, updateHtml } from '../../modules/editor';
 
 import DynamicTag from './DynamicTag';
 import { SelectButton, MoveButton } from './EditorButton';
@@ -56,7 +56,7 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
         // 태그 변경됨 알림
         if (line.tag === 'ol' || line.tag === 'ul') {
             // 만약 ol, ul 형태가 된다면 이전 태그도 그런지 확인, 만약 그렇다면 flag 값이 변경되어야 함
-            const prevLineData = getBeforeLineData(line);
+            const prevLineData = getLineData(line);
 
             if (prevLineData?.tag === line.tag) {
                 line.flag = prevLineData.flag + 1;
@@ -88,17 +88,18 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
     }
 
     /**
-     * 현재 Line 기준으로 위에 있는 Line 데이터 가져오기
+     * 현재 Line 기준으로 offset 만큼 있는 Line 데이터 가져오기
      * @param {LINE_TYPE} curLine 현재 라인 데이터
+     * @param {number} offset 기준, default 값은 내 이전 라인을 가져오겠다는 뜻
      * @returns {LINE_TYPE || undefined} 위에 있는 라인 데이터
      */
-    function getBeforeLineData(curLine: LINE_TYPE) {
-        const idx = content.findIndex(line => line.id === curLine.id);
+    function getLineData(curLine: LINE_TYPE, offset: number = -1) {
+        const idx = content.findIndex(line => line.id === curLine.id) + offset;
 
-        if (idx <= 0)
+        if (idx <= -1 || content.length <= idx)
             return undefined;
 
-        return content[idx - 1];
+        return content[idx];
     }
 
     /**
@@ -106,26 +107,54 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
      * @param e 입력 키 이벤트
      */
     function keyHandler(e: React.KeyboardEvent<HTMLParagraphElement>) {
-        // console.log(window.getSelection());
 
         // 새 EditLine 생성하고 focus 이동
         if (e.key === 'Enter') {
             e.preventDefault();
             
-            dispatch(addLine(line.id));
+            let sPos = window.getSelection()?.focusOffset || 0;     // selection 시작 pos
+            let ePos = window.getSelection()?.anchorOffset || 0;    // selection 끝나는 pos
+
+            if (ePos < sPos) [sPos, ePos] = [ePos, sPos];
+
+            if (0 < ePos && ePos < line.html.length) {
+                // 내 뒷 부분을 다음 줄로 이동
+                dispatch(addLine(line.id, line.html.slice(ePos)));
+
+                // 선택한 부분이 있다면 제거
+                line.html = line.html.slice(0, sPos);
+                if (lineRef.current) lineRef.current.innerHTML = line.html;
+                // 현재 줄은 상태에 따라 다시 변경
+                dispatch(updateHtml(line.id, line.html));
+            }
+            else {
+                dispatch(addLine(line.id));
+            }
         }
         // 현재 EditLine 삭제하고 이전 focus 이동 (첫째 줄이라면 제거 되어선 안되므로 무시)
         else if (e.key === 'Backspace' && content[0].id !== line.id) {
             if (line.html === '') {
                 e.preventDefault();
 
+                // ol, li 태그들은 줄 삭제 이전에 <p> 태그로의 변환이 한번 있어야 함
+                if (line.tag === 'ol' || line.tag === 'ul') {
+                    dispatch(changeTag(line.id, 'p'));
+                    return;
+                }
+
                 dispatch(removeLine(line.id));
             }
             else if (window.getSelection()?.focusOffset === 0 && window.getSelection()?.anchorOffset === 0) {
                 e.preventDefault();
 
+                // ol, li 태그들은 줄 삭제 이전에 <p> 태그로의 변환이 한번 있어야 함
+                if (line.tag === 'ol' || line.tag === 'ul') {
+                    dispatch(changeTag(line.id, 'p'));
+                    return;
+                }
+
                 // 내 위에 라인이 남아있다면 내 뒤에 있는 내용들을 그 위에 붙여 줘야 함.
-                let prevLine = getBeforeLineData(line);
+                let prevLine = getLineData(line);
                 if (prevLine) {
                     prevLine.html += line.html;
                     
@@ -136,6 +165,26 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
                 
                 // 현재 줄 삭제
                 dispatch(removeLine(line.id));
+            }
+        }
+        else if (e.key === 'Delete') {
+            const sPos = window.getSelection()?.focusOffset || 0;     // selection 시작 pos
+            const ePos = window.getSelection()?.anchorOffset || 0;    // selection 끝나는 pos
+
+            // 내 뒤에 있는 줄을 가져와야 함
+            if (sPos === line.html.length && ePos === line.html.length) {
+                const afterLineData = getLineData(line, 1);
+                if (afterLineData) {
+                    e.preventDefault();
+
+                    // 현재 줄의 데이터를 내 다음 데이터 앞에 붙임
+                    afterLineData.html = line.html + afterLineData.html;
+                    afterLineData.tag = line.tag;
+                    dispatch(updateHtml(afterLineData.id, afterLineData.html));
+                    
+                    // 현재 줄 삭제
+                    dispatch(removeLine(line.id));
+                }
             }
         }
         else if (e.key === 'ArrowDown') {
@@ -209,6 +258,28 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
                 </>
             }
             {
+                line.tag === 'ol' ?
+                    <ol start={line.flag + 1}>
+                        <DynamicTag 
+                            as={'li'}
+                            ref={lineRef}
+                            onInput={typing}
+                            onKeyDown={keyHandler}
+                        >
+                        </DynamicTag>
+                    </ol>
+                :
+                line.tag === 'ul' ?
+                    <ul>
+                        <DynamicTag 
+                            as={'li'}
+                            ref={lineRef}
+                            onInput={typing}
+                            onKeyDown={keyHandler}
+                        >
+                        </DynamicTag>
+                    </ul>
+                :
                     <DynamicTag 
                         as={line.tag}
                         ref={lineRef}

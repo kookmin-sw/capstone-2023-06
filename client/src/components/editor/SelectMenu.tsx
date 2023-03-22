@@ -75,6 +75,11 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
             icon: <IconList/>,
             ret: 'ul',
         },
+        {
+            text: 'blockquote',
+            icon: <IconList/>,
+            ret: 'blockquote',
+        },
     ];
 
     // function ff(e: any) {
