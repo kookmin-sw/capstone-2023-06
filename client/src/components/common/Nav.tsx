@@ -28,7 +28,6 @@ const NavBarCollapse = styled(NavBarStyle)`
     flex-basis: auto;
     flex-grow: 1;
     justify-content: end;
-    font-weight: bold;
 `;
 
 export const NavLinkItem = styled(NavLink)`

@@ -12,7 +12,8 @@ import React from 'react';
 type Tool = {
     icon: JSX.Element,
     commandId: string,
-    value?: string
+    value?: string,
+    needCheck?: boolean,
 }
 
 const DragondContainer = styled.div`
@@ -28,25 +29,46 @@ const DragondContainer = styled.div`
     -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
 `;
 
+export const RoundColorPicker = styled.div`
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 1.25rem;
+    overflow: hidden;
+`;
+export const ColorPicker = styled.input.attrs(props => ({
+    type: "color"
+}))`
+    border: 0;
+    padding: 0;
+    width: 200%;
+    height: 200%;
+    cursor: pointer;
+    transform: translate(-25%, -25%)
+`;
 const Dragond = ({ posX, posY } : POSITION) => {
     const [openSubDragond, setOpenSubDragond] = React.useState<boolean>(false);
-    
+    const [drawColor, setDrawColor] = React.useState<string>('#FFF');
+
     const tools : Tool[] = [
         {
             icon: <IconBold/>,
-            commandId: 'bold'
+            commandId: 'bold',
+            needCheck: true,
         },
         {
             icon: <IconItalic/>,
-            commandId: 'Italic'
+            commandId: 'Italic',
+            needCheck: true,
         },
         {
             icon: <IconUnderline/>,
-            commandId: 'Underline'
+            commandId: 'Underline',
+            needCheck: true,
         },
         {
             icon: <IconStrikethrough/>,
-            commandId: 'StrikeThrough'
+            commandId: 'StrikeThrough',
+            needCheck: true,
         },
         // {
         //     name: '내어쓰기',
@@ -105,15 +127,26 @@ const Dragond = ({ posX, posY } : POSITION) => {
                         icon={tool.icon}
                         commandId={tool.commandId}
                         value={tool.value || undefined}
+                        needCheck={tool.needCheck}
                     ></ToolButton>
                 )
             }
 
             {
-                openSubDragond &&
-                <div>
-
-                </div>
+                !openSubDragond &&
+                <DragondContainer
+                    posX={0}
+                    posY={64}
+                >
+                    <RoundColorPicker>
+                        <ColorPicker
+                            value={drawColor}
+							onChange={e => { 
+								setDrawColor(e.target.value);
+							}}
+                        />
+                    </RoundColorPicker>
+                </DragondContainer>
             }
 
         </DragondContainer>

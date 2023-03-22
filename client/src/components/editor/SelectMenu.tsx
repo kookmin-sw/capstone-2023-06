@@ -82,10 +82,6 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
         },
     ];
 
-    // function ff(e: any) {
-    //     onClickHandler()
-    // }
-
     return (
         <EditMenuBlock
             posX={posX}
