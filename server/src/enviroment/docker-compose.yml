@@ -33,6 +33,9 @@ services:
       MYSQL_DATABASE: "${DB_TEST_NAME}"
       MYSQL_ROOT_PASSWORD: "${DB_PASS}"
       TZ: "Asia/Seoul"
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     stdin_open: true # `-i`
     tty: true # `-t`
     networks:
