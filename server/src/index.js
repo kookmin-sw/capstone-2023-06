@@ -7,6 +7,7 @@ const passport = require('passport');
 const passportConfig = require('./routes/passport');
 const UserRoute = require("./routes/user_routes.js");
 const ProductRoute = require("./routes/product_routes.js");
+const PostRoute = require("./routes/post_routes.js");
 
 var cookieParser = require('cookie-parser');
 const dotenv = require("dotenv");
@@ -35,5 +36,6 @@ passportConfig();
 
 app.use("/api/user", UserRoute);
 app.use("/api/product", ProductRoute);
+app.use("/api/post", PostRoute);
 
 app.listen(process.env.TEST_SERVER_PORT, () => console.log("server start"));
