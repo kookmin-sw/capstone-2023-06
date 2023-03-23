@@ -77,6 +77,7 @@ exports.autologin = function (req, res) {
     if (req.isAuthenticated() && req.user) {
         res.json({
             success: true,
+            message: "유저 오토 로그인",
             user: userToResponse(req.user)
         });
         return;
@@ -84,6 +85,7 @@ exports.autologin = function (req, res) {
 
     res.json({
         success: false,
+        message: "유저 존재하지 않음",
         user: null
     });
 }
@@ -96,5 +98,30 @@ exports.logout = function (req, res) {
             "isSuccess": true,
             "result": "LOGOUT"
         });
+    });
+}
+
+exports.deleteUser = function (req, res) {
+    if(!req.isAuthenticated() || !req.user) {
+        res.status(403).send({
+            success: false,
+            message: "로그인 정보 없음"
+        });
+        return;
+    }
+
+    User.deleteById(req.user.id, (err, _) => {
+        if(err) {
+            res.status(400).send({
+                success: false,
+                message: "삭제 실패"
+            });
+            return;
+        }
+        
+        res.status(200).send({
+            success: true,
+            message: "delete 성공"
+        })
     });
 }
