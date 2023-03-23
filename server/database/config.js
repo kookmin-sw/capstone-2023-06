@@ -8,15 +8,17 @@ const config = {
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         port: process.env.DB_PORT,
-        database: process.env.DB_NAME
+        database: process.env.DB_NAME,
+        charset: "utf8mb4"
     },
     dev: {
         host: "dev_db_container",
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         port: process.env.DB_PORT,
-        database: process.env.DB_TEST_NAME
+        database: process.env.DB_TEST_NAME,
+        charset: "utf8mb4"
     }
-  };
+};
 
-  module.exports = config;
+module.exports = config;
