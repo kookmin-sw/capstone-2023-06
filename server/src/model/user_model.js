@@ -3,7 +3,7 @@ const mysql = require("../../database/connect.js");
 const table = "user";
 
 const User = function(user){
-    this.uid = user.uid;
+    this.id = user.id;
     this.nickname = user.nickname;
     this.password = user.password;
     this.email = user.email;
@@ -37,6 +37,17 @@ User.create = function(nickname, password, email, picture, userRoleId, result){
         VALUES('${nickname}', '${password}', '${email}', '${picture}', ${userRoleId});
     `;
     mysql.query(INSERT_QUERY, (err, res)=>{
+        if (err) {
+            result(err, null);
+        } else {
+            result(null, res);
+        }
+    });
+}
+
+User.deleteById = function (id, result) {
+    const DELETE_QUERY = `delete from ${table} where id = ${id};`;
+    mysql.query(DELETE_QUERY, (err, res)=> {
         if (err) {
             result(err, null);
         } else {
