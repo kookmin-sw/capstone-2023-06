@@ -74,6 +74,8 @@ const Editor = () => {
         setOpenDragond(true);
     }
 
+    const [drawColor, setDrawColor] = React.useState<string>('#FFF');
+
     return (
         <>
             {
@@ -81,6 +83,8 @@ const Editor = () => {
                 <Dragond
                     posX={dragondPos.posX}
                     posY={dragondPos.posY}
+                    drawColor={drawColor}
+                    setDrawColor={setDrawColor}
                 />
             }
 

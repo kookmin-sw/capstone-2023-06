@@ -2,7 +2,7 @@ import { createGlobalStyle, css } from "styled-components"
 import reset from 'styled-reset'    // normalize쓸지 고민하다가 reset 으로 결정
 
 export const GlobalStyle = createGlobalStyle`
-    
+    ${reset}
     
     ${({ theme }) => {
         return css`

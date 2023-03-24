@@ -189,9 +189,19 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
         }
         else if (e.key === 'ArrowDown') {
             // firstChild 에는 + 버튼이 들어갈 수 있기 때문에 lastChild로 찾아야 함
-            (lineRef.current?.parentElement?.nextSibling?.lastChild as HTMLElement).focus();
+            let nextSibling = (lineRef.current?.parentElement?.nextSibling?.lastChild as HTMLElement);
+            // 더음 태그가 ol, li 태그라면 child 가 하나 더 있기 떄문에 예외 처리
+            if (['OL', 'LI'].includes(nextSibling.nodeName))
+                nextSibling = nextSibling.lastChild as HTMLElement;
+            nextSibling.focus();
         } else if (e.key === 'ArrowUp') {
-            (lineRef.current?.parentElement?.previousSibling?.lastChild as HTMLElement).focus();
+            // 현재 태그가 ol, li 태그라면 parent 태그가 하나 더 있기 때문에 예외 처리
+            let prevSibling = lineRef.current?.parentElement;
+            if (line.tag === 'ol' || line.tag === 'li')
+                prevSibling = (prevSibling?.parentElement?.previousSibling?.lastChild as HTMLElement);
+            else
+                prevSibling = (prevSibling?.previousSibling?.lastChild as HTMLElement);
+            prevSibling.focus();
         }
     }
 

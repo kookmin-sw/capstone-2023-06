@@ -45,9 +45,13 @@ export const ColorPicker = styled.input.attrs(props => ({
     cursor: pointer;
     transform: translate(-25%, -25%)
 `;
-const Dragond = ({ posX, posY } : POSITION) => {
+
+type DragondType = POSITION & {
+    drawColor: string,
+    setDrawColor: React.Dispatch<React.SetStateAction<string>>
+}
+const Dragond = ({ posX, posY, drawColor, setDrawColor } : DragondType) => {
     const [openSubDragond, setOpenSubDragond] = React.useState<boolean>(false);
-    const [drawColor, setDrawColor] = React.useState<string>('#FFF');
 
     const tools : Tool[] = [
         {
@@ -98,12 +102,12 @@ const Dragond = ({ posX, posY } : POSITION) => {
         {
             icon: <IconPalette/>,
             commandId: 'foreColor',
-            value: '#ff0000'
+            value: drawColor
         },
         {
             icon: <IconTexture/>,
             commandId: 'hiliteColor',
-            value: '#005500'
+            value: drawColor
         },
         // {
         //     name: '글번호 매기기',
