@@ -72,9 +72,14 @@ const Editor = () => {
 
         setDragondPos({posX, posY});
         setOpenDragond(true);
+
+        console.log(document.queryCommandState('createLink'));
+        // if (document.queryCommandState('CreateLink'))
+
     }
 
     const [drawColor, setDrawColor] = React.useState<string>('#FFF');
+    const [linkURL, setLinkURL] = React.useState<string>('');
 
     return (
         <>
@@ -84,7 +89,9 @@ const Editor = () => {
                     posX={dragondPos.posX}
                     posY={dragondPos.posY}
                     drawColor={drawColor}
+                    linkURL={linkURL}
                     setDrawColor={setDrawColor}
+                    setLinkURL={setLinkURL}
                 />
             }
 

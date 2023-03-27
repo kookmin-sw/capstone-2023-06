@@ -10,11 +10,16 @@ import { addLine, changeTag, removeLine, updateContent, updateHtml } from '../..
 
 import DynamicTag from './DynamicTag';
 import { SelectButton, MoveButton } from './EditorButton';
+import ImageBlock from './ImageBlock';
 
 const Line = styled.div`
     position: relative;
     margin-bottom: 10px;
     margin-top: 10px;
+
+    padding-left: 12rem;
+    padding-right: 12rem;
+
     :focus-visible {
         outline: 3px solid #aaa;
     }
@@ -190,10 +195,12 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
         else if (e.key === 'ArrowDown') {
             // firstChild 에는 + 버튼이 들어갈 수 있기 때문에 lastChild로 찾아야 함
             let nextSibling = (lineRef.current?.parentElement?.nextSibling?.lastChild as HTMLElement);
-            // 더음 태그가 ol, li 태그라면 child 가 하나 더 있기 떄문에 예외 처리
-            if (['OL', 'LI'].includes(nextSibling.nodeName))
-                nextSibling = nextSibling.lastChild as HTMLElement;
-            nextSibling.focus();
+            if (nextSibling) {
+                // 더음 태그가 ol, li 태그라면 child 가 하나 더 있기 떄문에 예외 처리
+                if (['OL', 'LI'].includes(nextSibling.nodeName))
+                   nextSibling = nextSibling.lastChild as HTMLElement;
+                nextSibling.focus();
+            }
         } else if (e.key === 'ArrowUp') {
             // 현재 태그가 ol, li 태그라면 parent 태그가 하나 더 있기 때문에 예외 처리
             let prevSibling = lineRef.current?.parentElement;
@@ -201,7 +208,9 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
                 prevSibling = (prevSibling?.parentElement?.previousSibling?.lastChild as HTMLElement);
             else
                 prevSibling = (prevSibling?.previousSibling?.lastChild as HTMLElement);
-            prevSibling.focus();
+            if (prevSibling) {
+                prevSibling.focus();
+            }
         }
     }
 
@@ -289,6 +298,9 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
                         >
                         </DynamicTag>
                     </ul>
+                :
+                line.tag === 'img' ?
+                    <ImageBlock></ImageBlock>
                 :
                     <DynamicTag 
                         as={line.tag}

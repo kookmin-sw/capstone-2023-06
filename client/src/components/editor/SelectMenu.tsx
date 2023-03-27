@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import {
     IconH1, IconH2, IconH3, IconAbc, 
-    IconList, IconListNumbers } from '@tabler/icons-react';
+    IconList, IconListNumbers,
+    IconBlockquote } from '@tabler/icons-react';
 import React from 'react';
 // 아이콘 : https://tabler-icons.io/
 import { POSITION } from './type';
@@ -77,9 +78,14 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
         },
         {
             text: 'blockquote',
-            icon: <IconList/>,
+            icon: <IconBlockquote/>,
             ret: 'blockquote',
         },
+        {
+            text: '이미지',
+            icon: <IconBlockquote/>,
+            ret: 'img'
+        }
     ];
 
     return (
