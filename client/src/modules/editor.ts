@@ -1,5 +1,6 @@
 import { ElementType } from "react";
 import { LINE_TYPE } from "../components/editor/type";
+import { generateRandomID } from "../utils/randomID";
 
 const UPDATE_HTML = `editor/UPDATE_HTML` as const;
 const CHANGE_TAG = `editor/CHANGE_TAG` as const;
@@ -44,10 +45,6 @@ type EditorAction =
     | ReturnType<typeof newLine>
     | ReturnType<typeof removeLine>
     | ReturnType<typeof updateContent>;
-
-const generateRandomID = () => {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
-};
 
 const initState: LINE_TYPE = {
     id: generateRandomID(),

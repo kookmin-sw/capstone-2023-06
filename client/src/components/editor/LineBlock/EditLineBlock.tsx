@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LINE_TYPE } from './type';
+import { LINE_TYPE } from '../type';
 
 import { IconPlus, IconGripVertical } from '@tabler/icons-react';
 import { IItemProps } from 'react-movable';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../modules';
-import { addLine, changeTag, removeLine, updateContent, updateHtml } from '../../modules/editor';
+import { RootState } from '../../../modules';
+import { addLine, changeTag, removeLine, updateHtml } from '../../../modules/editor';
 
 import DynamicTag from './DynamicTag';
-import { SelectButton, MoveButton } from './EditorButton';
-import ImageBlock from './ImageBlock';
+import { SelectButton, MoveButton } from '../common/Button';
+import ImageBlock from './ImageLineBlock/ImageBlock';
 
 const Line = styled.div`
     position: relative;
@@ -107,6 +107,61 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
         return content[idx];
     }
 
+    function lineDivider(html: string) {
+        // const html = `<font color="#f03333">111111<br>111111</font>`;
+        const lines = html.split("<br>");
+        const tagStack = [];
+        const tagStack2 = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            let lastIndex = line.lastIndexOf("<");
+            
+            // 스택에 남아있는 태그들을 열어줍니다.
+            while (tagStack2.length > 0) {
+                const openingTag = tagStack2.pop();
+                lines[i] = openingTag + lines[i];
+            }
+
+            while (lastIndex !== -1) {
+                const closingIndex = line.indexOf(">", lastIndex);
+
+                if (closingIndex !== -1) {
+                    const tag = line.substring(lastIndex, closingIndex + 1);
+
+                    if (tag.charAt(1) === "/") {
+                        // 닫는 태그일 경우 스택에서 제거하고 적용합니다.
+                        const openingTag = tagStack.pop();
+
+                        if (openingTag !== undefined)
+                        if (openingTag !== tag.substring(1)) {
+                            console.error(`Invalid closing tag: ${tag}`);
+                            return;
+                        }
+                    } else {
+                        // 열린 태그일 경우 스택에 추가합니다.
+                        tagStack.push(tag);
+                        tagStack2.push(tag);
+                    }
+
+                } else {
+                    console.error(`Invalid tag: ${line.substring(lastIndex)}`);
+                    return;
+                }
+
+                lastIndex = line.indexOf("<", closingIndex);
+            }
+
+            // 스택에 남아있는 태그들을 닫아줍니다.
+            while (tagStack.length > 0) {
+                const closingTag = tagStack.pop()?.replace("<", "</");
+                lines[i] += closingTag;
+            }
+        }
+
+        return lines;
+    }
+
     /**
      * 키 입력 핸들러
      * @param e 입력 키 이벤트
@@ -116,24 +171,27 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
         // 새 EditLine 생성하고 focus 이동
         if (e.key === 'Enter') {
             e.preventDefault();
-            
-            let sPos = window.getSelection()?.focusOffset || 0;     // selection 시작 pos
-            let ePos = window.getSelection()?.anchorOffset || 0;    // selection 끝나는 pos
 
-            if (ePos < sPos) [sPos, ePos] = [ePos, sPos];
+            // 커맨드로 안전하게 <br> 태그 중간에 넣음
+            document.execCommand('insertLineBreak')
 
-            if (0 < ePos && ePos < line.html.length) {
-                // 내 뒷 부분을 다음 줄로 이동
-                dispatch(addLine(line.id, line.html.slice(ePos)));
+            // 라인 분리해서 사이에 태그 안전하게 넣기
+            const lines = lineDivider(line.html);
 
-                // 선택한 부분이 있다면 제거
-                line.html = line.html.slice(0, sPos);
-                if (lineRef.current) lineRef.current.innerHTML = line.html;
-                // 현재 줄은 상태에 따라 다시 변경
-                dispatch(updateHtml(line.id, line.html));
-            }
-            else {
-                dispatch(addLine(line.id));
+            // 업데이트
+            if (lines) {
+                if (lines?.length >= 2) {
+                    
+                    // 현재 줄은 상태에 따라 다시 변경
+                    dispatch(updateHtml(line.id, lines[0]));
+                    if (lineRef.current) lineRef.current.innerHTML = lines[0];
+
+                    // 내 뒷 부분을 다음 줄로 이동
+                    dispatch(addLine(line.id, lines[1]));
+                }
+                else {
+                    dispatch(addLine(line.id));
+                }
             }
         }
         // 현재 EditLine 삭제하고 이전 focus 이동 (첫째 줄이라면 제거 되어선 안되므로 무시)
@@ -211,6 +269,13 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
             if (prevSibling) {
                 prevSibling.focus();
             }
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            document.execCommand('indent', false, undefined);
+        } else if (e.key === 'Control') {
+            document.execCommand('insertLineBreak')
+
+            
         }
     }
 

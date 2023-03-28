@@ -2,16 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { LINE_TYPE, POSITION } from './type';
 
-import EditLineBlock from './EditLineBlock';
-import EditMenu from './SelectMenu';
+import EditLineBlock from './LineBlock/EditLineBlock';
+import EditMenu from './Menu/SelectMenu';
+import Dragond from './Dragond/Dragond';
 
-import Dragond from './Dragond';
-
-import { List as MovableContainer , arrayMove, arrayRemove } from 'react-movable';
+import { List as MovableContainer , arrayMove } from 'react-movable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
-import { addLine, changeTag, newLine, updateContent } from '../../modules/editor';
+import { changeTag, newLine, updateContent } from '../../modules/editor';
 
 export const EditorContainer = styled.div`
     background-color: #ecffeb;
@@ -22,7 +21,7 @@ const NeweLineContainer = styled.div`
     width: 100%;
     height: 20rem;
     cursor: text;
-`
+`;
 
 const Editor = () => {
     // 전체 내용

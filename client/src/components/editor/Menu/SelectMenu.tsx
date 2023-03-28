@@ -2,10 +2,12 @@ import styled from 'styled-components';
 import {
     IconH1, IconH2, IconH3, IconAbc, 
     IconList, IconListNumbers,
-    IconBlockquote } from '@tabler/icons-react';
+    IconBlockquote, 
+    IconPhoto} from '@tabler/icons-react';
 import React from 'react';
 // 아이콘 : https://tabler-icons.io/
-import { POSITION } from './type';
+import { POSITION } from '../type';
+import { MenuButton } from '../common/Button';
 
 const EditMenuBlock = styled.div`
     position: absolute;
@@ -21,30 +23,16 @@ const EditMenuBlock = styled.div`
     z-index: ${({theme} ) => theme.zIndex.editMenuIndex};
 `;
 
-const Menu = styled.button`
-    font-size: 1.25rem;
-    display: flex;
-    background: white;
-    border: none;
-    &:hover {
-        background: #efefef;
-    }
-    & + & {
-        margin-top: 0.25rem;
-    }
-    svg {
-        margin-right: 0.5rem;
-    }
-`
-type EditMenuProps = POSITION & {
-    onClickHandler: (e:React.ElementType) => void;
-}
 type MenusType =  {
     text: string,
     icon: React.ReactNode,
     ret: React.ElementType
 }
-export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
+
+type EditMenuProps = POSITION & {
+    onClickHandler: (e:React.ElementType) => void;
+}
+export const EditMenu = ({ posX, posY, onClickHandler } : EditMenuProps) => {
     const menus : MenusType[] = [
         {
             text: 'header 1',
@@ -83,7 +71,7 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
         },
         {
             text: '이미지',
-            icon: <IconBlockquote/>,
+            icon: <IconPhoto/>,
             ret: 'img'
         }
     ];
@@ -96,7 +84,7 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
             {
                 menus.map((m, idx)  => {
                     return (
-                        <Menu
+                        <MenuButton
                             key={idx}
                             onClick={(e)=>{
                                 e.preventDefault();
@@ -105,7 +93,7 @@ export const EditMenu = ({ onClickHandler, posX, posY } : EditMenuProps) => {
                         >
                             { m.icon }
                             { m.text }
-                        </Menu>
+                        </MenuButton>
                     )
                 })
             }

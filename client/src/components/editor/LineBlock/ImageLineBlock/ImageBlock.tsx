@@ -1,85 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import { ReferButton } from "./EditorButton";
-import { POSITION } from "./type";
+import { ReferButton } from "../../common/Button";
+import { POSITION } from "../../type";
 // import { debounce } from IconLayoutDashboard;
 
 import { debounce } from "lodash";
-import { PrimaryButton } from "../common/Button";
+import { PrimaryButton } from "../../../common/Button";
 import { IconTag, IconTrash } from "@tabler/icons-react";
+import { generateRandomID } from "../../../../utils/randomID";
 
-export const FullImage = styled.img`
-    width: 100%;
-`;
-export const ClickArea = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #00edff0f;
-`;
+import { RemoveButton, ModeButton } from "../../common/Button";
+import { ReferInput } from "../../common/Input";
+import { FullImage } from "../../common/Image";
+import ClickContainer from "./ClickContainer";
 
-const ReferInput = styled.input`
-    position: absolute;
-    right: 1rem;
-    bottom: 1rem;
-    border: none;
-    border-radius: 0.25rem;
-    padding: .25rem .5rem;
-    outline: none;
-    width: 10rem;
-`;
 
-const ModeButton = styled.button`
-    border: none;
-    border-radius: .125rem;
-    padding: ${(props: { padding?: string }) => (props.padding || '0.5rem 1rem')};
-    background: white;
-    font-size: 1rem;
-    outline: none;
-    color: white;
-    background: #0000007a;
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-`;
-const RemoveButton = styled.button`
-    border-radius: .125rem;
-    background: #0000007a;
-    position: absolute;
-    bottom: 1rem;
-    right: 12rem;
-    border: none;
-    svg {
-        color: white;
-    }
-`;
 
-const generateRandomID = () => {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
-};
+
 
 type Refer = POSITION & {
     id: string,
     data: string
 }
 
-type ClickContainerProps = {
-    onClickHandler: (e: React.MouseEvent<HTMLDivElement>) => void
-}
-
-
-const ClickContainer = ({ onClickHandler } : ClickContainerProps) => {
-
-
-    return (
-        <ClickArea
-            onClick={onClickHandler}
-        >
-        </ClickArea>
-    )
-};
 
 const ImageBlock = () => {
     const imgRef = React.useRef<HTMLImageElement>(null);

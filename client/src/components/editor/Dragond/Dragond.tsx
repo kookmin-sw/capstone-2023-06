@@ -1,4 +1,4 @@
-
+import React from 'react';
 import styled from 'styled-components';
 import { 
     IconBold, IconItalic, IconUnderline, IconStrikethrough,
@@ -7,8 +7,8 @@ import {
     IconLink
 } from '@tabler/icons-react';
 import { ToolButton } from './ToolButton';
-import { POSITION } from './type';
-import React from 'react';
+import { POSITION } from '../type';
+import { ColorPicker, LinkInput, RoundInputBlock } from '../../common/Input';
 
 type Tool = {
     icon: JSX.Element,
@@ -18,7 +18,7 @@ type Tool = {
 }
 
 const DragondContainer = styled.div`
-display: flex;
+    display: flex;
     position: absolute;
     background-color: white;
     padding: 0.5rem;
@@ -31,29 +31,7 @@ display: flex;
     -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.75);
 `;
 
-export const RoundColorPicker = styled.div`
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 1.25rem;
-    overflow: hidden;
-`;
-export const ColorPicker = styled.input.attrs(props => ({
-    type: "color"
-}))`
-    border: 0;
-    padding: 0;
-    width: 200%;
-    height: 200%;
-    cursor: pointer;
-    transform: translate(-25%, -25%)
-`;
-export const LinkInput = styled.input`
-    border: none;
-    border-radius: 0.25rem;
-    background-color: #efefef;
-    padding: 0.125rem;
-    outline-color: ${({theme})=>theme.colors.primary};
-`
+
 
 type DragondType = POSITION & {
     drawColor: string,
@@ -86,11 +64,11 @@ const Dragond = ({ posX, posY, drawColor, setDrawColor, linkURL, setLinkURL } : 
             needCheck: true,
         },
         // {
-        //     name: '내어쓰기',
+        //     icon: <IconStrikethrough/>,
         //     commandId: 'outdent'
         // },
         // {
-        //     name: '들여쓰기',
+        //     icon: <IconStrikethrough/>,
         //     commandId: 'indent'
         // },
         {
@@ -125,14 +103,6 @@ const Dragond = ({ posX, posY, drawColor, setDrawColor, linkURL, setLinkURL } : 
             commandId: 'CreateLink',
             value: linkURL,
         },
-        // {
-        //     name: '글번호 매기기',
-        //     commandId: 'insertorderedList'
-        // },
-        // {
-        //     name: '글머리 매기기',
-        //     commandId: 'insertunorderdList'
-        // },
     ];
 
     return (
@@ -159,14 +129,14 @@ const Dragond = ({ posX, posY, drawColor, setDrawColor, linkURL, setLinkURL } : 
                     posX={0}
                     posY={64}
                 >
-                    <RoundColorPicker>
+                    <RoundInputBlock>
                         <ColorPicker
                             value={drawColor}
 							onChange={e => { 
 								setDrawColor(e.target.value);
 							}}
                         />
-                    </RoundColorPicker>
+                    </RoundInputBlock>
                 </DragondContainer>
             }
 
