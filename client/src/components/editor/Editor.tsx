@@ -11,12 +11,18 @@ import { List as MovableContainer , arrayMove, arrayRemove } from 'react-movable
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
-import { addLine, changeTag, updateContent } from '../../modules/editor';
+import { addLine, changeTag, newLine, updateContent } from '../../modules/editor';
 
 export const EditorContainer = styled.div`
     background-color: #ecffeb;
-    padding: 1rem;
+    padding: 1rem 1rem 0rem 1rem;
 `;
+
+const NeweLineContainer = styled.div`
+    width: 100%;
+    height: 20rem;
+    cursor: text;
+`
 
 const Editor = () => {
     // 전체 내용
@@ -134,12 +140,10 @@ const Editor = () => {
                 )}
             />
 
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+            <NeweLineContainer
+                onClick={() => { dispatch(newLine()); }}
+            />
+
 
             <div>
                 { content.map(e => JSON.stringify(e)) }

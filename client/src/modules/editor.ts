@@ -4,6 +4,7 @@ import { LINE_TYPE } from "../components/editor/type";
 const UPDATE_HTML = `editor/UPDATE_HTML` as const;
 const CHANGE_TAG = `editor/CHANGE_TAG` as const;
 const ADD_LINE = `editor/ADD_LINE` as const;
+const NEW_LINE = `editor/NEW_LINE` as const;
 const REMOVE_LINE = `editor/REMOVE_LINE` as const;
 const UPDATE_CONTENT = `editor/UPDATE_CONTENT` as const;
 
@@ -17,10 +18,15 @@ export const changeTag = (id:string, tag: ElementType<any>) => ({
     id: id,
     payload: tag,
 });
+// 라인들 사이세 라인을 생성할 수 있는 경우 사용
 export const addLine = (id:string, content: string = '') => ({
     type: ADD_LINE,
     id: id,
     payload: content
+});
+// 라인의 마지막 라인에 새 라인을 추가하고 싶을 경우에만 사용
+export const newLine = () => ({
+    type: NEW_LINE
 });
 export const removeLine = (id:string) => ({
     type: REMOVE_LINE,
@@ -35,6 +41,7 @@ type EditorAction =
     | ReturnType<typeof updateHtml>
     | ReturnType<typeof changeTag>
     | ReturnType<typeof addLine>
+    | ReturnType<typeof newLine>
     | ReturnType<typeof removeLine>
     | ReturnType<typeof updateContent>;
 
@@ -80,6 +87,18 @@ function editor(
                 });
             }
             return [...state];
+
+        case NEW_LINE:
+            return [
+                ...state,
+                {
+                    id: generateRandomID(),
+                    html: '',
+                    tag: 'p',
+                    flag: 0
+                }
+            ];
+        
 
         case REMOVE_LINE:
             idx = state.findIndex(line => line.id === action.id);
