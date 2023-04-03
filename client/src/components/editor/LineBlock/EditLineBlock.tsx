@@ -42,9 +42,10 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
      * 라인이 삭제 되어서 그 아래 컴포넌트들이 다시 렌더링 되어야 할때 필요함.
      */
     React.useEffect(() => {
-        if (lineRef.current)
+        if (lineRef.current) {
             lineRef.current.innerHTML = line.html;
-        
+        }
+
     }, [line]);
 
     /**
@@ -108,10 +109,9 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
     }
 
     function lineDivider(html: string) {
-        // const html = `<font color="#f03333">111111<br>111111</font>`;
         const lines = html.split("<br>");
-        const tagStack = [];
-        const tagStack2 = [];
+        const tagStack = [];        // 태그 닫기할떄 사용
+        const tagStack2 = [];       // 태그 열기할때 사용
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
@@ -273,11 +273,30 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
             e.preventDefault();
             document.execCommand('indent', false, undefined);
         } else if (e.key === 'Control') {
-            document.execCommand('insertLineBreak')
-
-            
+            // document.execCommand('insertLineBreak')   
         }
     }
+
+    
+    /**
+     * 붙여넣기 핸들러
+     * @param event Clipboard 이벤트
+     * @returns 
+     */
+    function pasteHandler(event :  React.ClipboardEvent<HTMLDivElement>) {
+        const paste = (event.clipboardData || event.clipboardData).getData('text');
+        const reversed = Array.from(paste).reverse().join('');
+
+        const selection = window.getSelection();
+        if (!selection?.rangeCount) return false;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(reversed));
+
+        event.preventDefault();
+        
+        dispatch(updateHtml(line.id, lineRef.current?.innerHTML || ''));
+    }
+
 
     /**
      * 라인의 속성을 변경하려 함 (설정창 열기와 현재 타겟 line id를 변경)
@@ -323,6 +342,7 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
             style={props.style}
             ref={ref}
             onMouseEnter={onMouseEnterHandler}
+            onPaste={pasteHandler}
             // onMouseLeave={editExitHandler}
         >
             {
