@@ -13,28 +13,38 @@ import { RemoveButton, ModeButton } from "../../common/Button";
 import { ReferInput } from "../../common/Input";
 import { FullImage } from "../../common/Image";
 import ClickContainer from "./ClickContainer";
+import { RootState } from "../../../../modules";
+import { useDispatch, useSelector } from "react-redux";
+import { Refer, addRefer, checkRefers, newImage, removeImage, updateRefers } from "../../../../modules/images";
 
 
 
 
 
-type Refer = POSITION & {
-    id: string,
-    data: string
-}
+// type Refer = POSITION & {
+//     id: string,
+//     data: string
+// }
 
 
-const ImageBlock = () => {
+const ImageBlock = ({ id } : { id: string }) => {
+
+    const dispatch = useDispatch();
+    const images = useSelector((state: RootState) => state.images);
+
     const imgRef = React.useRef<HTMLImageElement>(null);
-    const [refers, setRefers] = React.useState<Refer[]>([]);
+    // const [refers, setRefers] = React.useState<Refer[]>([]);
     const [imgRect, setImgRect] = React.useState<DOMRect>();
     const [curReferId, setCurReferId] = React.useState<string>('');
 
     React.useEffect(()=>{
+        // 데이터 생성
         window.addEventListener('resize', handleResize);
-
+        dispatch(newImage(id));
+        
         return () => {
             window.removeEventListener('resize', handleResize);
+            dispatch(removeImage(id));
         }
     }, [imgRef]);
 
@@ -59,20 +69,22 @@ const ImageBlock = () => {
     }
 
     function checkBeforeCurCreate() {
-        // 만약 이전에 하나 입력한 상태에서        
-        if (curReferId !== '') {
-            const idx = refers.findIndex(r => r.id === curReferId);
+        dispatch(checkRefers( id, curReferId ));
 
-            if (idx > -1) {
-                // 이전에 선택한게 데이터를 입력 안했었다면 그건 제거
-                if (refers[idx].data === '') {
-                    refers.splice(idx, 1);
-                    setRefers([...refers]);
-                    // 이 함수를 호출하는 단계에서는 항상 curRefer를 변경하기 때문에 이 함수에서 setState 코드는 필요 없음
-                    /// setCurReferId('');
-                }
-            }
-        }
+        // // 만약 이전에 하나 입력한 상태에서        
+        // if (curReferId !== '') {
+        //     const idx = refers.findIndex(r => r.id === curReferId);
+
+        //     if (idx > -1) {
+        //         // 이전에 선택한게 데이터를 입력 안했었다면 그건 제거
+        //         if (refers[idx].data === '') {
+        //             refers.splice(idx, 1);
+        //             setRefers([...refers]);
+        //             // 이 함수를 호출하는 단계에서는 항상 curRefer를 변경하기 때문에 이 함수에서 setState 코드는 필요 없음
+        //             /// setCurReferId('');
+        //         }
+        //     }
+        // }
     }    
 
     function onClickHandler(e: React.MouseEvent<HTMLDivElement> ) {
@@ -97,10 +109,18 @@ const ImageBlock = () => {
         clickPos.posX = Math.round((clickPos.posX + Number.EPSILON) * 100) / 100;
         clickPos.posY = Math.round((clickPos.posY + Number.EPSILON) * 100) / 100;
 
-        const id = generateRandomID();
-        setRefers([...refers, { ...clickPos,  data:'', id: id }]);
+        const refer_id = generateRandomID();
+        // setRefers([...refers, { ...clickPos,  data:'', id: id }]);
+        dispatch(addRefer(id, refer_id, clickPos));
 
-        setCurReferId(id);
+        setCurReferId(refer_id);
+    }
+
+    function getRefers() {
+        if (images[id] === undefined) {
+            dispatch(newImage(id));
+        }
+        return images[id].refers || [];
     }
 
     function selectRefer(refer: Refer) {
@@ -114,7 +134,8 @@ const ImageBlock = () => {
         if (curReferId === '')
             return false;
 
-        const idx = refers.findIndex(r => r.id === curReferId);
+        
+        const idx = images[id].refers.findIndex(r => r.id === curReferId);
         return idx > -1;
     }
 
@@ -122,18 +143,18 @@ const ImageBlock = () => {
         if (curReferId === '')
             return;
         
-        const idx = refers.findIndex(r => r.id === curReferId);
-        if (idx > -1) {
-            console.log(idx);
-            refers.splice(idx, 1);
-            setRefers([...refers]);
-            setCurReferId('');
-        }
+        const idx = images[id].refers.findIndex(r => r.id === curReferId);
+        // if (idx > -1) {
+        //     console.log(idx);
+        //     refers.splice(idx, 1);
+        //     setRefers([...refers]);
+        //     setCurReferId('');
+        // }
     }
 
     function getReferValue() {
-        const idx = refers.findIndex(r => r.id === curReferId);
-        return refers[idx].data || '';
+        const idx = images[id].refers.findIndex(r => r.id === curReferId);
+        return images[id].refers[idx].data || '';
     }
     const [isEditMode, setEditMode] = React.useState<boolean>(false);
 
@@ -153,7 +174,7 @@ const ImageBlock = () => {
                 ></ClickContainer>
             }
             {
-                refers.map((refer, idx) => {
+                getRefers().map((refer, idx) => {
                     return <ReferButton
                         onClick={()=>{selectRefer(refer)}}
                         key={idx}
@@ -173,10 +194,12 @@ const ImageBlock = () => {
                     <ReferInput 
                         value={getReferValue()}
                         onChange={(e) => {
-                            const idx = refers.findIndex(r => r.id === curReferId);
+                            const idx = getRefers().findIndex(r => r.id === curReferId);
                             if (idx > -1) {
-                                refers[idx].data = e.target.value;
-                                setRefers([...refers]);
+                                getRefers()[idx].data = e.target.value;
+                                dispatch(updateRefers(id, getRefers()));
+                                // refers[idx].data = e.target.value;
+                                // setRefers([...refers]);
                             }
                         }}
                     ></ReferInput>

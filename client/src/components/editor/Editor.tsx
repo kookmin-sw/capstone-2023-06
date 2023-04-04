@@ -27,6 +27,7 @@ const Editor = () => {
     // 전체 내용
     const dispatch = useDispatch();
     const content = useSelector((state: RootState) => state.editor);
+    const images = useSelector((state: RootState) => state.images);
 
     // 선의 속성을 변경 시켜줄 메뉴 state
     const [openMenu, setOpenMenu] = React.useState<boolean>(false);
@@ -147,6 +148,15 @@ const Editor = () => {
             <div>
                 { content.map(e => JSON.stringify(e)) }
             </div>
+            <br/>
+            <div>
+                { JSON.stringify(images) }
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
         </>
     )
 }

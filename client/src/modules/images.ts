@@ -1,0 +1,137 @@
+import { ElementType } from "react";
+import { POSITION } from "../components/editor/type";
+import { generateRandomID } from "../utils/randomID";
+import { omit } from "lodash";
+
+const UPDATE_REFERS = `images/UPDATE_REFERS` as const;
+const CHECK_REFERS = `images/CHECK_REFERS` as const;
+const ADD_REFER = `images/ADD_REFERS` as const;
+const NEW_IMAGE = `images/NEW_LINE` as const;
+const REMOVE_IMAGE = `images/REMOVE_LINE` as const;
+
+export const updateRefers = (id: string, content: Refer[]) => ({
+    type: UPDATE_REFERS,
+    id: id,
+    payload: content,
+});
+export const checkRefers = (id: string, payload:string) => ({
+    type: CHECK_REFERS,
+    id: id,
+    payload: payload,
+});
+export const addRefer = (id: string, payload: string, pos: POSITION) => ({
+    type: ADD_REFER,
+    id: id,
+    pos: pos,
+    payload: payload,
+})
+// 라인의 마지막 라인에 새 라인을 추가하고 싶을 경우에만 사용
+export const newImage = (id:string) => ({
+    type: NEW_IMAGE,
+    id: id,
+});
+export const removeImage = (id:string) => ({
+    type: REMOVE_IMAGE,
+    id: id,
+});
+
+type EditorAction = 
+    | ReturnType<typeof updateRefers>
+    | ReturnType<typeof checkRefers>
+    | ReturnType<typeof addRefer>
+    | ReturnType<typeof newImage>
+    | ReturnType<typeof removeImage>;
+
+
+export type Refer = POSITION & {
+    id: string,
+    data: string
+}
+    
+export type ImageData = {
+    id: string,
+    refers: Refer[],
+    src: string,
+}
+
+export type ImagesObjectType = {
+    [key: string] : ImageData
+}
+
+function editor(
+    state: ImagesObjectType = {},
+    action: EditorAction
+): ImagesObjectType {
+    var idx;
+    var idx2;
+    var newState;
+    switch (action.type) {
+        case UPDATE_REFERS:
+            newState = { ...state };
+            newState[action.id].refers = [...action.payload];
+            return newState;
+            // idx = state.findIndex(line => line.id === action.id);
+            // if (idx > -1)
+            //     state[idx].refers = action.payload;
+            // return [...state];
+
+        case NEW_IMAGE:
+            return { 
+                ...state,
+                [action.id]: {
+                    id: '',
+                    refers: [],
+                    src: ''
+                }
+            };
+            // return [
+            //     ...state,
+            //     {
+            //         id: action.id,
+            //         refers: [],
+            //         src: '',
+            //     }
+            // ];
+
+        case ADD_REFER:
+            newState = {...state};
+            newState[action.id].refers = [
+              ...state[action.id].refers, 
+              {
+                id: action.payload,
+                data: '',
+                ...action.pos
+              }
+            ];
+            return {...newState};
+
+            // idx = state.findIndex(line => line.id === action.id);
+            // if (idx > -1) {
+            //     state[idx].refers.push({
+            //         id: generateRandomID(),
+            //         data: '',
+            //         ...action.pos
+            //     });
+            // }
+            // return [...state];
+        
+        case CHECK_REFERS:
+            newState = {...state};
+            idx = newState[action.id].refers.findIndex(r => r.id === action.payload);
+            if (idx > -1) {
+              if (newState[action.id].refers[idx].data === '') {
+                newState[action.id].refers.splice(idx, 1);
+              }
+            }
+            return {...newState};
+
+        case REMOVE_IMAGE:
+            return omit(state, action.id);
+            // delete state[action.id];
+            // return { ...state };
+
+        default:
+            return { ...state };
+    }
+}
+export default editor;

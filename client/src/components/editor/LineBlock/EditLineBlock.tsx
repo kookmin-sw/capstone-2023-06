@@ -385,7 +385,9 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
                     </ul>
                 :
                 line.tag === 'img' ?
-                    <ImageBlock></ImageBlock>
+                    <ImageBlock
+                        id={line.id}
+                    ></ImageBlock>
                 :
                     <DynamicTag 
                         as={line.tag}
