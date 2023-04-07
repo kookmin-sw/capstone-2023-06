@@ -6,6 +6,7 @@ import { omit } from "lodash";
 const UPDATE_REFERS = `images/UPDATE_REFERS` as const;
 const CHECK_REFERS = `images/CHECK_REFERS` as const;
 const ADD_REFER = `images/ADD_REFERS` as const;
+const REMOVE_REFER = `images/REMOVE_REFERS` as const;
 const NEW_IMAGE = `images/NEW_LINE` as const;
 const REMOVE_IMAGE = `images/REMOVE_LINE` as const;
 
@@ -14,7 +15,7 @@ export const updateRefers = (id: string, content: Refer[]) => ({
     id: id,
     payload: content,
 });
-export const checkRefers = (id: string, payload:string) => ({
+export const checkRefers = (id: string, payload: string) => ({
     type: CHECK_REFERS,
     id: id,
     payload: payload,
@@ -24,7 +25,12 @@ export const addRefer = (id: string, payload: string, pos: POSITION) => ({
     id: id,
     pos: pos,
     payload: payload,
-})
+});
+export const removeRefer = (id: string, payload: string) => ({
+    type: REMOVE_REFER,
+    id: id,
+    payload: payload
+});
 // 라인의 마지막 라인에 새 라인을 추가하고 싶을 경우에만 사용
 export const newImage = (id:string) => ({
     type: NEW_IMAGE,
@@ -39,6 +45,7 @@ type EditorAction =
     | ReturnType<typeof updateRefers>
     | ReturnType<typeof checkRefers>
     | ReturnType<typeof addRefer>
+    | ReturnType<typeof removeRefer>
     | ReturnType<typeof newImage>
     | ReturnType<typeof removeImage>;
 
@@ -115,13 +122,21 @@ function editor(
             // }
             // return [...state];
         
+        case REMOVE_REFER:
+            newState = {...state};
+            idx = newState[action.id].refers.findIndex(r => r.id === action.payload);
+            if (idx > -1)
+                newState[action.id].refers.splice(idx, 1);
+            return {...newState};
+            
+
         case CHECK_REFERS:
             newState = {...state};
             idx = newState[action.id].refers.findIndex(r => r.id === action.payload);
             if (idx > -1) {
-              if (newState[action.id].refers[idx].data === '') {
-                newState[action.id].refers.splice(idx, 1);
-              }
+                if (newState[action.id].refers[idx].data === '') {
+                    newState[action.id].refers.splice(idx, 1);
+                }
             }
             return {...newState};
 

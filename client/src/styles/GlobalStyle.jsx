@@ -80,6 +80,13 @@ export const GlobalStyle = createGlobalStyle`
             margin-inline-end: 0px;
             padding-inline-start: 40px;
         }
+        ul {
+            display: block;
+            list-style-type: disc;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 40px;
+        }
 
         .ol-li {
             list-style-type: decimal;
