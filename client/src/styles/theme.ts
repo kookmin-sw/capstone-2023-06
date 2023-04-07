@@ -43,9 +43,18 @@ const devices = {
 export type DevicesTypes = typeof devices;
 
 
+// z-index
+const zIndex = {
+    editMenuIndex: 100,
+    editDragond: 99
+}
+export type ZIndexTypes = typeof zIndex;
+
+
 const theme : DefaultTheme = {
     colors,
     fonts,
     devices,
+    zIndex
 };
 export default theme;

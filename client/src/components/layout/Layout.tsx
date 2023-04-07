@@ -3,7 +3,7 @@ import React from 'react';
 import Header from "./Header";
 import Footer from "./Footer";
 
-import { Container, MobileWrapper, MobileContainer } from '../common/Grid';
+import { Container, ContainerFluid, MobileWrapper, MobileContainer } from '../common/Grid';
 
 export const MainLayout = ({ children } : { children: React.ReactNode }) => {
     return (
@@ -13,6 +13,17 @@ export const MainLayout = ({ children } : { children: React.ReactNode }) => {
                 { children }
             </Container>
             <Footer/>
+        </div>
+    )
+}
+
+export const FluidLayout = ({ children } : { children: React.ReactNode }) => {
+    return (
+        <div className='fluid-layout'>
+            <Header/>
+            <ContainerFluid>
+                { children }
+            </ContainerFluid>
         </div>
     )
 }
