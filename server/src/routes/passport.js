@@ -29,9 +29,9 @@ module.exports = () => {
         },
             function (email, password, done) {
                 return User.findByEmail(email, async (err, user) => {
-                    if (err) return done(null, false, { message: err });
+                    if (err) return done(err);
 
-                    if (!user) return done(null, false, { message: `No User email by ${email}` });
+                    if (!user[0]) return done(null, false, { message: `No User email by ${email}` });
 
                     if (!await Decryption(password, user[0].password)) return done(null, false, { message: "Not Correct Password" });
                     
