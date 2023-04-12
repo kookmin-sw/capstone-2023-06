@@ -31,12 +31,12 @@ exports.findById = function (req, res) {
         if (err) {
             res.status(400).send({
                 success: false,
-                message: err.code,
+                message: err.message,
             });
             return;
         }
         
-        if (!user[0]) {
+        if (!user) {
             res.status(200).send({
                 success:true,
                 message: "유저 찾음",
@@ -48,7 +48,7 @@ exports.findById = function (req, res) {
         res.status(200).send({
             success:true,
             message: "유저 찾음",
-            result: userToResponse(user[0])
+            result: userToResponse(user)
         });
     })
 }
@@ -58,12 +58,12 @@ exports.findByEmail = function (req, res) {
         if (err) {
             res.status(400).send({
                 success: false,
-                message: err.code,
+                message: err.message,
             });
             return;
         }
 
-        if (!user[0]) {
+        if (!user) {
             res.status(200).send({
                 success:true,
                 message: "유저 찾음",
@@ -75,7 +75,7 @@ exports.findByEmail = function (req, res) {
         res.status(200).send({
             success:true,
             message: "유저 찾음",
-            result: userToResponse(user[0])
+            result: userToResponse(user)
         });
     });
 }
@@ -91,20 +91,19 @@ exports.userSignUp = async function (req, res) {
         return;
     }
 
-    
     const hashedPassword = await Encryption(password);
     User.create(nickname, hashedPassword, email, picture, USER_ROLE, (err, user) => {
         if (err) {
             res.status(400).send({
                 success: false,
-                message: err.code,
+                message: "MYSQL ERROR",
             });
             return;
         }
         res.status(201).json({
             success: true,
             message: `Sign Up for  ${email}`,
-            result: user.insertId
+            result: user
         });
     });
 }
