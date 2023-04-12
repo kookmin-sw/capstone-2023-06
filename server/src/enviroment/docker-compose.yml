@@ -5,13 +5,11 @@ services:
     image: node:19.4.0
     container_name: dev_nodejs
     ports:
-      - "${TEST_SERVER_PORT}:${TEST_SERVER_PORT}"
+      - "${SERVER_PORT}:${SERVER_PORT}"
       - "3907:3907"
     volumes:
       - "../../:/dev-workspace"
     working_dir: "/dev-workspace"
-    env_file:
-      - .env
     environment:
       TZ: "Asia/Seoul"
     stdin_open: true # `-i`
@@ -26,12 +24,12 @@ services:
     image: mysql:8.0.31
     container_name: dev_db_container
     ports:
-      - "${DB_HOST_PORT}:3306"
+      - "3838:3306"
     volumes:
       - ../../database/sql/init:/docker-entrypoint-initdb.d/
     environment:
-      MYSQL_DATABASE: "${DB_TEST_NAME}"
-      MYSQL_ROOT_PASSWORD: "${DB_PASS}"
+      MYSQL_DATABASE: "desk_it_test"
+      MYSQL_ROOT_PASSWORD: "ehddnjs12"
       TZ: "Asia/Seoul"
     command: 
       - --character-set-server=utf8mb4

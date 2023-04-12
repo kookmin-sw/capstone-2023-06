@@ -33,6 +33,14 @@ exports.create = async (req,res) => {
 // async await 완료
 exports.uploadImage = async (req,res) => {
     try {
+        if(!req.file) {
+            res.status(400).send({
+                success: false,
+                message: "사진 업로드 실패",
+            });
+            return;
+        }
+
         const pictureId = await Picture.create(req.file.location, "STYLING");
         res.status(200).send({
             success: true,
