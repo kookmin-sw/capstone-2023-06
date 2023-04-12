@@ -11,6 +11,16 @@ const User = function(user){
     this.userRoleId = user.user_role_id;
 }
 
+User.findById = function (id, result) {
+    mysql.query(`select * from ${table} where id = '${id}'`, (err, res) => {
+        if (err) {
+            result(err, null);
+        } else {
+            result(null, res);
+        }
+    });
+}
+
 User.findByEmail = function (email, result) {
     mysql.query(`Select * from ${table} where email = '${email}'`, email, (err, res) =>{
         if (err) {
