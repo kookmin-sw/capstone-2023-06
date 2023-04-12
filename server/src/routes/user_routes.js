@@ -13,8 +13,5 @@ router.get("/email/:email", userController.findByEmail);
 router.post("/profile", ImageUploader.single("image"), userController.uploadProfile);
 router.delete("/", userController.deleteUser);
 
-
-
-
 module.exports = router;
 
