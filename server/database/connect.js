@@ -1,14 +1,39 @@
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const config = require('./config');
 
-// 현재 test 연결
-const conn = mysql.createConnection(
-    config['dev']  
+const pool = mysql.createPool(
+    config['dev']
 );
+exports.GetConnection = async () => {
+    try {      
+        const conn = await pool.getConnection();
+        if(!conn) {
+            throw Error("No Connection");
+        }
+        return conn;
+    } catch (err) {
+        console.error(`connection error: ${err.message}`);
+    }
+};
 
-conn.connect((err)=>{
-    if(err) throw err;
-    console.log("DB connect success!");
-});
+exports.ReleaseConnection = async (conn) => {
+    try {
+        await conn.release();
+    } catch (err) {
+        console.error(`release error: ${err.message}`);
+    }
+}
 
-module.exports = conn;
+// const conn = mysql.createConnection(
+//     config['dev']  
+// );
+
+// conn.connect((err)=>{
+//     if(err) throw err;
+//     console.log("DB connect success!");
+// });
+
+// conn.release((err)=>{
+//     if(err) throw err;
+//     console.log("DB Release")
+// })
