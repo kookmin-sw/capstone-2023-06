@@ -25,7 +25,6 @@ const ImageUploader = multer({
         s3: s3,
         bucket: "deskit-bucket-1",
         key: (req, file, callback) => {
-            console.log(req.originalUrl)
             const uploadDirectory = uploadType[req.originalUrl];
             const extension = path.extname(file.originalname);
             if (!allowedExtensions.includes(extension)) {
@@ -33,7 +32,7 @@ const ImageUploader = multer({
             }
             callback(null, `${uploadDirectory}/${Date.now()}_${file.originalname}`);
         },
-        acl: 'public-read-write'
+        acl: 'public-read'
     })
 });
 

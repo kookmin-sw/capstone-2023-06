@@ -58,7 +58,7 @@ Posts.findById = async (id) => {
         const [posts] = await conn.execute(FIND_QUERY, [id]);
         return posts[0];
     } catch (err) {
-        throw new Error("My SQL Error");
+        throw new Error("MYSQL ERROR");
     } finally {
         ReleaseConnection(conn);
     }

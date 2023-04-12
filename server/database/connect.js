@@ -1,8 +1,11 @@
 const mysql = require('mysql2/promise');
 const config = require('./config');
+const dotenv = require("dotenv");
+const path = require("path");
+dotenv.config({path:path.join(__dirname,"/./../src/enviroment/.env")});
 
 const pool = mysql.createPool(
-    config['dev']
+    config[process.env.CURRENT_TYPE]
 );
 exports.GetConnection = async () => {
     try {      
@@ -23,17 +26,3 @@ exports.ReleaseConnection = async (conn) => {
         console.error(`release error: ${err.message}`);
     }
 }
-
-// const conn = mysql.createConnection(
-//     config['dev']  
-// );
-
-// conn.connect((err)=>{
-//     if(err) throw err;
-//     console.log("DB connect success!");
-// });
-
-// conn.release((err)=>{
-//     if(err) throw err;
-//     console.log("DB Release")
-// })

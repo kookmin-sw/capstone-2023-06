@@ -19,11 +19,20 @@ const userToResponse = (user) => {
 }
 
 exports.uploadProfile = (req,res) => {
+    if(!req.file) {
+        res.status(400).send({
+            success: false,
+            message: "사진 업로드 실패",
+        });
+        return;
+    }
+
     res.status(200).send({
         success: true,
         message: "사진 업로드 성공",
         result: req.file.location
     });
+    return;
 }
 
 exports.findById = function (req, res) {
@@ -65,15 +74,6 @@ exports.findByEmail = function (req, res) {
         }
 
         if (!user) {
-            res.status(200).send({
-                success:true,
-                message: "유저 찾음",
-                result: null
-            });
-            return;
-        }
-
-        if (!user[0]) {
             res.status(200).send({
                 success:true,
                 message: "유저 찾음",

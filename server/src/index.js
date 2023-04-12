@@ -38,4 +38,4 @@ app.use("/api/user", UserRoute);
 app.use("/api/product", ProductRoute);
 app.use("/api/post", PostRoute);
 
-app.listen(process.env.TEST_SERVER_PORT, () => console.log("server start"));
+app.listen(process.env.SERVER_PORT, () => console.log("server start"));
