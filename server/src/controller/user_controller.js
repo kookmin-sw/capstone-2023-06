@@ -36,6 +36,7 @@ exports.findById = function (req, res) {
             return;
         }
         
+
         if (!user) {
             res.status(200).send({
                 success:true,
@@ -64,6 +65,15 @@ exports.findByEmail = function (req, res) {
         }
 
         if (!user) {
+            res.status(200).send({
+                success:true,
+                message: "유저 찾음",
+                result: null
+            });
+            return;
+        }
+
+        if (!user[0]) {
             res.status(200).send({
                 success:true,
                 message: "유저 찾음",
@@ -103,6 +113,7 @@ exports.userSignUp = async function (req, res) {
         res.status(201).json({
             success: true,
             message: `Sign Up for  ${email}`,
+
             result: user
         });
     });
