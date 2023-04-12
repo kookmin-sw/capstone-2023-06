@@ -18,6 +18,41 @@ const userToResponse = (user) => {
     };
 }
 
+exports.uploadProfile = (req,res) => {
+    res.status(200).send({
+        success: true,
+        message: "사진 업로드 성공",
+        result: req.file.location
+    });
+}
+
+exports.findById = function (req, res) {
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code,
+            });
+            return;
+        }
+        
+        if (!user[0]) {
+            res.status(200).send({
+                success:true,
+                message: "유저 찾음",
+                result: null
+            });
+            return
+        }
+        
+        res.status(200).send({
+            success:true,
+            message: "유저 찾음",
+            result: userToResponse(user[0])
+        });
+    })
+}
+
 exports.findByEmail = function (req, res) {
     User.findByEmail(req.params.email, (err, user) => {
         if (err) {
@@ -27,10 +62,20 @@ exports.findByEmail = function (req, res) {
             });
             return;
         }
+
+        if (!user[0]) {
+            res.status(200).send({
+                success:true,
+                message: "유저 찾음",
+                result: null
+            });
+            return;
+        }
         
         res.status(200).send({
             success:true,
-            user: userToResponse(user[0])
+            message: "유저 찾음",
+            result: userToResponse(user[0])
         });
     });
 }
@@ -59,9 +104,7 @@ exports.userSignUp = async function (req, res) {
         res.status(201).json({
             success: true,
             message: `Sign Up for  ${email}`,
-            result: {
-                userId: user.insertId
-            }
+            result: user.insertId
         });
     });
 }
@@ -78,7 +121,7 @@ exports.autologin = function (req, res) {
         res.json({
             success: true,
             message: "유저 오토 로그인",
-            user: userToResponse(req.user)
+            result: userToResponse(req.user)
         });
         return;
     }
@@ -86,7 +129,7 @@ exports.autologin = function (req, res) {
     res.json({
         success: false,
         message: "유저 존재하지 않음",
-        user: null
+        result: null
     });
 }
 
@@ -95,8 +138,8 @@ exports.logout = function (req, res) {
         req.session.destroy();
         if (err) { return next(err); }
         res.json({
-            "isSuccess": true,
-            "result": "LOGOUT"
+            "success": true,
+            "message": "LOGOUT"
         });
     });
 }
@@ -118,10 +161,14 @@ exports.deleteUser = function (req, res) {
             });
             return;
         }
-        
-        res.status(200).send({
-            success: true,
-            message: "delete 성공"
-        })
+
+        req.logout(function (err) {
+            req.session.destroy();
+            if (err) { return next(err); }
+            res.status(200).send({
+                success: true,
+                message: "delete 성공"
+            })
+        });
     });
 }
