@@ -11,10 +11,14 @@ export const Button = styled.button`
 export const PrimaryButton = styled(Button)`
     color: white;
     background: ${({theme} ) => theme.colors.primary};
-`
+`;
 export const SecondaryButton = styled(Button)`
     color: white;
     background: ${({theme} ) => theme.colors.secondary};
+`;
+export const LightButton = styled(Button)`
+    color: ${({theme} ) => theme.colors.lightGrey};
+    background: ${({theme} ) => theme.colors.light};
 `;
 
 export const PrimaryRoundButton = styled.button`
