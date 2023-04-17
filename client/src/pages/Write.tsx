@@ -1,6 +1,6 @@
 import React from "react";
 
-import styled from "styled-components";
+import styled, { CSSProperties } from "styled-components";
 
 import { FluidLayout } from "../components/layout/Layout";
 import { Container } from "../components/common/Grid";
@@ -23,29 +23,25 @@ const Write = () => {
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    
     // 글 업로드
     try {
+      const res = await upload({
+        title: title,
+        thumbnail: thumbnail,
+        hashtags: tags,
+        content: {
+          content: content,
+          images: images,
+        },
+      });
 
-        const res = await upload({
-            title: title,
-            thumbnail: thumbnail,
-            hashtags: tags,
-            content: {
-                content: content,
-                images: images,
-            }
-          });
-  
-        console.log(res);
-  
-        if (res.success) {
-            
-        }
-      } catch (err) {
-        console.error(err);
+      console.log(res);
+
+      if (res.success) {
       }
-
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -69,7 +65,7 @@ const Write = () => {
             type="text"
             placeholder="#태그입력"
             onChange={(e) => {
-              setTags(prev => [...prev, e.target.value]);
+              setTags((prev) => [...prev, e.target.value]);
             }}
           />
           <TitleInput

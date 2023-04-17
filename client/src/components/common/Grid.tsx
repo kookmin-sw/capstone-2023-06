@@ -32,3 +32,12 @@ export const MobileWrapper = styled.div`
     align-items: center;
     min-height: 100vh;
 `;
+
+export const LoginContainer = styled.div`
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 5px;
+    background-color: #ffffff00;
+    text-align: center;
+`;

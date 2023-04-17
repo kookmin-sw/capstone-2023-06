@@ -9,12 +9,75 @@ const sendError = (res, msg, status) => {
     })  
 }
 
-exports.search = (req,res) => {
-    
+exports.list = async (req,res) => {
+    console.info(req.originalUrl, 'type: list');
+    let type;
+    let reverse;
+    if(!req.query.type) {
+        type = "date";
+    } else if(req.query.type === "date" || req.query.type === "user" || req.query.type === "like") {
+        type = req.query.type;
+    } else {
+        res.status(400).send({
+            success: false,
+            message: "parameter 설정 error"
+        });
+        return;
+    }
+
+    if(!req.query.reverse) {
+        reverse = false
+    } else if(req.query.reverse === "true") {
+        reverse = true;
+    } else if(req.query.reverse === "false") {
+        reverse = false;
+    } else {
+        res.status(400).send({
+            success: false,
+            message: "parameter 설정 error"
+        });
+        return;
+    }
+
+    if(type === 'date' && (!req.body.startTime || !req.body.endTime)) {
+        console.info("here1");
+        res.status(400).send({
+            success: false,
+            message: "req body 설정 error"
+        });
+        return;
+    }
+
+    if(typeof req.body.offset != 'number' || typeof req.body.limit != 'number'){
+        res.status(400).send({
+            success: false,
+            message: "req body 설정 error"
+        });
+        return;
+    }
+
+    const condition = {
+        ...req.body,
+        type: type,
+        reverse: reverse,
+    }
+
+    try {
+        const posts = await Posts.list(condition);
+        res.status(200).send({
+            success:true,
+            message: "리스트 가져오기 성공",
+            result: posts
+        });
+    } catch (err) {
+        sendError(res, err.message, 400);
+        return;
+    }
 }
 
 // async await 완료
 exports.create = async (req,res) => {
+    console.info(req.originalUrl, 'type: create');
     const {title, thumbnail, hashtags, content} = req.body;
     try {
         const postId = await Posts.create(req.user.id, title, thumbnail, hashtags, JSON.stringify({"content": content}));
@@ -32,6 +95,7 @@ exports.create = async (req,res) => {
 
 // async await 완료
 exports.uploadImage = async (req,res) => {
+    console.info(req.originalUrl, 'type: image');
     try {
         if(!req.file) {
             res.status(400).send({
@@ -58,6 +122,7 @@ exports.uploadImage = async (req,res) => {
 
 // async await 완료
 exports.findById = async (req, res) => {
+    console.info(req.originalUrl);
     try {
         const post = await Posts.findById(req.params.id);
         if(!post) { //null 리턴
