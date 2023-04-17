@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
-  origin: 'http://localhost:3907',
+  origin: '*',
   credentials: true
 }));
 
@@ -37,5 +37,9 @@ passportConfig();
 app.use("/api/user", UserRoute);
 app.use("/api/product", ProductRoute);
 app.use("/api/post", PostRoute);
+app.use(express.static(path.join(__dirname, '../../client/build')));
 
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../../client/build/index.html'));
+});
 app.listen(process.env.SERVER_PORT, () => console.log("server start"));
