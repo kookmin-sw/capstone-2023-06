@@ -106,12 +106,13 @@ Posts.list = async (condition) => {
     const FIND_QUERY = `
         select * 
         from ${TABLE}
-        no limit ${condition.limit} offset ${condition.offset}
+        orders limit ${condition.limit} offset ${condition.offset}
     `;
 
     const conn = await GetConnection();
     try {
         const [posts] = await conn.execute(FIND_QUERY, []);
+        console.info(posts.length);
 
         const returnPosts = await Promise.all(posts.map(async (post) => {
             const JOIN_QUERY = `
