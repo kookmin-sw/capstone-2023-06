@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Singup from './pages/Signup';
 import FindAccount from './pages/FindAccount';
 import Write from './pages/Write';
+import Post from './pages/Post';
 
 function App() {  
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/signup" element={<Singup/>}/>
             <Route path="/findaccount" element={<FindAccount/>}/>
             <Route path="/write" element={<Write/>}/>
+            <Route path="/post/:post_id" element={<Post/>}/>
           </Routes>
         </BrowserRouter>
       </div>

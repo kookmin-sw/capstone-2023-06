@@ -4,8 +4,8 @@ type Props = {
     as?: React.ElementType;
     children: React.ReactNode;
     // ref: RefObject<HTMLParagraphElement>;
-    onInput: (e:React.FormEvent<HTMLParagraphElement>)=>void;
-    onKeyDown: (e:React.KeyboardEvent<HTMLParagraphElement>)=>void;
+    onInput?: (e:React.FormEvent<HTMLParagraphElement>)=>void;
+    onKeyDown?: (e:React.KeyboardEvent<HTMLParagraphElement>)=>void;
     onFocus?: (e:React.FocusEvent<HTMLInputElement>)=>void;
     onBlur?: (e:React.FocusEvent<HTMLInputElement>)=>void;
 };
@@ -33,4 +33,15 @@ const DynamicTag = React.forwardRef(
     );
 });
 
+export const DynamicTagReadOnly = (
+    { as: Tag = "p", children } : Props
+) => {
+    return (
+        <Tag
+            className={`outline-none`}
+            dangerouslySetInnerHTML={{__html: children}}
+        >
+        </Tag>
+    )
+}
 export default DynamicTag;
