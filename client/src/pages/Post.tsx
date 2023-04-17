@@ -2,9 +2,9 @@ import React from "react";
 import { FluidLayout } from "../components/layout/Layout";
 import { Container } from "../components/common/Grid";
 import styled from "styled-components";
-import { LINE_TYPE } from "../components/editor/type";
+import { ImagesObjectType, LINE_TYPE } from "../components/editor/type";
 import { DynamicTagReadOnly } from "../components/editor/LineBlock/DynamicTag";
-import { ImagesObjectType } from "../modules/images";
+// import { ImagesObjectType } from "../modules/images";
 
 const Post = () => {
     const [tagList, setTagList] = React.useState<string>('#태그, #태그1, #태그2');

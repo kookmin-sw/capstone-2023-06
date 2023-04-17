@@ -20,9 +20,11 @@ export type FontSizeTypes = typeof fonts;
 
 // 색상
 const colors = {
-    primary: '#79b44d',
+    primary: '#386437',
     secondary: '#accc95',
     black: "#222222",
+    light: "#F7F8F9",
+    lightGrey: "#BCB9AF",
 };
 export type ColorTypes = typeof colors;
 
