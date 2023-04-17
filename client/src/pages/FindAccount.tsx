@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 import { LoginLayout } from '../components/layout/Layout';
-import { ExtraLinkButton, SubmitButton } from '../components/common/Button';
+import { ExtraLinkButton, SubmitButton, SwapButton } from '../components/common/Button';
 import { LoginInput } from '../components/common/Input';
 
 const FindPassword = () => {
@@ -12,14 +12,12 @@ const FindPassword = () => {
 
   const submitFindPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // PW 찾기 API 호출 및 데이터 유효성 검사를 이곳에서 수행하세요
-    console.log(email, userID);
+    // console.log(email, userID);
   };
 
   const submitFindID = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // ID 찾기 API 호출 및 데이터 유효성 검사를 이곳에서 수행하세요
-    console.log(email);
+    // console.log(email);
   };
 
   return (
@@ -33,8 +31,8 @@ const FindPassword = () => {
           <section>
             <LoginInput id="email" name="email" type="email" autoComplete="email" placeholder="가입한 이메일" onChange={(e) => setEmail(e.target.value)} required />
           </section>
-          <SubmitButton type="submit" disabled={!email || !userID}>PW 찾기</SubmitButton>
-          <SubmitButton type="button" onClick={() => setShowFindID(true)}>ID 찾기</SubmitButton>
+          <SubmitButton disabled={!email || !userID}>PW 찾기</SubmitButton>
+          <SwapButton onClick={() => setShowFindID(true)}>ID 찾기</SwapButton>
           <ExtraLinkButton>
             <Link to="/login">로그인</Link>
           </ExtraLinkButton>
@@ -44,8 +42,8 @@ const FindPassword = () => {
           <section>
             <LoginInput id="email" name="email" type="email" autoComplete="email" placeholder="가입한 이메일" onChange={(e) => setEmail(e.target.value)} required />
           </section>
-          <SubmitButton type="submit" disabled={!email}>ID 찾기</SubmitButton>
-          <SubmitButton type="button" onClick={() => setShowFindID(false)}>PW 찾기</SubmitButton>
+          <SubmitButton disabled={!email}>ID 찾기</SubmitButton>
+          <SwapButton onClick={() => setShowFindID(false)}>PW 찾기</SwapButton>
           <ExtraLinkButton>
             <Link to="/login">로그인</Link>
           </ExtraLinkButton>

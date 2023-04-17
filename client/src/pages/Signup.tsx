@@ -12,7 +12,7 @@ const Signup = () => {
     const [password, setPassword] = React.useState<string>("");
     const [confirmPassword, setConfirmPassword] = React.useState<string>("");
   
-    const submitSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    const submitSignup = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       //console.log(name, email, password, confirmPassword);
       navigate('/login');
@@ -34,7 +34,7 @@ const Signup = () => {
             <section>
               <LoginInput id="confirmPassword" name="confirmPassword" type="password" autoComplete="new-password" placeholder="비밀번호 확인" onChange={(e) => setConfirmPassword(e.target.value)} required />
             </section>
-            <SubmitButton type="submit" disabled={!name || !email || !password || !confirmPassword}>회원가입</SubmitButton>
+            <SubmitButton disabled={!name || !email || !password || !confirmPassword}>회원가입</SubmitButton>
             <ExtraLinkButton>
               <Link to="/login">로그인</Link>
               <Link to="/findaccount">ID/PW 찾기</Link>

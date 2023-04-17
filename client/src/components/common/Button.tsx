@@ -35,10 +35,9 @@ export const ExtraLinkButton = styled(Button)`
     }
     
 `;
-
-export const SubmitButton = styled(Button)`
+export const SwapButton = styled(Button)`
     width: 100%;
-    padding: 10px;
+    padding: 0.5rem;
     margin-top: 1rem;
     background-color: #ccc;
     border-radius: 0.25rem;
@@ -53,3 +52,10 @@ export const SubmitButton = styled(Button)`
         background-color: #386437;
     }
 `;
+
+export const SubmitButton = styled(SwapButton).attrs(props => ({
+    type:'submit'
+  }))`
+`;
+
+
