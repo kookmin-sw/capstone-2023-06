@@ -18,7 +18,7 @@ Posts.create = async (author_id, title, thumbnail, hashtags, content) => {
         let hashtagList = [];
 
         //해시태그 추가
-        hashtags.forEach(async (hashtagTitle) => {
+        for (const hashtagTitle of hashtags) {
             const [res] = await conn.execute('select * from hashtag where title = ?;', [hashtagTitle]);
             if(!res[0]) { //해시태그가 존재하지 않으면
                 const [hashtag] = await conn.execute('insert into hashtag (title) values (?);', [hashtagTitle]);
@@ -29,13 +29,15 @@ Posts.create = async (author_id, title, thumbnail, hashtags, content) => {
             } else { // 해시태그가 존재하면 
                 hashtagList.push(res[0]);
             }
-        });
+        };
         
         //포스트 업로드 처리
         const [ insertResult ] = await conn.execute(`insert into ${TABLE} (author_id, title, thumbnail, content) values (?, ?, ?, ?);`, [author_id, title, thumbnail, content]);
         const postId = insertResult.insertId;
 
         // 해시태그 <-> 포스트 연관관계
+
+        console.info(hashtagList);
         hashtagList.forEach(async (hashtag) => {
             await conn.execute(`insert into post_hashtag (post_id, hashtag_id) values(?, ?);`,[postId, hashtag.id]);
         });
@@ -56,7 +58,21 @@ Posts.findById = async (id) => {
     const conn = await GetConnection();
     try {
         const [posts] = await conn.execute(FIND_QUERY, [id]);
-        return posts[0];
+        let post = posts[0];
+        
+        const JOIN_QUERY = `
+            select h.title
+            from post_hashtag p
+            left join hashtag h
+            on p.hashtag_id = h.id
+            where p.post_id = ?
+        `;
+        const [hashtagResult] = await conn.execute(JOIN_QUERY, [post.id]);
+        const returnPost = {
+            ...post,
+            hashtags: hashtagResult.map((hashtag) => hashtag.title)
+        };
+        return returnPost;
     } catch (err) {
         throw new Error("MYSQL ERROR");
     } finally {
@@ -79,16 +95,45 @@ Posts.deleteById = async (id, author_id) => {
     }
 }
 
-Posts.search = function (condition, result) {
-    // const SEARCH_QUERY = `
-    //     SELECT from ${TABLE} ;
-    // `;
 
-    // mysql.query(SEARCH_QUERY, (err, res)=> {
-    //     if(err) {
-    //         result
-    //     }
-    // });
+
+
+Posts.list = async (condition) => {
+    const FIND_QUERY = `
+        select * 
+        from ${TABLE}
+        no limit ${condition.limit} offset ${condition.offset}
+    `;
+
+    const conn = await GetConnection();
+    try {
+        const [posts] = await conn.execute(FIND_QUERY, []);
+
+        const returnPosts = await Promise.all(posts.map(async (post) => {
+            const JOIN_QUERY = `
+                select h.title
+                from post_hashtag p
+                left join hashtag h
+                on p.hashtag_id = h.id
+                where p.post_id = ?
+            `;
+            const [hashtagResult] = await conn.execute(JOIN_QUERY, [post.id]);
+            const renewPost = {
+                ...post,
+                hashtags: hashtagResult.map((hashtag) => hashtag.title),
+                content: JSON.parse(post.content).content 
+            };
+
+            return renewPost;
+        }));
+
+        return returnPosts;
+    } catch (err) {
+        console.error(err.message);
+        throw new Error("MYSQL ERROR");
+    } finally {
+        ReleaseConnection(conn);
+    }
 }
 
 module.exports = Posts;
