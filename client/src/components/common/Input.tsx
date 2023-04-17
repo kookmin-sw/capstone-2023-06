@@ -50,3 +50,14 @@ export const LinkInput = styled.input`
     padding: 0.125rem;
     outline-color: ${({theme})=>theme.colors.primary};
 `;
+
+export const LoginInput = styled.input`
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.3s;
+`;
