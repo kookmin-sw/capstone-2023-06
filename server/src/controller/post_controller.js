@@ -131,6 +131,7 @@ exports.findById = async (req, res) => {
                 message: "포스트 조회 완료",
                 post: post
             });
+            return;
         }
         const searchPost = {
             ...post,
@@ -141,6 +142,7 @@ exports.findById = async (req, res) => {
             message: "포스트 조회 완료",
             post: searchPost
         });
+        return;
     } catch (err) {
         sendError(res,err.message,400);
         return;

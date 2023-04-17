@@ -59,7 +59,6 @@ Posts.findById = async (id) => {
     try {
         const [posts] = await conn.execute(FIND_QUERY, [id]);
         let post = posts[0];
-        
         const JOIN_QUERY = `
             select h.title
             from post_hashtag p
@@ -67,6 +66,10 @@ Posts.findById = async (id) => {
             on p.hashtag_id = h.id
             where p.post_id = ?
         `;
+
+        if(!post) {
+            return null;
+        }
         const [hashtagResult] = await conn.execute(JOIN_QUERY, [post.id]);
         const returnPost = {
             ...post,
@@ -74,6 +77,7 @@ Posts.findById = async (id) => {
         };
         return returnPost;
     } catch (err) {
+        console.error(err.message);
         throw new Error("MYSQL ERROR");
     } finally {
         ReleaseConnection(conn);
