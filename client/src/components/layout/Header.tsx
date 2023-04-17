@@ -25,7 +25,7 @@ const Header = () => {
             const res = await autoLogin();
             setLoggedIn(res.success);
             if (res.success) {
-                dispatch(setUser(res.user.nickname));
+                dispatch(setUser(res.result.nickname));
             }
         } catch (err) {
             console.error(err);

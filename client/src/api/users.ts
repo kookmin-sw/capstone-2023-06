@@ -1,11 +1,12 @@
 import axios from "axios";
 // const baseURL = process.env.API_URL;
-const baseURL = process.env.API_URL;
+const baseURL = process.env.REACT_APP_API_URL;
 
 //axios.defaults.withCredentials = true;    // 세션
 
 const userAPI = axios.create({
-  baseURL: `${baseURL}/user`,
+  baseURL: `/api/user`,
+  withCredentials: true
 });
 userAPI.defaults.withCredentials = true; // 세션
 

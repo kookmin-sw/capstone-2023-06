@@ -4,10 +4,11 @@ import {
   LINE_TYPE,
   UploadData,
 } from "../components/editor/type";
-const baseURL = process.env.API_URL;
+const baseURL = process.env.REACT_APP_API_URL;
 
 const uploadAPI = axios.create({
-  baseURL: `${baseURL}/post`,
+  baseURL: `/api/post`,
+  withCredentials: true
 });
 uploadAPI.defaults.withCredentials = true; // 세션
 
@@ -17,6 +18,9 @@ uploadAPI.defaults.withCredentials = true; // 세션
  * @returns 성공 여부
  */
 export const upload = async (uploadData: UploadData) => {
+  
+  console.log(baseURL);
+
   try {
     const res = await uploadAPI.post(`/`, uploadData);
     return res.data;
@@ -81,18 +85,16 @@ export const deletePost = async (id: string) => {
 
 /**
  * 글 목록 불러오기
- * @param {string} id 글 고유 id
  * @param {"user" | "date" | "like"} type 정렬 기준
  * @param {string} reverse 정렬 반대 여부
  * @returns 성공 여부
  */
 export const getPostList = async (
-  id: string,
   type: "user" | "date" | "like",
   reverse: boolean = false
 ) => {
   try {
-    const res = await uploadAPI.get(`/${id}`, {
+    const res = await uploadAPI.get(`/list`, {
       params: {
         type,
         reverse,
