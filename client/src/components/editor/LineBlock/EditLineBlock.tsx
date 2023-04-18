@@ -11,19 +11,8 @@ import { addLine, changeTag, removeLine, updateHtml } from '../../../modules/edi
 import DynamicTag from './DynamicTag';
 import { SelectButton, MoveButton } from '../common/Button';
 import ImageBlock from './ImageLineBlock/ImageBlock';
+import { Line } from '../common/LineStyle';
 
-const Line = styled.div`
-    position: relative;
-    margin-bottom: 10px;
-    margin-top: 10px;
-
-    padding-left: 12rem;
-    padding-right: 12rem;
-
-    :focus-visible {
-        outline: 3px solid #aaa;
-    }
-`;
 
 type LineBlockType = IItemProps & {
     curLineId: string,

@@ -11,12 +11,14 @@ import ImageBlock from "../components/editor/LineBlock/ImageLineBlock/ImageBlock
 import { useDispatch } from "react-redux";
 import { resetImages } from "../modules/images";
 import ImageBlockReadonly from "../components/editor/LineBlock/ImageLineBlock/ImageBlockReadonly";
+import { Line, LineStyle } from "../components/editor/common/LineStyle";
+// import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
 
 const Post = () => {
   const { post_id } = useParams();
 
-  const [tagList, setTagList] = React.useState<string>("#태그, #태그1, #태그2");
+  const [tagList, setTagList] = React.useState<string[]>([]);
   const [title, setTitle] = React.useState<string>("Lorem Ipsum");
   const [thumbnail, setThumbnail] = React.useState<string>("");
   const [content, setContent] = React.useState<LINE_TYPE[]>([
@@ -64,12 +66,12 @@ const Post = () => {
     <FluidLayout>
       <PostHeaderImage thumbnail={thumbnail}/>
       <Container>
-        <Tags>{tagList}</Tags>
+        <Tags>{tagList.map(t => '#' + t)}</Tags>
         <Title>{title}</Title>
         <Content>
           {content.map((line) => {
             return (
-              <LineBlock key={line.id}>
+              <Line key={line.id}>
                 {line.tag === "ol" ? (
                   <ol start={line.flag + 1}>
                     <DynamicTagReadOnly as={"li"}>
@@ -92,7 +94,7 @@ const Post = () => {
                     {line.html}
                   </DynamicTagReadOnly>
                 )}
-              </LineBlock>
+              </Line>
             );
           })}
         </Content>
@@ -107,15 +109,14 @@ const Tags = styled.p`
   font-size: 1rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.primary};
+  
+  ${LineStyle}
 `;
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: bold;
+  ${LineStyle}
 `;
 const Content = styled.div`
   padding: 1rem;
-`;
-const LineBlock = styled.div`
-  margin-top: 10px;
-  margin-bottom: 10px;
 `;

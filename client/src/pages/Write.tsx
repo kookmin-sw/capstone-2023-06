@@ -15,7 +15,9 @@ import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 const Write = () => {
   const [title, setTitle] = React.useState<string>("");
   // const [tags, setTags] = React.useState<string[]>(['어쩌구', '저쩌구', 'ABC']);
-  const [tags, setTags] = React.useState<string[]>([]); // 만약 분리식으로 저장해야 한다면 윗줄식으로로 변경
+  // const [tags, setTags] = React.useState<string[]>([]); // 만약 분리식으로 저장해야 한다면 윗줄식으로로 변경
+  const [tags, setTags] = React.useState<string>(""); // 
+
   const [thumbnail, setThumbnail] = React.useState<string>("");
 
   const content = useSelector((state: RootState) => state.editor);
@@ -29,7 +31,7 @@ const Write = () => {
       const res = await upload({
         title: title,
         thumbnail: thumbnail,
-        hashtags: tags,
+        hashtags: tags.split(" "),
         content: {
           content: content,
           images: images,
@@ -52,7 +54,7 @@ const Write = () => {
 
     if (imageLists == null || imageLists.length !== 1) {
       // 이미지 입력 안했음. 잘못된 행동
-      
+
       return;
     }
 
@@ -66,20 +68,17 @@ const Write = () => {
       const res = await uploadImage(formData);
 
       if (res.success) {
-        // dispatch(srcImage(id, res.result.url));
-      setThumbnail(res.result.url);
+        setThumbnail(res.result.url);
       }
     } catch (err) {
       console.error(err);
     }
   };
 
-  // const bgStyle: CSSProperties = {
-  //   backgroundImage: `url(${thumbnail})`,
-  //   backgroundSize: "cover",
-  //   backgroundRepeat: "no-repeat",
-  //   backgroundPosition: "center center",
-  // };
+  const inputTagHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTags(e.target.value);
+    // setTags((prev) => [...prev, e.target.value]);
+  };
 
   return (
     <FluidLayout>
@@ -103,9 +102,7 @@ const Write = () => {
             spellCheck="false"
             type="text"
             placeholder="#태그입력"
-            onChange={(e) => {
-              setTags((prev) => [...prev, e.target.value]);
-            }}
+            onChange={inputTagHandler}
           />
           <TitleInput
             className="outline-none"

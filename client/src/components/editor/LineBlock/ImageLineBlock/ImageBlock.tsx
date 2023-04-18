@@ -252,7 +252,7 @@ const ImageBlock = ({ id }: { id: string }) => {
             </div> */}
 
       <ModeButton
-      type='button'
+        type="button"
         style={{
           position: "absolute",
           top: "1rem",
