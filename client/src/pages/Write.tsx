@@ -9,7 +9,8 @@ import Editor from "../components/editor/Editor";
 import { TagInput, TitleInput } from "../components/common/Input";
 import { RootState } from "../modules";
 import { useSelector } from "react-redux";
-import { upload } from "../api/upload";
+import { upload, uploadImage } from "../api/upload";
+import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 
 const Write = () => {
   const [title, setTitle] = React.useState<string>("");
@@ -44,12 +45,50 @@ const Write = () => {
     }
   };
 
+  const handleAddImages = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const imageLists = event.target.files;
+
+    if (imageLists == null || imageLists.length !== 1) {
+      // 이미지 입력 안했음. 잘못된 행동
+      
+      return;
+    }
+
+    // setThumbnail(URL.createObjectURL(imageLists[0]));
+
+    // 이미지 업로드
+    try {
+      const formData = new FormData();
+      formData.append("image", imageLists[0]);
+
+      const res = await uploadImage(formData);
+
+      if (res.success) {
+        // dispatch(srcImage(id, res.result.url));
+      setThumbnail(res.result.url);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // const bgStyle: CSSProperties = {
+  //   backgroundImage: `url(${thumbnail})`,
+  //   backgroundSize: "cover",
+  //   backgroundRepeat: "no-repeat",
+  //   backgroundPosition: "center center",
+  // };
+
   return (
     <FluidLayout>
-      <ImageUpload>
+      <PostHeaderImage thumbnail={thumbnail}>
+        {thumbnail}
         <p>썸네일을 추가해주세요.</p>
         <PrimaryButton>업로드</PrimaryButton>
-      </ImageUpload>
+        <input type="file" name="thumbnail_file" onChange={handleAddImages} />
+      </PostHeaderImage>
       <Container>
         <form onSubmit={submitHandler}>
           {/* <p>
@@ -87,48 +126,3 @@ const Write = () => {
 };
 
 export default Write;
-
-const ImageUpload = styled.div`
-  height: 30rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-image: repeating-linear-gradient(
-      -21deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    ),
-    repeating-linear-gradient(
-      69deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    ),
-    repeating-linear-gradient(
-      159deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    ),
-    repeating-linear-gradient(
-      249deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    );
-  background-size: 3px 100%, 100% 3px, 3px 100%, 100% 3px;
-  background-position: 0 0, 0 0, 100% 0, 0 100%;
-  background-repeat: no-repeat;
-`;

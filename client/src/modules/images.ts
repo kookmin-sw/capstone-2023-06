@@ -10,6 +10,7 @@ const REMOVE_REFER = `images/REMOVE_REFERS` as const;
 const NEW_IMAGE = `images/NEW_LINE` as const;
 const SRC_IMAGE = `images/SRC_IMAGE` as const;
 const REMOVE_IMAGE = `images/REMOVE_LINE` as const;
+const RESET_IMAGES = `images/RESET_IMAGES` as const;
 
 export const updateRefers = (id: string, content: Refer[]) => ({
   type: UPDATE_REFERS,
@@ -46,6 +47,10 @@ export const removeImage = (id: string) => ({
   type: REMOVE_IMAGE,
   id: id,
 });
+export const resetImages = (payload: ImagesObjectType) => ({
+  type: RESET_IMAGES,
+  payload: payload,
+});
 
 type EditorAction =
   | ReturnType<typeof updateRefers>
@@ -54,14 +59,14 @@ type EditorAction =
   | ReturnType<typeof removeRefer>
   | ReturnType<typeof newImage>
   | ReturnType<typeof srcImage>
-  | ReturnType<typeof removeImage>;
+  | ReturnType<typeof removeImage>
+  | ReturnType<typeof resetImages>;
 
 function editor(
   state: ImagesObjectType = {},
   action: EditorAction
 ): ImagesObjectType {
   var idx;
-  var idx2;
   var newState;
   switch (action.type) {
     case UPDATE_REFERS:
@@ -141,6 +146,9 @@ function editor(
       return omit(state, action.id);
     // delete state[action.id];
     // return { ...state };
+
+    case RESET_IMAGES:
+      return { ...action.payload };
 
     default:
       return { ...state };
