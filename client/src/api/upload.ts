@@ -1,14 +1,10 @@
 import axios from "axios";
-import {
-  ImagesObjectType,
-  LINE_TYPE,
-  UploadData,
-} from "../components/editor/type";
+import { UploadData } from "../components/editor/type";
 const baseURL = process.env.REACT_APP_API_URL;
 
 const uploadAPI = axios.create({
   baseURL: `/api/post`,
-  withCredentials: true
+  withCredentials: true,
 });
 uploadAPI.defaults.withCredentials = true; // 세션
 
@@ -18,7 +14,6 @@ uploadAPI.defaults.withCredentials = true; // 세션
  * @returns 성공 여부
  */
 export const upload = async (uploadData: UploadData) => {
-  
   console.log(baseURL);
 
   try {

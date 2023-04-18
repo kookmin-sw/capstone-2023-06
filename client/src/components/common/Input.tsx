@@ -11,7 +11,6 @@ export const TagInput = styled(Input)`
   width: 100%;
   font-size: 1rem;
   font-weight: 700;
-  margin-top: 0.5rem;
   color: ${({ theme }) => theme.colors.primary};
   ${LineStyle}
   &::placeholder {
@@ -22,7 +21,7 @@ export const TitleInput = styled(Input)`
   width: 100%;
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0rem;
   ${LineStyle}
   &::placeholder {
     color: #c5c5c5;

@@ -274,12 +274,12 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
      */
     function pasteHandler(event :  React.ClipboardEvent<HTMLDivElement>) {
         const paste = (event.clipboardData || event.clipboardData).getData('text');
-        const reversed = Array.from(paste).reverse().join('');
+        // const reversed = Array.from(paste).join('');
 
         const selection = window.getSelection();
         if (!selection?.rangeCount) return false;
         selection.deleteFromDocument();
-        selection.getRangeAt(0).insertNode(document.createTextNode(reversed));
+        selection.getRangeAt(0).insertNode(document.createTextNode(paste));
 
         event.preventDefault();
         

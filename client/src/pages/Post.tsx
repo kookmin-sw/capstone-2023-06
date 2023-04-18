@@ -12,33 +12,28 @@ import { useDispatch } from "react-redux";
 import { resetImages } from "../modules/images";
 import ImageBlockReadonly from "../components/editor/LineBlock/ImageLineBlock/ImageBlockReadonly";
 import { Line, LineStyle } from "../components/editor/common/LineStyle";
+import { dateFormat } from "../utils/format";
+import ProfileBar from "../components/profile/ProfileBar";
 // import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
 
+type PostData = {
+  title: string;
+  thumbnail: string;
+  content: LINE_TYPE[];
+  hashtags: string[];
+  created_at: string;
+};
+
 const Post = () => {
+  const dispatch = useDispatch();
   const { post_id } = useParams();
 
-  const [tagList, setTagList] = React.useState<string[]>([]);
-  const [title, setTitle] = React.useState<string>("Lorem Ipsum");
-  const [thumbnail, setThumbnail] = React.useState<string>("");
-  const [content, setContent] = React.useState<LINE_TYPE[]>([
-    {
-      id: "111",
-      html: "<h1>어쩌구</h1>",
-      tag: "p",
-      flag: 0,
-    },
-    {
-      id: "222",
-      html: "저쩌구",
-      tag: "p",
-      flag: 0,
-    },
-  ]);
-//   const [images, setImages] = React.useState<ImagesObjectType>({});
+  const [post, setPost] = React.useState<PostData>();
 
-  const dispatch = useDispatch();
-  // const images = useSelector((state: RootState) => state.images);
+  React.useEffect(() => {
+    initPost();
+  }, [post_id]);
 
   const initPost = async () => {
     if (!post_id) return;
@@ -48,75 +43,81 @@ const Post = () => {
 
       if (res.success) {
         console.log(res);
-        setTagList(res.post.hashtags);
-        setContent(res.post.content.content);
-        setTitle(res.post.title);
-        setThumbnail(res.post.thumbnail);
+        setPost({ ...res.post, content: res.post.content.content });
         dispatch(resetImages(res.post.content.images));
       }
     } catch (err) {
       console.error(err);
     }
   };
-  React.useEffect(() => {
-    initPost();
-  }, [post_id]);
 
   return (
     <FluidLayout>
-      <PostHeaderImage thumbnail={thumbnail}/>
-      <Container>
-        <Tags>{tagList.map(t => '#' + t)}</Tags>
-        <Title>{title}</Title>
-        <Content>
-          {content.map((line) => {
-            return (
-              <Line key={line.id}>
-                {line.tag === "ol" ? (
-                  <ol start={line.flag + 1}>
-                    <DynamicTagReadOnly as={"li"}>
-                      {line.html}
-                    </DynamicTagReadOnly>
-                  </ol>
-                ) : line.tag === "ul" ? (
-                  <ul>
-                    <DynamicTagReadOnly as={"li"}>
-                      {line.html}
-                    </DynamicTagReadOnly>
-                  </ul>
-                ) : (
-                  line.tag === 'img' ?
-                      <ImageBlockReadonly
-                          id={line.id}
-                      ></ImageBlockReadonly>
-                  :
-                  <DynamicTagReadOnly as={line.tag}>
-                    {line.html}
-                  </DynamicTagReadOnly>
-                )}
-              </Line>
-            );
-          })}
-        </Content>
-      </Container>
+      {post && (
+        <>
+          <PostHeaderImage thumbnail={post.thumbnail} />
+          <Container>
+            <PostHead>
+              <Tags>{post.hashtags.map((t) => "#" + t)}</Tags>
+              <Title>{post.title}</Title>
+              <PostDate>{dateFormat(new Date(post.created_at))}</PostDate>
+              <ProfileBar profileID={'11'} nickname={'고롱스'}></ProfileBar>
+            </PostHead>
+            <Content>
+              {post.content.map((line) => {
+                return (
+                  <Line key={line.id}>
+                    {line.tag === "ol" ? (
+                      <ol start={line.flag + 1}>
+                        <DynamicTagReadOnly as={"li"}>
+                          {line.html}
+                        </DynamicTagReadOnly>
+                      </ol>
+                    ) : line.tag === "ul" ? (
+                      <ul>
+                        <DynamicTagReadOnly as={"li"}>
+                          {line.html}
+                        </DynamicTagReadOnly>
+                      </ul>
+                    ) : line.tag === "img" ? (
+                      <ImageBlockReadonly id={line.id}></ImageBlockReadonly>
+                    ) : (
+                      <DynamicTagReadOnly as={line.tag}>
+                        {line.html}
+                      </DynamicTagReadOnly>
+                    )}
+                  </Line>
+                );
+              })}
+            </Content>
+          </Container>
+        </>
+      )}
     </FluidLayout>
   );
 };
 
 export default Post;
 
+const PostHead = styled.div`
+  margin: 2rem 0rem;
+  ${LineStyle}
+`;
 const Tags = styled.p`
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 400;
   color: ${({ theme }) => theme.colors.primary};
-  
-  ${LineStyle}
+
 `;
 const Title = styled.h1`
+  margin: 0.5rem 0rem;
   font-size: 2rem;
   font-weight: bold;
-  ${LineStyle}
+`;
+const PostDate = styled.p`
+  margin: 0.5rem 0rem;
 `;
 const Content = styled.div`
-  padding: 1rem;
+  font-size: 1.25rem;
+  // padding: 1rem;
 `;
