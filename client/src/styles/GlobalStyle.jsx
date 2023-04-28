@@ -17,6 +17,14 @@ export const GlobalStyle = createGlobalStyle`
             box-sizing: border-box;
         }
     
+        :root {
+            --primaryColor: ${theme.colors.primary};
+            --secondaryColor: ${theme.colors.secondary};
+            --blackColor: ${theme.colors.black};
+            --lightColor: ${theme.colors.light};
+            --lightGreyColor: ${theme.colors.lightGrey};
+        }
+
         body, input {
             margin: 0px;
             font-family: ${theme.fonts.family.base};

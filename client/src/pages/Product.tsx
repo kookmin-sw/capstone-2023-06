@@ -1,6 +1,6 @@
 import React from "react";
 import { MainLayout } from "../components/layout/Layout";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   Button,
   LightButton,
@@ -8,6 +8,10 @@ import {
 } from "../components/common/Button";
 import { SecondaryButton } from "../components/common/Button";
 import { IconBasketFilled, IconHeartFilled } from "@tabler/icons-react";
+import ProductDetailPostImage from "../components/product/ProductDetailPost";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
+import ProductDetailPost from "../components/product/ProductDetailPost";
+import ProductComment from "../components/product/ProductComment";
 
 type ProductSample = {
   src: string;
@@ -19,6 +23,7 @@ type ProductData = {
   price: string;
 };
 const Product = () => {
+  const { hash } = useLocation();
   const [subImageList, setSubImageList] = React.useState<ProductSample[]>([
     {
       src: "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
@@ -81,12 +86,19 @@ const Product = () => {
 
       <DottedLine />
       <ProductNav>
-        <ProductNavItem className="active">제품 상세 정보</ProductNavItem>
-        <ProductNavItem>리뷰 28개</ProductNavItem>
-        <ProductNavItem>댓글 4,333개</ProductNavItem>
+        <ProductNavItem to="#detail" active={hash === "#detail"}>
+          제품 상세 정보
+        </ProductNavItem>
+        <ProductNavItem to="#review" active={hash === "#review"}>
+          리뷰 28개
+        </ProductNavItem>
+        <ProductNavItem to="#comment" active={hash === "#comment"}>
+          댓글 4,333개
+        </ProductNavItem>
       </ProductNav>
 
-      <ProductDetailPostImage src="https://iws.danawa.com/prod_img/500000/541/312/desc/prod_19312541/add_1/20230314163829604_0GUVMB4J.jpg" />
+      {hash === "#comment" ? <ProductComment /> : <ProductDetailPostImage />}
+      {/* <ProductDetailPostImage src="https://iws.danawa.com/prod_img/500000/541/312/desc/prod_19312541/add_1/20230314163829604_0GUVMB4J.jpg" /> */}
     </MainLayout>
   );
 };
@@ -178,28 +190,27 @@ const LikeButton = styled(LightButton)`
 const ProductNav = styled.div`
   display: flex;
 `;
-const ProductNavItem = styled(Button)`
+const ProductNavItem = styled(Link)<{ active: boolean }>`
   flex: 1;
   padding: 1rem;
   margin-bottom: 3rem;
+  text-align: center;
   &:hover {
     background-color: #f8f2e287;
   }
-  &.active {
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors.primary};
-    background-color: #f8f2e2;
-  }
+  ${(props) => {
+    if (props.active)
+      return css`
+        font-weight: 600;
+        color: var(--primaryColor);
+        background-color: #f8f2e2;
+      `;
+  }}
 `;
 
 const DottedLine = styled.div`
   margin-top: 3rem;
   height: 1px;
   width: 100%;
-  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='2' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-`;
-
-// Detail Block ======================
-const ProductDetailPostImage = styled.img`
-  width: 100%;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='1' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 `;
