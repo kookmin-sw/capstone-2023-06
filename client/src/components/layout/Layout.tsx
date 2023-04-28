@@ -21,9 +21,10 @@ export const FluidLayout = ({ children } : { children: React.ReactNode }) => {
     return (
         <div className='fluid-layout'>
             <Header/>
-            <ContainerFluid>
+            <ContainerFluid className='pd-none'>
                 { children }
             </ContainerFluid>
+            <Footer/>
         </div>
     )
 }

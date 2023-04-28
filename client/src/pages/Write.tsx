@@ -9,12 +9,15 @@ import Editor from "../components/editor/Editor";
 import { TagInput, TitleInput } from "../components/common/Input";
 import { RootState } from "../modules";
 import { useSelector } from "react-redux";
-import { upload } from "../api/upload";
+import { upload, uploadImage } from "../api/upload";
+import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 
 const Write = () => {
   const [title, setTitle] = React.useState<string>("");
   // const [tags, setTags] = React.useState<string[]>(['어쩌구', '저쩌구', 'ABC']);
-  const [tags, setTags] = React.useState<string[]>([]); // 만약 분리식으로 저장해야 한다면 윗줄식으로로 변경
+  // const [tags, setTags] = React.useState<string[]>([]); // 만약 분리식으로 저장해야 한다면 윗줄식으로로 변경
+  const [tags, setTags] = React.useState<string>(""); // 
+
   const [thumbnail, setThumbnail] = React.useState<string>("");
 
   const content = useSelector((state: RootState) => state.editor);
@@ -28,7 +31,7 @@ const Write = () => {
       const res = await upload({
         title: title,
         thumbnail: thumbnail,
-        hashtags: tags,
+        hashtags: tags.split(" "),
         content: {
           content: content,
           images: images,
@@ -44,12 +47,47 @@ const Write = () => {
     }
   };
 
+  const handleAddImages = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const imageLists = event.target.files;
+
+    if (imageLists == null || imageLists.length !== 1) {
+      // 이미지 입력 안했음. 잘못된 행동
+
+      return;
+    }
+
+    // setThumbnail(URL.createObjectURL(imageLists[0]));
+
+    // 이미지 업로드
+    try {
+      const formData = new FormData();
+      formData.append("image", imageLists[0]);
+
+      const res = await uploadImage(formData);
+
+      if (res.success) {
+        setThumbnail(res.result.url);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const inputTagHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTags(e.target.value);
+    // setTags((prev) => [...prev, e.target.value]);
+  };
+
   return (
     <FluidLayout>
-      <ImageUpload>
+      <PostHeaderImage thumbnail={thumbnail}>
+        {thumbnail}
         <p>썸네일을 추가해주세요.</p>
         <PrimaryButton>업로드</PrimaryButton>
-      </ImageUpload>
+        <input type="file" name="thumbnail_file" onChange={handleAddImages} />
+      </PostHeaderImage>
       <Container>
         <form onSubmit={submitHandler}>
           {/* <p>
@@ -64,9 +102,7 @@ const Write = () => {
             spellCheck="false"
             type="text"
             placeholder="#태그입력"
-            onChange={(e) => {
-              setTags((prev) => [...prev, e.target.value]);
-            }}
+            onChange={inputTagHandler}
           />
           <TitleInput
             className="outline-none"
@@ -87,48 +123,3 @@ const Write = () => {
 };
 
 export default Write;
-
-const ImageUpload = styled.div`
-  height: 30rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-image: repeating-linear-gradient(
-      -21deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    ),
-    repeating-linear-gradient(
-      69deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    ),
-    repeating-linear-gradient(
-      159deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    ),
-    repeating-linear-gradient(
-      249deg,
-      #bdbdbd,
-      #bdbdbd 30px,
-      transparent 30px,
-      transparent 60px,
-      #bdbdbd 60px
-    );
-  background-size: 3px 100%, 100% 3px, 3px 100%, 100% 3px;
-  background-position: 0 0, 0 0, 100% 0, 0 100%;
-  background-repeat: no-repeat;
-`;

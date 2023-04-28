@@ -4,6 +4,10 @@ export const ContainerFluid = styled.div`
 	width: 100%;
 	padding-left: 1rem;
 	padding-right: 1rem;
+    &.pd-none {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 `;
 export const Container = styled(ContainerFluid)`
     margin-left: auto;
