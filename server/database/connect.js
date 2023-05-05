@@ -7,8 +7,9 @@ dotenv.config({path:path.join(__dirname,"/./../src/enviroment/.env")});
 const pool = mysql.createPool(
     config[process.env.CURRENT_TYPE]
 );
+
 exports.GetConnection = async () => {
-    try {      
+    try {
         const conn = await pool.getConnection();
         if(!conn) {
             throw Error("No Connection");
