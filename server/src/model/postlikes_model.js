@@ -29,7 +29,7 @@ PostLikes.findByUserIdAndPostId = async (user_id, post_id) => {
     const FIND_QUERY = `
         select *
         from ${TABLE}
-        where user_id = ? and post_id = ?
+        where user_id = ? and post_id = ?;
     `;
     try {
         const [postLikes] = await conn.execute(FIND_QUERY, [user_id, post_id]);
@@ -57,7 +57,7 @@ PostLikes.deleteById = async (postlikes_id) => {
 PostLikes.findByPostId = async (post_id) => {
     const conn = await GetConnection();
     const FIND_QUERY = `
-        select * from ${TABLE} where post_id = ?
+        select * from ${TABLE} where post_id = ?;
     `;
     try {
         const [postLikes] = await conn.execute(FIND_QUERY, [post_id]);
