@@ -43,4 +43,4 @@ app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../../client/build/index.html'));
 });
 
-app.listen(process.env.SERVER_PORT, () => console.log("server start"));
+module.exports = app;

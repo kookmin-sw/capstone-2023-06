@@ -152,8 +152,8 @@ exports.findById = async (req, res) => {
 // async await으로 처리 완료
 exports.deleteById = async (req, res) => {
     try {
-        const affetRows = await Posts.deleteById(req.params.id, req.user.id);
-        if(affetRows < 1) { // 영향받은 row의 수
+        const affectRows = await Posts.deleteById(req.params.id, req.user.id);
+        if(affectRows < 1) { // 영향받은 row의 수
             sendError(res,"제대로 삭제되지 않았음",400);
         return;
         }
