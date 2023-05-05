@@ -13,8 +13,9 @@ import { RootState } from '../../modules';
 import { changeTag, newLine, updateContent } from '../../modules/editor';
 
 export const EditorContainer = styled.div`
+    font-size: 1.25rem;
     background-color: #ecffeb;
-    padding: 1rem 1rem 0rem 1rem;
+    // padding: 1rem 1rem 0rem 1rem;
 `;
 
 const NeweLineContainer = styled.div`

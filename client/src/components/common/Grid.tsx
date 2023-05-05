@@ -4,6 +4,10 @@ export const ContainerFluid = styled.div`
 	width: 100%;
 	padding-left: 1rem;
 	padding-right: 1rem;
+    &.pd-none {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 `;
 export const Container = styled(ContainerFluid)`
     margin-left: auto;
@@ -31,4 +35,13 @@ export const MobileWrapper = styled.div`
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+`;
+
+export const LoginContainer = styled.div`
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 5px;
+    background-color: #ffffff00;
+    text-align: center;
 `;

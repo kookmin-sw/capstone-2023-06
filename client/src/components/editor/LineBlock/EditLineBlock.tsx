@@ -11,19 +11,8 @@ import { addLine, changeTag, removeLine, updateHtml } from '../../../modules/edi
 import DynamicTag from './DynamicTag';
 import { SelectButton, MoveButton } from '../common/Button';
 import ImageBlock from './ImageLineBlock/ImageBlock';
+import { Line } from '../common/LineStyle';
 
-const Line = styled.div`
-    position: relative;
-    margin-bottom: 10px;
-    margin-top: 10px;
-
-    padding-left: 12rem;
-    padding-right: 12rem;
-
-    :focus-visible {
-        outline: 3px solid #aaa;
-    }
-`;
 
 type LineBlockType = IItemProps & {
     curLineId: string,
@@ -285,12 +274,12 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
      */
     function pasteHandler(event :  React.ClipboardEvent<HTMLDivElement>) {
         const paste = (event.clipboardData || event.clipboardData).getData('text');
-        const reversed = Array.from(paste).reverse().join('');
+        // const reversed = Array.from(paste).join('');
 
         const selection = window.getSelection();
         if (!selection?.rangeCount) return false;
         selection.deleteFromDocument();
-        selection.getRangeAt(0).insertNode(document.createTextNode(reversed));
+        selection.getRangeAt(0).insertNode(document.createTextNode(paste));
 
         event.preventDefault();
         

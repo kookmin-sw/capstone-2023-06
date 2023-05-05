@@ -59,6 +59,7 @@ Posts.findById = async (id) => {
     try {
         const [posts] = await conn.execute(FIND_QUERY, [id]);
         let post = posts[0];
+
         const JOIN_QUERY = `
             select h.title
             from post_hashtag p
@@ -70,6 +71,7 @@ Posts.findById = async (id) => {
         if(!post) {
             return null;
         }
+
         const [hashtagResult] = await conn.execute(JOIN_QUERY, [post.id]);
         const returnPost = {
             ...post,

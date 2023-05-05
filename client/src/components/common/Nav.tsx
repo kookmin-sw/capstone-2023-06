@@ -15,7 +15,7 @@ export const NavBar = ({ children } : { children: React.ReactNode}) => {
 }
 
 export const NavBarStyle = styled.nav`
-    height: 5rem;
+    height: 3.5rem;
     display: flex;
     padding-left: 0;
     margin-top: 0;

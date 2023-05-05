@@ -27,11 +27,9 @@ function user(
 ): UserState {
     switch (action.type) {
         case SET_USER:
-            state.nickname = action.payload;
-            return state;
+            return {...state, nickname: action.payload};
         case RESET_USER:
-            state.nickname = '';
-            return state;
+            return {...state, nickname: ''};
         default:
             return state;
     }
