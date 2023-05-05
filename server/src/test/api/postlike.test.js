@@ -51,7 +51,6 @@ describe("PostLike API", () => {
         .expect(200)
         .end((err, res) => {
             if(err) throw err;
-            console.log(res.body);
             expect(res.body.success).toBe(true);
             expect(res.body.result.length).toBe(1);
             done();
