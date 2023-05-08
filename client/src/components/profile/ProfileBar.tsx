@@ -6,16 +6,33 @@ import React from "react";
 import { PrimaryButton } from "../common/Button";
 import { IconPlus } from "@tabler/icons-react";
 
+type ProfileBarProps = ProfileProps & {
+  activeFollow?: boolean,
+  subContent?: string,
+  isFollowing?: boolean,
+  padding?: string,
+};
+
 const ProfileBar = ({
   profileID,
   nickname,
   size = 4,
-  marginright = "0px",
-}: ProfileProps) => {
-  const [followerCount, setFollowerCount] = React.useState<number>(31231);
+  marginright = "0.5rem",
+  activeFollow = false,
+  subContent,
+  padding = "1rem 0rem",
+  isFollowing,
+}: ProfileBarProps) => {
+
+  const followHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    // TODO :
+    // 팔로우 시작 or 해제
+  }
 
   return (
-    <ProfileBarBlock>
+    <ProfileBarBlock padding={padding}>
       <Profile
         profileID={profileID}
         nickname={nickname}
@@ -28,35 +45,41 @@ const ProfileBar = ({
             {nickname}
           </Link>
         </span>
-        <span className="user-followers">{followerCount} 팔로워</span>
+        {
+          subContent &&
+          <span className="sub-content">{ subContent }</span>
+        }
       </ProfileDetail>
-      <FollowButton>
-        팔로우
-        <IconPlus className="icon" />
-      </FollowButton>
+      {
+        activeFollow &&
+        <FollowButton onClick={followHandler}>
+          팔로우
+          <IconPlus className="icon" />
+        </FollowButton>
+      }
     </ProfileBarBlock>
   );
 };
 
 export default ProfileBar;
 
-const ProfileBarBlock = styled.div`
+const ProfileBarBlock = styled.div<{padding: string}>`
   display: flex;
   position: relative;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGrey};
   align-items: center;
-  padding: 1.5rem 0rem;
+  padding: ${props => props.padding};
 `;
 const ProfileDetail = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 1rem;
+  // margin-left: 1rem;
   .user-name {
-    font-weight: 500;
+    color: black;
   }
-  .user-followers {
+  .sub-content {
     color: ${({ theme }) => theme.colors.lightGrey};
     font-size: 0.8rem;
+    font-weight: 300;
   }
 `;
 const FollowButton = styled(PrimaryButton)`

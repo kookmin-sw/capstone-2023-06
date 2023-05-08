@@ -13,6 +13,7 @@ import ProductDetailPost from "../components/product/ProductDetailPost";
 import ProductComment from "../components/product/ProductComment";
 import { ProductData } from "../type/product";
 import ProductCard from "../components/product/ProductCard";
+import ProductReview from "../components/product/ProductReview";
 
 type ProductSample = {
   src: string;
@@ -53,7 +54,7 @@ const Product = () => {
         </ProductNavItem>
       </ProductNav>
 
-      {hash === "#comment" ? <ProductComment /> : <ProductDetailPostImage />}
+      {hash === "#comment" ? <ProductComment /> : hash === "#review" ? <ProductReview/> : <ProductDetailPostImage />}
       {/* <ProductDetailPostImage src="https://iws.danawa.com/prod_img/500000/541/312/desc/prod_19312541/add_1/20230314163829604_0GUVMB4J.jpg" /> */}
     </MainLayout>
   );

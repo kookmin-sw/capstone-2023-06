@@ -61,7 +61,8 @@ const Post = () => {
               <Tags>{post.hashtags.map((t) => "#" + t)}</Tags>
               <Title>{post.title}</Title>
               <PostDate>{dateFormat(new Date(post.created_at))}</PostDate>
-              <ProfileBar profileID={'11'} nickname={'고롱스'}></ProfileBar>
+              <ProfileBar profileID={'11'} nickname={'고롱스'} activeFollow subContent={`${3} 팔로워`} marginright="1rem"></ProfileBar>
+              <HR />
             </PostHead>
             <Content>
               {post.content.map((line) => {
@@ -120,4 +121,10 @@ const PostDate = styled.p`
 const Content = styled.div`
   font-size: 1.25rem;
   // padding: 1rem;
+`;
+
+const HR = styled.hr`
+background: ${({ theme }) => theme.colors.lightGrey};
+height:1px;
+border:0;
 `;
