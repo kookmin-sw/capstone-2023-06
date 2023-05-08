@@ -63,3 +63,13 @@ export const LoginInput = styled.input`
   outline: none;
   transition: border 0.3s;
 `;
+
+export const CommentInput = styled.input`
+    width: 100%;
+    background-color:${({ theme }) => theme.colors.light};
+    outline: none;
+    border-radius: 0.25rem;
+    border: 1px solid ${({ theme }) => theme.colors.lightGrey};
+    flex: 1;
+    padding: 1.5rem;
+`;
