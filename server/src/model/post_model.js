@@ -15,32 +15,37 @@ Posts.create = async (author_id, title, thumbnail, hashtags, content) => {
     const conn = await GetConnection();
     try {
         await conn.beginTransaction(); // 트랜잭션 시작
-        let hashtagList = [];
 
-        //해시태그 추가
-        for (const hashtagTitle of hashtags) {
-            const [res] = await conn.execute('select * from hashtag where title = ?;', [hashtagTitle]);
-            if(!res[0]) { //해시태그가 존재하지 않으면
-                const [hashtag] = await conn.execute('insert into hashtag (title) values (?);', [hashtagTitle]);
-                hashtagList.push({
-                    "id": hashtag.insertId,
-                    "title": hashtagTitle
-                });
-            } else { // 해시태그가 존재하면 
-                hashtagList.push(res[0]);
-            }
-        };
-        
         //포스트 업로드 처리
         const [ insertResult ] = await conn.execute(`insert into ${TABLE} (author_id, title, thumbnail, content) values (?, ?, ?, ?);`, [author_id, title, thumbnail, content]);
         const postId = insertResult.insertId;
 
-        // 해시태그 <-> 포스트 연관관계
 
-        console.info(hashtagList);
-        hashtagList.forEach(async (hashtag) => {
-            await conn.execute(`insert into post_hashtag (post_id, hashtag_id) values(?, ?);`,[postId, hashtag.id]);
-        });
+        if(hashtags) {
+            let hashtagList = [];
+            //해시태그 추가
+            for (const hashtagTitle of hashtags) {
+                const [res] = await conn.execute('select * from hashtag where title = ?;', [hashtagTitle]);
+                if(!res[0]) { //해시태그가 존재하지 않으면
+                    const [hashtag] = await conn.execute('insert into hashtag (title) values (?);', [hashtagTitle]);
+                    hashtagList.push({
+                        "id": hashtag.insertId,
+                        "title": hashtagTitle
+                    });
+                } else { // 해시태그가 존재하면 
+                    hashtagList.push(res[0]);
+                }
+            };
+            
+
+            // 해시태그 <-> 포스트 연관관계
+
+            console.info(hashtagList);
+            hashtagList.forEach(async (hashtag) => {
+                await conn.execute(`insert into post_hashtag (post_id, hashtag_id) values(?, ?);`,[postId, hashtag.id]);
+            });
+        }
+
         await conn.commit();
         return postId;
     } catch(err) {
@@ -73,9 +78,13 @@ Posts.findById = async (id) => {
         }
 
         const [hashtagResult] = await conn.execute(JOIN_QUERY, [post.id]);
+        const [users] = await conn.execute(`select * from user where id = ?;`, [post.author_id]);
         const returnPost = {
             ...post,
-            hashtags: hashtagResult.map((hashtag) => hashtag.title)
+            hashtags: hashtagResult.map((hashtag) => hashtag.title),
+            authorNickname: users[0].nickname,
+            authorImage: users[0].picture,
+            authorEmail: users[0].email 
         };
         return returnPost;
     } catch (err) {
@@ -125,10 +134,14 @@ Posts.list = async (condition) => {
                 where p.post_id = ?
             `;
             const [hashtagResult] = await conn.execute(JOIN_QUERY, [post.id]);
+            const [users] = await conn.execute(`select * from user where id = ?;`, [post.author_id]);
             const renewPost = {
                 ...post,
                 hashtags: hashtagResult.map((hashtag) => hashtag.title),
-                content: JSON.parse(post.content).content 
+                content: JSON.parse(post.content).content,
+                authorNickname: users[0].nickname,
+                authorImage: users[0].picture,
+                authorEmail: users[0].email 
             };
 
             return renewPost;
