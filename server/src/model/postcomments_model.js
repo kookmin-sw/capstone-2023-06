@@ -111,6 +111,7 @@ PostComments.findByPostId = async (post_id) => {
     try {
         const [comments] = await conn.execute(FIND_QUERY, [post_id]);
         console.info(comments);
+
         return comments;
     } catch(err) {
         throw new Error("MYSQL ERROR");
