@@ -44,13 +44,17 @@ PostComments.create = async (...arg) => {
 PostComments.findById = async (id) => {
     const conn = await GetConnection();
     const FIND_QUERY = `
-        select * from ${TABLE}
-        where id = ?;
+        select c.*, u.email as userEmail, u.nickname as userNickname, u.picture as userPicture
+        from ${TABLE} c
+        left join user u
+        on c.user_id = u.id
+        where c.id = ?;
     `;
     try {
         const [comments] = await conn.execute(FIND_QUERY, [id]);
         return comments[0];
     } catch(err) {
+        console.error(err);
         throw new Error("MYSQL ERROR");
     } finally {
         ReleaseConnection(conn);
@@ -96,12 +100,17 @@ PostComments.deleteById = async (...arg) => {
 
 PostComments.findByPostId = async (post_id) => {
     const conn = await GetConnection();
+
     const FIND_QUERY = `
-        select * from ${TABLE}
-        where post_id = ?;
+        select c.*, u.email as userEmail, u.nickname as userNickname, u.picture as userPicture
+        from ${TABLE} c
+        left join user u
+        on c.user_id = u.id
+        where c.post_id = ?;
     `;
     try {
         const [comments] = await conn.execute(FIND_QUERY, [post_id]);
+        console.info(comments);
         return comments;
     } catch(err) {
         throw new Error("MYSQL ERROR");
