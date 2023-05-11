@@ -46,15 +46,17 @@ jobs:
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
       
-      - name: build module server
+      - name: module install server
         working-directory: ./server
         run: npm install 
 
+      - name: module install client
+        working-directory: ./client
+        run: npm install
+      
       - name: build client files
         working-directory: ./client
-        run: |
-          npm install
-          npm run build
+        run: npm run build
 
       - name: zip distributions
         run: zip -r desk-it.zip ./client/build ./server
