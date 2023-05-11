@@ -59,7 +59,7 @@ jobs:
         run: CI='' npm run build
 
       - name: zip distributions
-        run: zip -r desk-it.zip ./client/build ./server
+        run: zip -r desk-it.zip ./client/build ./server ./scripts ./appspec.yml
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
