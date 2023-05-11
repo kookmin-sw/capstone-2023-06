@@ -56,7 +56,7 @@ jobs:
       
       - name: build client files
         working-directory: ./client
-        run: npm run build
+        run: CI='' npm run build
 
       - name: zip distributions
         run: zip -r desk-it.zip ./client/build ./server
