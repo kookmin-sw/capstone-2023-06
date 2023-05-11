@@ -45,7 +45,7 @@ jobs:
           touch .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
-      
+
       - name: module install server
         working-directory: ./server
         run: npm install 

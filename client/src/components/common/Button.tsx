@@ -16,6 +16,9 @@ export const SecondaryButton = styled(Button)`
     color: white;
     background: ${({theme} ) => theme.colors.secondary};
 `;
+export const TransparentButton = styled(Button)`
+    background: transparent;
+`;
 export const LightButton = styled(Button)`
     color: ${({theme} ) => theme.colors.lightGrey};
     background: ${({theme} ) => theme.colors.light};

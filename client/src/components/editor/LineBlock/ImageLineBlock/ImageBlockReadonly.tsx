@@ -12,10 +12,9 @@ import { ReferInput } from "../../common/Input";
 import { FullImage } from "../../common/Image";
 import { RootState } from "../../../../modules";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addRefer,
-  checkRefers,
-} from "../../../../modules/images";
+import { addRefer, checkRefers } from "../../../../modules/images";
+import ProductCard from "../../../product/ProductCard";
+import { ProductData } from "../../../../type/product";
 
 const ImageBlockReadonly = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -41,7 +40,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-    //   dispatch(removeImage(id));
+      //   dispatch(removeImage(id));
     };
   }, [imgRef]);
 
@@ -72,7 +71,6 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     dispatch(checkRefers(id, curReferId));
   }
 
-
   const getRefers = () => {
     if (images === undefined || id === undefined || imgRef === undefined)
       return [];
@@ -89,6 +87,8 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     checkBeforeCurCreate();
     // e.stopPropagation();
     setCurReferId(refer.id);
+
+    setOpenProductDetail(true);
   }
 
   function isSelectingRefer() {
@@ -103,14 +103,27 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     return images[id].refers[idx].data || "";
   }
 
+  const [product, setProduct] = React.useState<ProductData>({
+    name: "Lorem Ipsum",
+    tags: ["태그", "태그2", "태그3"],
+    thumbnail:
+      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+    subThumbnail: [
+      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+    ],
+    price: "45,600",
+    detail:
+      "nisi est. ex est. commodo volutpat non nisl. odio hendrerit hendrerit ac ipsum quis ipsum Donec elementum efficitur. consectetur nisl. Donec tortor. at, Nunc leo. ex viverra in tincidunt nibh nec In faucibus Ut cursus dui. urna. ac elit",
+  });
+
+  const [openProductDetail, setOpenProductDetail] =
+    React.useState<boolean>(false);
+
   return (
     <div style={{ position: "relative" }}>
-      {showImage !== "" && (
-        <FullImage
-          ref={imgRef}
-          src={showImage}
-        />
-      )}
+      {showImage !== "" && <FullImage ref={imgRef} src={showImage} />}
       {showImage !== "" &&
         getRefers().map((refer, idx) => {
           return (
@@ -127,10 +140,13 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
         })}
       {isSelectingRefer() && (
         <>
-          <ReferInput
-            value={getReferValue()}
-            readOnly
-          ></ReferInput>
+          <ReferInput value={getReferValue()} readOnly></ReferInput>
+        </>
+      )}
+      {openProductDetail && (
+        <>
+          <ProductCard product={product} summary />
+          <ExitButton onClick={() => {setOpenProductDetail(false)}}>X</ExitButton>
         </>
       )}
     </div>
@@ -138,3 +154,18 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
 };
 
 export default ImageBlockReadonly;
+
+const ExitButton = styled.button`
+  background-color: #f8f2e2;
+  color: ${({ theme }) => theme.colors.primary};
+  font-weight: 700;
+  position: absolute;
+  z-index: 2;
+  transform: translate(0px, -50%);
+  top: 50%;
+  right: -1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 2rem;
+  border: 1px solid #d9d9d9;
+`;
