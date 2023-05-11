@@ -71,4 +71,11 @@ jobs:
       - name: upload to S3
         run: aws s3 cp --region ap-northeast-2 ./desk-it.zip s3://deskit-bucket-1/deploy/
 
+      - name: deploy with AWS codeDeploy
+        run: aws deploy create-deployment
+          --application-name desk-it-codedeployApp
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name desk-it-group
+          --s3-location bucket=deskit-bucket-1,bundleType=zip,key=deploy/desk-it.zip
+
 
