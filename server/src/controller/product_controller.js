@@ -1,104 +1,126 @@
+const Products = require("../model/product_model.js");
 const Picture = require("../model/picture_model.js");
-const Product = require("../model/product_model.js");
-
-/*
-    Product Scheme
-    {
-        author_id: 123,
-        title: "title",
-        content: "<content>
-                    중앙선거관리위원회는 <span style="bold | italic" color="red">대통령</span>이 임명하는 3인, 국회에서 선출하는 3인과 대법원장이 지명하는 3인의 위원으로 구성한다. 위원장은 위원중에서 호선한다.
-                    <picture id="0"/>
-                    <picture id="1"/>
-                    국가는 <span style="bold">주택개발정책</span>등을 통하여 모든 국민이 쾌적한 주거생활을 할 수 있도록 노력하여야 한다. 국민경제의 발전을 위한 중요정책의 수립에 관하여 대통령의 자문에 응하기 위하여 국민경제자문회의를 둘 수 있다.
-                    <picture id="2"/>
-                    <picture id="3"/>
-                </content>",
-        created_at: "2022-01-01 00:00:00",
-        modified_at: "2022-01-01 00:00:00",
-        tags: [
-            {
-                x: 1,
-                y: 1,
-                target_product_id: 1,
-                picture_cnt: 1,
-            }, 
-            {
-                x: 1,
-                y: 1,
-                target_product_id: 1,
-                picture_cnt: 2,
-            }, 
-        ],
-        imgs: [
-            {
-                base64: "abasdfs==="
-            },
-            {
-                base64: "asdf==="
-            }
-        ]
-    }
-*/
-
-exports.findById = function (req, res) {
-    Product.findById(req.params.id, async (err, product) => {
-        console.log(product)
-        if (err) res.send(err)
-        else {
-            const tags = await new Promise((resolve, reject) => { Product.findTagByProductId(product[0].id, (err, tag) => { if (!err) resolve(tag) }) })
-            const imgs = await new Promise((resolve, reject) => { Picture.findByProductId(product[0].id, (err, img) => { if (!err) resolve(img) }) })
-            res.status(200).json({
-                ...(product[0]),
-                tags,
-                imgs,
-            });
-        }
+const Hashtag = require("../model/hashtag_model.js");
+const ProductHashtag = require("../model/product_hashtag_model.js");
+const Subthumbnail = require("../model/subthumbnail_model.js");
+const MysqlError = require("../utils/errors/MysqlError.js");
+const {GetConnection, ReleaseConnection} = require("../../database/connect.js");
+const sendError = (res, msg, status) => {
+    res.status(status).send({
+        success: false,
+        message: msg,
     });
 }
 
-exports.create = async function (req, res) {
-    if (!req.session || !req.session.isLogin) {
-        console.log('logouted')
-        res.status(401).json({
-            "isSuccess": false,
-            "result": [
-                ''
-            ]
+const sendResult = (res, msg, result) => {
+    res.status(200).send({
+        success: true,
+        message: msg,
+        result: result
+    });
+}
+
+exports.create = async (req, res) => {
+    console.info("Create Posts");
+    const conn = await GetConnection();
+    let pictureIdList = [];
+
+    const {title, content, thumbnail, price, subthumbnails, hashtags, options} = req.body;
+    try {
+        await conn.beginTransaction();
+        // 프로덕트 올리기
+        
+        const productId = await Products.create(conn, req.user.id, title, content, thumbnail, price);
+        console.info("product Create");
+
+        // 서브 섬네일 로직
+        for(const imageUrl of subthumbnails) {
+            const pictureId = await Picture.createWithConn(conn, imageUrl, "PRODUCT");
+            pictureIdList.push(pictureId);
+        }
+        console.info("Picture create");
+
+        // 서브섬네일 테이블 매핑
+        pictureIdList.forEach((pictureId) => {
+            Subthumbnail.create(conn, productId, pictureId);
         });
+        console.info("subthumbnail create");
+
+        // 해시태그 삽입
+        if(hashtags) {
+            for (const hashtagTitle of hashtags) {
+                const findHashtag = await Hashtag.findById(conn, hashtagTitle);
+                if(!findHashtag) { //해시태그가 없으면
+                    const hashtagId = await Hashtag.create(conn, hashtagTitle);
+                    ProductHashtag.create(conn, productId, hashtagId);
+                } else { //해시태그가 있으면
+                    ProductHashtag.create(conn, productId, findHashtag.id);
+                }
+            }
+        }
+        console.info("hashtag create");
+
+        // 일단 공란
+        // if(options) {
+
+        // }
+        
+
+        await conn.commit();
+        sendResult(res, "포스트 생성 완료", productId);
+        return;
+    } catch(err) {
+        conn.rollback();
+        if (err instanceof MysqlError) {
+            sendError(res, err.message, 500);
+        } else {
+            sendError(res, err.message, 400);
+        }
+    } finally {
+        ReleaseConnection(conn);
+    }
+}
+
+exports.findById = async (req, res) => {
+    const conn = await GetConnection();
+    try {
+        const product = await Products.findByIdWithUser(conn, req.params.id);
+        const hashtags = await ProductHashtag.findByProductId(conn, product.id);
+        const subthumbnails = await Subthumbnail.findByProductId(conn, product.id);
+        //options 생략
+        const options = [];
+        
+        const renewProduct = {
+            ...product,
+            content: JSON.parse(product.content),
+            hashtags: hashtags.map((hashtag) => hashtag.value),
+            subthumbnails: subthumbnails.map((subthumbnail) => subthumbnail.value),
+            options: options.map((option)=> option.value) //option 바뀌면 여기도 바뀌어야함
+        };
+        
+
+        sendResult(res, "조회 성공", renewProduct);
+    } catch(err) {
+        if (err instanceof MysqlError) {
+            sendError(res, err.message, 500);
+        } else {
+            sendError(res, err.message, 400);
+        }
+    } finally {
+        ReleaseConnection(conn);
+    }
+}
+
+exports.getProducts = (req, res) => {
+
+}
+
+exports.uploadProductsImage = (req, res) => {
+    if(!req.file) {
+        sendError(res, "사진 업로드 실패", 400);
         return;
     }
-    const { author_id, title, content, tags } = req.body;
-    const tagsJson = JSON.parse(tags)
-    const imgIds = []
 
-    console.log('req.session.user', req.session.user)
-    //author_id 를 user로 변경
-    return
-    Product.create(author_id, title, content, new Date().toISOString().slice(0, 19).replace('T', ' '), async (err, product) => {
-        for (let i = 0; i < req.files.length; i++) {
-            const id = await new Promise((resolve, reject) => {
-                Picture.create(req.files[i].filename, product.insertId, (err, img) => { if (!err) resolve(img) })
-            })
-            imgIds.push(id.insertId)
-        }
-
-        if (err) {
-            res.send(err)
-        }
-        else {
-            for (let i = 0; i < tagsJson.length; i++) {
-                const { x, y, target_product_id, picture_cnt } = tagsJson[i]
-                await new Promise((resolve, reject) => {
-                    Product.createTag(x, y, product.insertId, target_product_id, imgIds[picture_cnt], (err, tag) => { if (!err) resolve(tag) })
-                })
-            }
-            res.status(201).json({
-                "isSuccess": true,
-                "result": [
-                    product
-                ]
-            });
-        }
-    });
+    sendResult(res,"상품 사진 업로드 성공", req.file.location);
+    return;
 }
