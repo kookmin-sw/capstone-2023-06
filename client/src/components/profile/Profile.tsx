@@ -7,14 +7,15 @@ export type ProfileLinkProps = {
     marginright?: string,
 }
 export type ProfileProps = ProfileLinkProps & {
-    profileID: string,
+    profileID: string | number | undefined,
     nickname?: string,
+    img: string | undefined,
 }
 
-const Profile = ({ profileID, nickname, size = 4, marginright = '0px' } : ProfileProps) => {
+const Profile = ({ profileID, nickname, img, size = 4, marginright = '0px' } : ProfileProps) => {
     return (
         <ProfileLink to={`/user/${profileID}`} size={size} marginright={marginright}>
-            <ProfileImg src={'https://user-images.githubusercontent.com/63653473/226567131-26e7d4d1-2ed7-45a1-bfec-28370cef7ee0.png'} alt="profile"/>
+            <ProfileImg src={img} alt="profile"/>
         </ProfileLink>
     )
 };

@@ -9,7 +9,7 @@ const ProductComment = () => {
   return (
     <div>
       <CommentForm>
-        <Profile profileID="3" marginright="1.5rem" />
+        <Profile profileID="3" marginright="1.5rem" img='' />
         <CommentInput placeholder="댓글을 남겨주세요." />
         <Button>작성</Button>
       </CommentForm>

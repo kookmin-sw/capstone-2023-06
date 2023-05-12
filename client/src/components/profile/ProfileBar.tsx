@@ -22,6 +22,7 @@ const ProfileBar = ({
   subContent,
   padding = "1rem 0rem",
   isFollowing,
+  img
 }: ProfileBarProps) => {
 
   const followHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,6 +39,7 @@ const ProfileBar = ({
         nickname={nickname}
         size={size}
         marginright={marginright}
+        img={img}
       ></Profile>
       <ProfileDetail>
         <span className="user-name">
