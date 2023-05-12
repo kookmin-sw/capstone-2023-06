@@ -6,3 +6,8 @@ export type ProductData = {
   detail: string;
   price: string;
 };
+
+export type CommentData = {
+  user: string,
+  comment: string,
+}

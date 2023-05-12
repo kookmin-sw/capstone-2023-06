@@ -10,8 +10,8 @@ import { SecondaryButton } from "../components/common/Button";
 import ProductDetailPostImage from "../components/product/ProductDetailPost";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import ProductDetailPost from "../components/product/ProductDetailPost";
-import ProductComment from "../components/product/ProductComment";
-import { ProductData } from "../type/product";
+import CommentList from "../components/Comment/CommentList";
+import { CommentData, ProductData } from "../type/product";
 import ProductCard from "../components/product/ProductCard";
 import ProductReview from "../components/product/ProductReview";
 
@@ -35,6 +35,17 @@ const Product = () => {
       "nisi est. ex est. commodo volutpat non nisl. odio hendrerit hendrerit ac ipsum quis ipsum Donec elementum efficitur. consectetur nisl. Donec tortor. at, Nunc leo. ex viverra in tincidunt nibh nec In faucibus Ut cursus dui. urna. ac elit",
   });
 
+  const [comments, setComments] = React.useState<CommentData[]>([
+    {
+      user: "11",
+      comment: "어쩌구 저쩌구",
+    },
+    {
+      user: "1231",
+      comment: "어쩌ㅁㄴㄹ구 저쩌ㅁㄴㅇㄻㄴㄹ구",
+    },
+  ]);
+
   return (
     <MainLayout>
       <ProductHeader>
@@ -54,7 +65,13 @@ const Product = () => {
         </ProductNavItem>
       </ProductNav>
 
-      {hash === "#comment" ? <ProductComment /> : hash === "#review" ? <ProductReview/> : <ProductDetailPostImage />}
+      {hash === "#comment" ? (
+        <CommentList comments={comments} />
+      ) : hash === "#review" ? (
+        <ProductReview />
+      ) : (
+        <ProductDetailPostImage />
+      )}
       {/* <ProductDetailPostImage src="https://iws.danawa.com/prod_img/500000/541/312/desc/prod_19312541/add_1/20230314163829604_0GUVMB4J.jpg" /> */}
     </MainLayout>
   );

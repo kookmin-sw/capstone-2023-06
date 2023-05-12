@@ -3,9 +3,10 @@ import { CommentInput } from "../common/Input";
 import Profile from "../profile/Profile";
 import { Button } from "../common/Button";
 
-import Comment from "./Comment";
+import Comment from ".";
+import { CommentData } from "../../type/product";
 
-const ProductComment = () => {
+const CommentList = ({ comments }: { comments: CommentData[] }) => {
   return (
     <div>
       <CommentForm>
@@ -13,14 +14,15 @@ const ProductComment = () => {
         <CommentInput placeholder="댓글을 남겨주세요." />
         <Button>작성</Button>
       </CommentForm>
-      <Comment />
-      <Comment />
+      {
+        comments.map(comment => <Comment {...comment}/>)
+      }
       <div className="row"></div>
     </div>
   );
 };
 
-export default ProductComment;
+export default CommentList;
 
 const CommentForm = styled.form`
   display: flex;

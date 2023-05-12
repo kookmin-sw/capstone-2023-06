@@ -138,11 +138,11 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
             </ReferButton>
           );
         })}
-      {isSelectingRefer() && (
-        <>
-          <ReferInput value={getReferValue()} readOnly></ReferInput>
-        </>
-      )}
+        {/* {isSelectingRefer() && (
+          <>
+            <ReferInput value={getReferValue()} readOnly></ReferInput>
+          </>
+        )} */}
       {openProductDetail && (
         <>
           <ProductCard product={product} summary />

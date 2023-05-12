@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { ImagesObjectType, LINE_TYPE } from "../components/editor/type";
 import { DynamicTagReadOnly } from "../components/editor/LineBlock/DynamicTag";
 import { useParams } from "react-router-dom";
-import { getPost } from "../api/upload";
+import { getComments, getPost } from "../api/upload";
 import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 import ImageBlock from "../components/editor/LineBlock/ImageLineBlock/ImageBlock";
 import { useDispatch } from "react-redux";
@@ -14,6 +14,8 @@ import ImageBlockReadonly from "../components/editor/LineBlock/ImageLineBlock/Im
 import { Line, LineStyle } from "../components/editor/common/LineStyle";
 import { dateFormat } from "../utils/format";
 import ProfileBar from "../components/profile/ProfileBar";
+import { CommentData } from "../type/product";
+import CommentList from "../components/Comment/CommentList";
 // import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
 
@@ -31,8 +33,20 @@ const Post = () => {
 
   const [post, setPost] = React.useState<PostData>();
 
+  const [comments, setComments] = React.useState<CommentData[]>([
+    {
+      user: "11",
+      comment: "어쩌구 저쩌구",
+    },
+    {
+      user: "1231",
+      comment: "어쩌ㅁㄴㄹ구 저쩌ㅁㄴㅇㄻㄴㄹ구",
+    },
+  ]);
+
   React.useEffect(() => {
     initPost();
+    initComments();
   }, [post_id]);
 
   const initPost = async () => {
@@ -42,9 +56,23 @@ const Post = () => {
       const res = await getPost(post_id);
 
       if (res.success) {
-        console.log(res);
+        console.log("111", res);
         setPost({ ...res.post, content: res.post.content.content });
         dispatch(resetImages(res.post.content.images));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const initComments = async () => {
+    if (!post_id) return;
+    try {
+      //
+      const res = await getComments(post_id);
+      console.log(res);
+      if (res.success) {
+        console.log(res);
       }
     } catch (err) {
       console.error(err);
@@ -61,7 +89,13 @@ const Post = () => {
               <Tags>{post.hashtags.map((t) => "#" + t)}</Tags>
               <Title>{post.title}</Title>
               <PostDate>{dateFormat(new Date(post.created_at))}</PostDate>
-              <ProfileBar profileID={'11'} nickname={'고롱스'} activeFollow subContent={`${3} 팔로워`} marginright="1rem"></ProfileBar>
+              <ProfileBar
+                profileID={"11"}
+                nickname={"고롱스"}
+                activeFollow
+                subContent={`${3} 팔로워`}
+                marginright="1rem"
+              ></ProfileBar>
               <HR />
             </PostHead>
             <Content>
@@ -91,6 +125,7 @@ const Post = () => {
                 );
               })}
             </Content>
+            <CommentList comments={comments} />
           </Container>
         </>
       )}
@@ -108,7 +143,6 @@ const Tags = styled.p`
   font-size: 1rem;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.primary};
-
 `;
 const Title = styled.h1`
   margin: 0.5rem 0rem;
@@ -120,11 +154,12 @@ const PostDate = styled.p`
 `;
 const Content = styled.div`
   font-size: 1.25rem;
+  padding-bottom: 10rem;
   // padding: 1rem;
 `;
 
 const HR = styled.hr`
-background: ${({ theme }) => theme.colors.lightGrey};
-height:1px;
-border:0;
+  background: ${({ theme }) => theme.colors.lightGrey};
+  height: 1px;
+  border: 0;
 `;
