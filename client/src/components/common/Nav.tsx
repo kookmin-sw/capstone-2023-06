@@ -38,3 +38,4 @@ export const NavLinkItem = styled(NavLink)`
         color: ${({ theme }) => theme.colors.primary };
     }
 `;
+

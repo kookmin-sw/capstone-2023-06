@@ -1,31 +1,47 @@
-import React from "react";
-import { MainLayout } from "../components/layout/Layout";
-import { getPostList } from "../api/upload";
+import React from 'react';
+import styled from 'styled-components';
+import { MainLayout } from '../components/layout/Layout';
+import {MainPost} from '../components/main/postbanner/Thumbnail'; //이렇게 분리하는게 맞는지?
+import {PostWrapper} from '../components/main/postbanner/Thumbnail.styles';
+import AdBanner from '../components/main/adbanner/AdBanner';
 
+
+//걍 테스트 서버에서 받아오기
+const testPosts = [
+  { title: "게시물 1", author: "작성자 1", date: "2023-05-03"}, //임시 데이터
+  { title: "게시물 2", author: "작성자 2", date: "2023-05-04"},
+  { title: "게시물 3", author: "작성자 3", date: "2023-05-05"},
+  { title: "게시물 4", author: "작성자 4", date: "2023-05-06"},
+];
+ 
+// 나중에 레이아웃좀 변경해야지
 const Main = () => {
-  React.useEffect(() => {
-    refreshPostList();
-  }, []);
-
-  const refreshPostList =  async () => {
-    // 아직 API 가 서버에서 구현이 안됨.
-    // try {
-    //   const res = await getPostList("user");
-
-    //   console.log(res);
-
-    //   if (res.success) {
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
-  };
-
   return (
     <MainLayout>
-      메인 화면
-      <div>캐로셀</div>
-      <div>배너</div>
+      <AdBanner/> 
+      <div style={{ marginBottom: '3rem' }}></div>
+      <h2 style={{ color: '#386437' }}>추천 게시물</h2>
+      <h5>고롱스를 위한 추천 게시물</h5>
+      <div style={{ marginBottom: '1rem' }}></div>
+      <PostWrapper>
+        {testPosts.map((post, index) => (
+          <MainPost key={index} post={post} />
+        ))}
+      </PostWrapper>
+      <h2 style={{ color: '#386437' }}>인기 게시물</h2>
+      <h5>최근 인기 게시물</h5>
+      <PostWrapper>
+        {testPosts.map((post, index) => (
+          <MainPost key={index} post={post} />
+        ))}
+      </PostWrapper>
+      <h2 style={{ color: '#386437' }}>셀럽 게시물</h2>
+      <h5>드라마 속 그 제품</h5>
+      <PostWrapper>
+        {testPosts.map((post, index) => (
+          <MainPost key={index} post={post} />
+        ))}
+      </PostWrapper>
     </MainLayout>
   );
 };
