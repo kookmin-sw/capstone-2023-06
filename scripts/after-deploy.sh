@@ -2,5 +2,5 @@
 SERVER_ROOT=/home/ubuntu/desk-it/server
 
 cd $SERVER_ROOT
-pm2 kill
-npm run prod
+sudo pm2 kill
+sudo npm run prod
