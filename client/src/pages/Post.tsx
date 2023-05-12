@@ -4,7 +4,7 @@ import { Container } from "../components/common/Grid";
 import styled from "styled-components";
 import { ImagesObjectType, LINE_TYPE } from "../components/editor/type";
 import { DynamicTagReadOnly } from "../components/editor/LineBlock/DynamicTag";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getPost } from "../api/upload";
 import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 import ImageBlock from "../components/editor/LineBlock/ImageLineBlock/ImageBlock";
@@ -28,6 +28,7 @@ type PostData = {
 const Post = () => {
   const dispatch = useDispatch();
   const { post_id } = useParams();
+  const navigate = useNavigate();
 
   const [post, setPost] = React.useState<PostData>();
 
@@ -40,6 +41,7 @@ const Post = () => {
     // 이미지 업로드
     try {
       const res = await getPost(post_id);
+      console.log(res);
 
       if (res.success) {
         console.log(res);
@@ -48,6 +50,7 @@ const Post = () => {
       }
     } catch (err) {
       console.error(err);
+      navigate('/404');
     }
   };
 
