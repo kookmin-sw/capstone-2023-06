@@ -4,27 +4,27 @@ import Review, { ReviewType } from "../Review";
 const ProductReview = () => {
     const [reviews, setReviews] = React.useState<ReviewType[]>([
         {
-            tags: '#어쩌구, #저쩌구',
+            tags: ['태그1', '태그2', '태그3'],
             title: '30대 직장인의 Desk Setup',
-            user: "a",
+            author: "a",
             date: '2023.03.03',
         },
         {
-            tags: '#어쩌구, #저쩌구',
+            tags: ['태그1', '태그2', '태그3'],
             title: '30대 직장인의 Desk Setup',
-            user: "a",
+            author: "a",
             date: '2023.03.03',
         },
         {
-            tags: '#어쩌구, #저쩌구',
+            tags: ['태그1', '태그2', '태그3'],
             title: '30대 직장인의 Desk Setup',
-            user: "a",
+            author: "a",
             date: '2023.03.03',
         },
         {
-            tags: '#어쩌구, #저쩌구',
+            tags: ['태그1', '태그2', '태그3'],
             title: '30대 직장인의 Desk Setup',
-            user: "a",
+            author: "a",
             date: '2023.03.03',
         },
     ]);
