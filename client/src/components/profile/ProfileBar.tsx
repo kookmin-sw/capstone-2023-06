@@ -22,6 +22,7 @@ const ProfileBar = ({
   subContent,
   padding = "1rem 0rem",
   isFollowing,
+  img
 }: ProfileBarProps) => {
 
   const followHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,9 +39,10 @@ const ProfileBar = ({
         nickname={nickname}
         size={size}
         marginright={marginright}
+        img={img}
       ></Profile>
       <ProfileDetail>
-        <span>
+        <span className="user-name">
           <Link to={`/user/${profileID}`} className="user-name">
             {nickname}
           </Link>
@@ -73,7 +75,7 @@ const ProfileDetail = styled.div`
   display: flex;
   flex-direction: column;
   // margin-left: 1rem;
-  .user-name {
+  .user-name a {
     color: black;
   }
   .sub-content {

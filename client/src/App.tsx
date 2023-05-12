@@ -9,6 +9,7 @@ import Singup from "./pages/Signup";
 import FindAccount from "./pages/FindAccount";
 import Write from "./pages/Write";
 import Product from "./pages/Product";
+import Error from "./pages/Error";
 import Post from "./pages/Post";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/write" element={<Write />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/post/:post_id" element={<Post />} />
+          <Route path="/*" element={<Error/>}/>
         </Routes>
       </BrowserRouter>
     </div>

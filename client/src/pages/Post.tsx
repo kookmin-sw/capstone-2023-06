@@ -4,7 +4,7 @@ import { Container } from "../components/common/Grid";
 import styled from "styled-components";
 import { ImagesObjectType, LINE_TYPE } from "../components/editor/type";
 import { DynamicTagReadOnly } from "../components/editor/LineBlock/DynamicTag";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getComments, getPost } from "../api/upload";
 import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 import ImageBlock from "../components/editor/LineBlock/ImageLineBlock/ImageBlock";
@@ -16,6 +16,7 @@ import { dateFormat } from "../utils/format";
 import ProfileBar from "../components/profile/ProfileBar";
 import { CommentData } from "../type/product";
 import CommentList from "../components/Comment/CommentList";
+import { UserData } from "../type/user";
 // import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
 
@@ -30,19 +31,12 @@ type PostData = {
 const Post = () => {
   const dispatch = useDispatch();
   const { post_id } = useParams();
+  const navigate = useNavigate();
 
   const [post, setPost] = React.useState<PostData>();
+  const [author, setAuthor] = React.useState<UserData>();
 
-  const [comments, setComments] = React.useState<CommentData[]>([
-    {
-      user: "11",
-      comment: "어쩌구 저쩌구",
-    },
-    {
-      user: "1231",
-      comment: "어쩌ㅁㄴㄹ구 저쩌ㅁㄴㅇㄻㄴㄹ구",
-    },
-  ]);
+  const [comments, setComments] = React.useState<CommentData[]>([]);
 
   React.useEffect(() => {
     initPost();
@@ -54,25 +48,43 @@ const Post = () => {
     // 이미지 업로드
     try {
       const res = await getPost(post_id);
+      console.log(res);
 
       if (res.success) {
-        console.log("111", res);
         setPost({ ...res.post, content: res.post.content.content });
+        setAuthor({
+          id: res.post.author_id,
+          nickname: res.post.authorNickname,
+          image: res.post.authorImage,
+          email: res.post.authorEmail,
+        });
         dispatch(resetImages(res.post.content.images));
       }
     } catch (err) {
       console.error(err);
+      navigate("/404");
     }
   };
+
 
   const initComments = async () => {
     if (!post_id) return;
     try {
-      //
       const res = await getComments(post_id);
+      
       console.log(res);
       if (res.success) {
-        console.log(res);
+        setComments(res.result.map((co: { comment: any; user_id: any; userNickname: any; userPicture: any; userEmail: any; }) => {
+          return {
+            comment: co.comment,
+            user: {
+              id: co.user_id,
+              nickname: co.userNickname,
+              image: co.userPicture,
+              email: co.userEmail,
+            }
+          }
+        }))
       }
     } catch (err) {
       console.error(err);
@@ -90,11 +102,12 @@ const Post = () => {
               <Title>{post.title}</Title>
               <PostDate>{dateFormat(new Date(post.created_at))}</PostDate>
               <ProfileBar
-                profileID={"11"}
-                nickname={"고롱스"}
+                profileID={author?.id}
+                nickname={author?.nickname}
                 activeFollow
                 subContent={`${3} 팔로워`}
                 marginright="1rem"
+                img={author?.image}
               ></ProfileBar>
               <HR />
             </PostHead>

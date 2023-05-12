@@ -40,7 +40,6 @@ exports.list = async (req,res) => {
     }
 
     if(type === 'date' && (!req.body.startTime || !req.body.endTime)) {
-        console.info("here1");
         res.status(400).send({
             success: false,
             message: "req body 설정 error"

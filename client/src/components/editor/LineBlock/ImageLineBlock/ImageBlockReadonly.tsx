@@ -80,7 +80,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     //   return [];
     // }
 
-    return images[id].refers || [];
+    return [...images[id].refers] || [];
   };
 
   function selectRefer(refer: Refer) {

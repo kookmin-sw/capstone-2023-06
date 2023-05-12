@@ -13,7 +13,7 @@ const ProductCard = ({
   summary?: boolean;
 }) => {
   return (
-    <ProductCardContainer className="row" summary={summary}>
+    <ProductCardContainer className="row" $summary={summary}>
       <div className="col-lg-6">
         <ProductImage src={product.thumbnail} alt=" " />
         <SubImageList>
@@ -55,9 +55,9 @@ const ProductCard = ({
 
 export default ProductCard;
 
-const ProductCardContainer = styled.div<{ summary: boolean }>`
+const ProductCardContainer = styled.div<{ $summary: boolean }>`
   ${(props) => {
-    if (props.summary) {
+    if (props.$summary === true) {
       return css`
         position: absolute;
         top: 0px;
@@ -70,6 +70,7 @@ const ProductCardContainer = styled.div<{ summary: boolean }>`
         z-index: 1;
       `;
     }
+    return ``;
   }}
 `;
 

@@ -1,24 +1,27 @@
 import styled from "styled-components";
 import ProfileBar from "./profile/ProfileBar";
 import { Link } from "react-router-dom";
+import { UserData } from "../type/user";
 
 export type ReviewType = {
+    id: number | string,
+    thumbnail: string,
     title: string,
-    user: string,
+    author: UserData,
     date: string,
-    tags: string,
+    tags: string[],
 }
-const Review = ({ title, user, date, tags }: ReviewType) => {
+const Review = ({ id, thumbnail, title, author, date, tags }: ReviewType) => {
     return (
-        <Link to="">
+        <Link to={`/post/${id}`}>
             <ReviewCard>
-                <ReviewThumbnail src="https://cdn.shopify.com/s/files/1/0870/0656/files/Inked0nk1apgq5tf41_LI_large.jpg?v=1596810453" />
+                <ReviewThumbnail src={thumbnail} />
                 <div className="card-body">
                     <ReviewTags>
-                        {tags}
+                        {tags.map(tag => `#${tag} `)}
                     </ReviewTags>
                     <ReviewTitle>{title}</ReviewTitle>
-                    <ProfileBar profileID={user} nickname={user} size={2} padding="0.125rem 0rem" subContent={date} />
+                    <ProfileBar profileID={author.id} nickname={author.nickname} size={1.5} padding="0.125rem 0rem" subContent={date} img={author.image} />
                 </div>
             </ReviewCard>
         </Link>
@@ -30,8 +33,14 @@ export default Review;
 const ReviewCard = styled.div`
     margin-bottom: 2rem;
     .user-name {
-        color: rgb(91, 91, 91);
+        font-size: 0.675rem;
         font-weight: 400;
+        .user-name {            
+            color: rgb(91, 91, 91);
+        }
+    }
+    .sub-content {
+        font-size: 0.675rem;
     }
     transition: opacity ease 0.5s;
     &:hover {
@@ -52,4 +61,5 @@ const ReviewTags = styled.span`
 const ReviewTitle = styled.h3`
     font-size: 1.375rem;
     color: black;
+    margin-bottom: 0.25rem;
 `;

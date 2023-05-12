@@ -5,7 +5,8 @@
   "main": "./src/index.js",
   "scripts": {
     "start": "node ./src/index.js",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit",
+    "prod": "pm2 start ./src/index.js -i max"
   },
   "author": "",
   "license": "ISC",

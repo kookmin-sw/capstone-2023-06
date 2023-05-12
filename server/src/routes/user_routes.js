@@ -4,6 +4,7 @@ const router = express.Router();
 const userController = require("../controller/user_controller.js");
 const ImageUploader = require("../utils/imageUploader/imageUploader.js");
 
+router.post("/brand/sign-up", userController.brandUserSignUp);
 router.post("/sign-up", userController.userSignUp);
 router.post("/login", passport.authenticate('local'), userController.login);
 router.get("/auto-login", userController.autologin);

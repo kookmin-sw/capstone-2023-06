@@ -89,11 +89,12 @@ export const getPostList = async (
   reverse: boolean = false
 ) => {
   try {
-    const res = await uploadAPI.get(`/list`, {
-      params: {
-        type,
-        reverse,
-      },
+    const res = await uploadAPI.post(`/list?type=${type}&rever=${reverse}`, {
+      "startTime": "2022-02-01T01:01:01",
+      "endTime": "2022-02-01T01:01:01",
+      "offset": 0,
+      "limit": 4,
+      "keyward": "스타일링페이지"
     });
     return res.data;
   } catch (err) {
