@@ -40,7 +40,7 @@ const ProfileBar = ({
         marginright={marginright}
       ></Profile>
       <ProfileDetail>
-        <span>
+        <span className="user-name">
           <Link to={`/user/${profileID}`} className="user-name">
             {nickname}
           </Link>
@@ -73,7 +73,7 @@ const ProfileDetail = styled.div`
   display: flex;
   flex-direction: column;
   // margin-left: 1rem;
-  .user-name {
+  .user-name a {
     color: black;
   }
   .sub-content {
