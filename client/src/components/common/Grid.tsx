@@ -45,3 +45,17 @@ export const LoginContainer = styled.div`
     background-color: #ffffff00;
     text-align: center;
 `;
+
+export const FooterWrapper = styled.footer`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 20px 0;
+`;
+
+export const FooterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

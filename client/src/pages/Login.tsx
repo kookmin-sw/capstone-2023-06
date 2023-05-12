@@ -43,7 +43,7 @@ const Login = () => {
   return (
     <LoginLayout>
       <Link to="/">홈(이미지)</Link>
-      {/* TODO : input도 form 도 모두 컴포넌트화 */}
+      {/* TODO : input도 form 도 모두 컴포넌트화 하기 */}
       <form onSubmit={submitLogin} method="post">
           <section>
               {/* <label htmlFor="username">Username</label> */}

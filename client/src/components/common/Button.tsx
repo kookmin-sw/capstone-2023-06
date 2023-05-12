@@ -39,8 +39,7 @@ export const ExtraLinkButton = styled(Button)`
     font-size: 1rem;
     &:extra-links a:hover {
         text-decoration: underline;
-    }
-    
+    } 
 `;
 export const SwapButton = styled(Button)`
     width: 100%;

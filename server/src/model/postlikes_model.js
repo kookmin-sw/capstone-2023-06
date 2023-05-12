@@ -57,7 +57,11 @@ PostLikes.deleteById = async (postlikes_id) => {
 PostLikes.findByPostId = async (post_id) => {
     const conn = await GetConnection();
     const FIND_QUERY = `
-        select * from ${TABLE} where post_id = ?;
+        select l.*, u.nickname as userNickname, u.picture as userPicture, u.email as userEmail 
+        from ${TABLE} l
+        left join user u
+        on l.user_id = u.id 
+        where l.post_id = ?;
     `;
     try {
         const [postLikes] = await conn.execute(FIND_QUERY, [post_id]);

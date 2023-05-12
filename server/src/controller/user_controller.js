@@ -6,6 +6,7 @@ const validEmailCheck = (email) =>{
 }
 
 const USER_ROLE = 1;
+const BRAND_USER_ROLE = 2;
 
 // 비밀번호를 안보이게 하기 위해서
 const userToResponse = (user) => {
@@ -16,6 +17,35 @@ const userToResponse = (user) => {
         "picture": user.picture,
         "user_role": user.user_role
     };
+}
+
+exports.brandUserSignUp = async function (req, res) {
+    const { nickname, password, email, picture } = req.body;
+    
+    if(!validEmailCheck(email)) {
+        res.status(400).send({
+            success: false,
+            message: "이메일 형식이 올바르지 않습니다."
+        });
+        return;
+    }
+
+    const hashedPassword = await Encryption(password);
+    User.create(nickname, hashedPassword, email, picture, BRAND_USER_ROLE, (err, user) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: "MYSQL ERROR",
+            });
+            return;
+        }
+        res.status(201).json({
+            success: true,
+            message: `Sign Up for  ${email}`,
+
+            result: user
+        });
+    });
 }
 
 exports.uploadProfile = (req,res) => {

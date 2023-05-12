@@ -17,7 +17,8 @@ const s3 = new S3Client({
 const allowedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.heic', '.bmp'];
 const uploadType = {
     "/api/post/image": "post/image",
-    "/api/user/profile": "user/profile"
+    "/api/user/profile": "user/profile",
+    "/api/product/image": "product/image"
 };
 
 const ImageUploader = multer({

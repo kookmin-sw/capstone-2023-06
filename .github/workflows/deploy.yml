@@ -1,0 +1,81 @@
+name: deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    strategy:
+        matrix:
+          node-version: [19.x]
+    steps:
+      - name: Checkout source code.
+        uses: actions/checkout@v2
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: create env file at server
+        working-directory: ./server/src/enviroment
+        run: |
+          touch .env aws.env crypto.env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
+          echo "SESSION_KEY=${{ secrets.SESSION_KEY }}" >> .env
+          echo "CURRENT_TYPE=${{ secrets.CURRENT_TYPE }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> aws.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> aws.env
+          echo "SALT=${{ secrets.SALT }}" >> crypto.env
+          echo "ITERATION=${{ secrets.ITERATION }}" >> crypto.env
+      
+      - name: create env file at client
+        working-directory: ./client
+        run: |
+          touch .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+
+      - name: module install server
+        working-directory: ./server
+        run: npm install 
+
+      - name: module install client
+        working-directory: ./client
+        run: npm install
+      
+      - name: build client files
+        working-directory: ./client
+        run: CI='' npm run build
+
+      - name: zip distributions
+        run: zip -r desk-it.zip ./client/build ./server ./scripts ./appspec.yml
+
+      - name: AWS configure credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEPLOY_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_DEPLOY_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./desk-it.zip s3://deskit-bucket-1/deploy/
+
+      - name: deploy with AWS codeDeploy
+        run: aws deploy create-deployment
+          --application-name desk-it-codedeployApp
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name desk-it-group
+          --s3-location bucket=deskit-bucket-1,bundleType=zip,key=deploy/desk-it.zip
+
+
