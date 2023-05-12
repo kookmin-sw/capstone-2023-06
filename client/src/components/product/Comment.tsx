@@ -7,7 +7,7 @@ import { TransparentButton } from "../common/Button";
 const Comment = () => {
     return (
       <CommentStyled>
-        <Profile profileID="3" marginright="1.5rem" />
+        <Profile profileID="3" marginright="1.5rem" img={''} />
         <CommentContent>
           <Link className="name" to="profile/3">이름</Link>
           <p className="content">

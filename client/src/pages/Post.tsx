@@ -14,6 +14,7 @@ import ImageBlockReadonly from "../components/editor/LineBlock/ImageLineBlock/Im
 import { Line, LineStyle } from "../components/editor/common/LineStyle";
 import { dateFormat } from "../utils/format";
 import ProfileBar from "../components/profile/ProfileBar";
+import { UserData } from "../type/user";
 // import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
 
@@ -31,6 +32,7 @@ const Post = () => {
   const navigate = useNavigate();
 
   const [post, setPost] = React.useState<PostData>();
+  const [author, setAuthor] = React.useState<UserData>();
 
   React.useEffect(() => {
     initPost();
@@ -46,6 +48,12 @@ const Post = () => {
       if (res.success) {
         console.log(res);
         setPost({ ...res.post, content: res.post.content.content });
+        setAuthor({
+          id: res.post.author_id,
+          nickname: res.post.authorNickname,
+          image: res.post.authorImage,
+          email: res.post.authorEmail,
+        })
         dispatch(resetImages(res.post.content.images));
       }
     } catch (err) {
@@ -64,7 +72,7 @@ const Post = () => {
               <Tags>{post.hashtags.map((t) => "#" + t)}</Tags>
               <Title>{post.title}</Title>
               <PostDate>{dateFormat(new Date(post.created_at))}</PostDate>
-              <ProfileBar profileID={'11'} nickname={'고롱스'} activeFollow subContent={`${3} 팔로워`} marginright="1rem"></ProfileBar>
+              <ProfileBar profileID={author?.id} nickname={author?.nickname} activeFollow subContent={`${3} 팔로워`} marginright="1rem" img={author?.image}></ProfileBar>
               <HR />
             </PostHead>
             <Content>

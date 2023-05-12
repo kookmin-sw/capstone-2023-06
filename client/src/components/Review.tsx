@@ -1,24 +1,27 @@
 import styled from "styled-components";
 import ProfileBar from "./profile/ProfileBar";
 import { Link } from "react-router-dom";
+import { UserData } from "../type/user";
 
 export type ReviewType = {
+    id: number | string,
+    thumbnail: string,
     title: string,
-    author: string,
+    author: UserData,
     date: string,
     tags: string[],
 }
-const Review = ({ title, author, date, tags }: ReviewType) => {
+const Review = ({ id, thumbnail, title, author, date, tags }: ReviewType) => {
     return (
-        <Link to="">
+        <Link to={`/post/${id}`}>
             <ReviewCard>
-                <ReviewThumbnail src="https://cdn.shopify.com/s/files/1/0870/0656/files/Inked0nk1apgq5tf41_LI_large.jpg?v=1596810453" />
+                <ReviewThumbnail src={thumbnail} />
                 <div className="card-body">
                     <ReviewTags>
                         {tags.map(tag => `#${tag} `)}
                     </ReviewTags>
                     <ReviewTitle>{title}</ReviewTitle>
-                    <ProfileBar profileID={author} nickname={author} size={1.5} padding="0.125rem 0rem" subContent={date} />
+                    <ProfileBar profileID={author.id} nickname={author.nickname} size={1.5} padding="0.125rem 0rem" subContent={date} img={author.image} />
                 </div>
             </ReviewCard>
         </Link>
