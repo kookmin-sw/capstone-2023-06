@@ -47,7 +47,7 @@ const CommentList = ({ comments }: { comments: CommentData[] }) => {
   return (
     <div>
       <CommentForm onSubmit={submitComment} method="post">
-        <Profile profileID="3" marginright="1.5rem" img="" />
+        <Profile profileID={"3"} marginright="1.5rem" img="" />
         <CommentInput
           placeholder="댓글을 남겨주세요."
           value={commentInput}

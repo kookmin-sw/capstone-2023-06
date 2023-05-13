@@ -11,6 +11,7 @@ import Write from "./pages/Write";
 import Product from "./pages/Product";
 import Error from "./pages/Error";
 import Post from "./pages/Post";
+import User from "./pages/User";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/signup" element={<Singup />} />
           <Route path="/findaccount" element={<FindAccount />} />
           <Route path="/write" element={<Write />} />
+          <Route path="/user/:id" element={<User />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/post/:post_id" element={<Post />} />
           <Route path="/*" element={<Error/>}/>

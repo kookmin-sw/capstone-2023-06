@@ -9,9 +9,9 @@ import { CommentData } from "../../type/product";
 const Comment = ({ user, comment }: CommentData) => {
     return (
       <CommentStyled>
-        <Profile profileID="3" marginright="1.5rem" img={user.image} />
+        <Profile profileID={user.id} marginright="1.5rem" img={user.image} />
         <CommentContent>
-          <Link className="name" to={`profile/${user.id}`}>{user.nickname}</Link>
+          <Link className="name" to={`/user/${user.id}`}>{user.nickname}</Link>
           <p className="content">
             { comment }
           </p>
