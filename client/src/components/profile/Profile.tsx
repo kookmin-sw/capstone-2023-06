@@ -5,11 +5,13 @@ import styled, { css } from "styled-components";
 export type ProfileLinkProps = {
   size?: number;
   marginright?: string;
+  disabled?: boolean;
 };
 export type ProfileProps = ProfileLinkProps & {
   profileID: string | number | undefined;
   nickname?: string;
   img: string | undefined;
+  children?: React.ReactNode;
 };
 
 const Profile = ({
@@ -18,7 +20,18 @@ const Profile = ({
   img,
   size = 4,
   marginright = "0px",
+  disabled = false,
+  children,
 }: ProfileProps) => {
+  if (disabled) {
+    return (
+      <ProfileDiv size={size} marginright={marginright}>
+        {img && <ProfileImg src={img} alt="" />}
+        {children}
+      </ProfileDiv>
+    );
+  }
+
   return (
     <ProfileLink
       to={`/user/${profileID}`}
@@ -26,14 +39,15 @@ const Profile = ({
       marginright={marginright}
     >
       {img && <ProfileImg src={img} alt="" />}
+      {children}
     </ProfileLink>
   );
 };
 
-const ProfileLink = styled(Link)`
-  // display: inline-block;
+const ProfileStyled = css`
   display: inline-flex;
   align-items: center;
+  position: relative;
   ${(props: ProfileLinkProps) => {
     return css`
       width: ${props.size}rem;
@@ -41,7 +55,14 @@ const ProfileLink = styled(Link)`
       margin-right: ${props.marginright};
     `;
   }}
-  & + & {
+  ${(props: ProfileLinkProps) => {
+    if (props.disabled) {
+      return css`
+        pointer-events: none;
+      `;
+    }
+  }}
+& + & {
     margin-left: 0.5rem;
   }
   .profile-nickname {
@@ -54,6 +75,13 @@ const ProfileLink = styled(Link)`
       font-weight: 400;
     }
   }
+`;
+
+const ProfileLink = styled(Link)`
+  ${ProfileStyled}
+`;
+const ProfileDiv = styled.div`
+  ${ProfileStyled}
 `;
 
 const ProfileImg = styled.img`

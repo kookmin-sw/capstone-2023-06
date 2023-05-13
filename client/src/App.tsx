@@ -12,21 +12,23 @@ import Product from "./pages/Product";
 import Error from "./pages/Error";
 import Post from "./pages/Post";
 import User from "./pages/User";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Singup />} />
           <Route path="/findaccount" element={<FindAccount />} />
           <Route path="/write" element={<Write />} />
-          <Route path="/user/:id" element={<User />} />
+          <Route path="/user/:user_id" element={<User />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/post/:post_id" element={<Post />} />
-          <Route path="/*" element={<Error/>}/>
+          <Route path="/*" element={<Error />} />
         </Routes>
       </BrowserRouter>
     </div>

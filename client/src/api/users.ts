@@ -139,12 +139,12 @@ export const removeUser = async () => {
 
 /**
  * 유저 정보 수정
- * @param {File} image 프로필 이미지
+ * @param {FormData} uploadData 프로필 이미지
  * @returns 성공 여부
  */
-export const updateProfile = async (image: File) => {
+export const updateProfile = async (uploadData: FormData) => {
   try {
-    const res = await userAPI.post(`/profile`, { image });
+    const res = await userAPI.post(`/profile`, uploadData);
     return res.data;
   } catch (err) {
     let msg: string;
