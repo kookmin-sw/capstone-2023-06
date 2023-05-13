@@ -3,19 +3,21 @@ import Profile from "../profile/Profile";
 import { IconHeart } from "@tabler/icons-react";
 import styled from "styled-components";
 import { TransparentButton } from "../common/Button";
+import { CommentData } from "../../type/product";
 
-const Comment = () => {
+
+const Comment = ({ user, comment }: CommentData) => {
     return (
       <CommentStyled>
-        <Profile profileID="3" marginright="1.5rem" img={''} />
+        <Profile profileID="3" marginright="1.5rem" img={user.image} />
         <CommentContent>
-          <Link className="name" to="profile/3">이름</Link>
+          <Link className="name" to={`profile/${user.id}`}>{user.nickname}</Link>
           <p className="content">
-            디자인도 무난하고 튼튼해서 가성비로 괜찮은 것 같아요.
+            { comment }
           </p>
-          <LikeButton>
+          {/* <LikeButton>
             <IconHeart className="icon" /> 좋아요
-          </LikeButton>
+          </LikeButton> */}
         </CommentContent>
       </CommentStyled>
     );

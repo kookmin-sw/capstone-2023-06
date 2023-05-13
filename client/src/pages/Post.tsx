@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { ImagesObjectType, LINE_TYPE } from "../components/editor/type";
 import { DynamicTagReadOnly } from "../components/editor/LineBlock/DynamicTag";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPost } from "../api/upload";
+import { getComments, getPost } from "../api/upload";
 import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 import ImageBlock from "../components/editor/LineBlock/ImageLineBlock/ImageBlock";
 import { useDispatch } from "react-redux";
@@ -14,6 +14,8 @@ import ImageBlockReadonly from "../components/editor/LineBlock/ImageLineBlock/Im
 import { Line, LineStyle } from "../components/editor/common/LineStyle";
 import { dateFormat } from "../utils/format";
 import ProfileBar from "../components/profile/ProfileBar";
+import { CommentData } from "../type/product";
+import CommentList from "../components/Comment/CommentList";
 import { UserData } from "../type/user";
 // import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
@@ -34,8 +36,11 @@ const Post = () => {
   const [post, setPost] = React.useState<PostData>();
   const [author, setAuthor] = React.useState<UserData>();
 
+  const [comments, setComments] = React.useState<CommentData[]>([]);
+
   React.useEffect(() => {
     initPost();
+    initComments();
   }, [post_id]);
 
   const initPost = async () => {
@@ -46,19 +51,43 @@ const Post = () => {
       console.log(res);
 
       if (res.success) {
-        console.log(res);
         setPost({ ...res.post, content: res.post.content.content });
         setAuthor({
           id: res.post.author_id,
           nickname: res.post.authorNickname,
           image: res.post.authorImage,
           email: res.post.authorEmail,
-        })
+        });
         dispatch(resetImages(res.post.content.images));
       }
     } catch (err) {
       console.error(err);
-      navigate('/404');
+      navigate("/404");
+    }
+  };
+
+
+  const initComments = async () => {
+    if (!post_id) return;
+    try {
+      const res = await getComments(post_id);
+      
+      console.log(res);
+      if (res.success) {
+        setComments(res.result.map((co: { comment: any; user_id: any; userNickname: any; userPicture: any; userEmail: any; }) => {
+          return {
+            comment: co.comment,
+            user: {
+              id: co.user_id,
+              nickname: co.userNickname,
+              image: co.userPicture,
+              email: co.userEmail,
+            }
+          }
+        }))
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -72,7 +101,14 @@ const Post = () => {
               <Tags>{post.hashtags.map((t) => "#" + t)}</Tags>
               <Title>{post.title}</Title>
               <PostDate>{dateFormat(new Date(post.created_at))}</PostDate>
-              <ProfileBar profileID={author?.id} nickname={author?.nickname} activeFollow subContent={`${3} 팔로워`} marginright="1rem" img={author?.image}></ProfileBar>
+              <ProfileBar
+                profileID={author?.id}
+                nickname={author?.nickname}
+                activeFollow
+                subContent={`${3} 팔로워`}
+                marginright="1rem"
+                img={author?.image}
+              ></ProfileBar>
               <HR />
             </PostHead>
             <Content>
@@ -102,6 +138,7 @@ const Post = () => {
                 );
               })}
             </Content>
+            <CommentList comments={comments} />
           </Container>
         </>
       )}
@@ -119,7 +156,6 @@ const Tags = styled.p`
   font-size: 1rem;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.primary};
-
 `;
 const Title = styled.h1`
   margin: 0.5rem 0rem;
@@ -131,11 +167,12 @@ const PostDate = styled.p`
 `;
 const Content = styled.div`
   font-size: 1.25rem;
+  padding-bottom: 10rem;
   // padding: 1rem;
 `;
 
 const HR = styled.hr`
-background: ${({ theme }) => theme.colors.lightGrey};
-height:1px;
-border:0;
+  background: ${({ theme }) => theme.colors.lightGrey};
+  height: 1px;
+  border: 0;
 `;

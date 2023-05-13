@@ -8,18 +8,20 @@ import {
 } from "../components/common/Button";
 import { SecondaryButton } from "../components/common/Button";
 import ProductDetailPostImage from "../components/product/ProductDetailPost";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import ProductDetailPost from "../components/product/ProductDetailPost";
-import ProductComment from "../components/product/ProductComment";
-import { ProductData } from "../type/product";
+import CommentList from "../components/Comment/CommentList";
+import { CommentData, ProductData } from "../type/product";
 import ProductCard from "../components/product/ProductCard";
 import ProductReview from "../components/product/ProductReview";
+import { getComments } from "../api/upload";
 
 type ProductSample = {
   src: string;
 };
 const Product = () => {
   const { hash } = useLocation();
+  const { id } = useParams();
   const [product, setProduct] = React.useState<ProductData>({
     name: "Lorem Ipsum",
     tags: ["태그", "태그2", "태그3"],
@@ -34,6 +36,33 @@ const Product = () => {
     detail:
       "nisi est. ex est. commodo volutpat non nisl. odio hendrerit hendrerit ac ipsum quis ipsum Donec elementum efficitur. consectetur nisl. Donec tortor. at, Nunc leo. ex viverra in tincidunt nibh nec In faucibus Ut cursus dui. urna. ac elit",
   });
+  const [comments, setComments] = React.useState<CommentData[]>([]);
+
+  // const initComments = async () => {
+  //   if (!id) return;
+  //   try {
+
+  //     TODO : 상품 댓글 불러오기 API 로 변경하기
+  //     const res = await getComments(id);
+      
+  //     console.log(res);
+  //     if (res.success) {
+  //       setComments(res.result.map((co: { comment: any; user_id: any; userNickname: any; userPicture: any; userEmail: any; }) => {
+  //         return {
+  //           comment: co.comment,
+  //           user: {
+  //             id: co.user_id,
+  //             nickname: co.userNickname,
+  //             image: co.userPicture,
+  //             email: co.userEmail,
+  //           }
+  //         }
+  //       }))
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   return (
     <MainLayout>
@@ -43,18 +72,24 @@ const Product = () => {
 
       <DottedLine />
       <ProductNav>
-        <ProductNavItem to="#detail" active={hash === "#detail"}>
+        <ProductNavItem to="#detail" $active={hash === "#detail"}>
           제품 상세 정보
         </ProductNavItem>
-        <ProductNavItem to="#review" active={hash === "#review"}>
+        <ProductNavItem to="#review" $active={hash === "#review"}>
           리뷰 28개
         </ProductNavItem>
-        <ProductNavItem to="#comment" active={hash === "#comment"}>
+        <ProductNavItem to="#comment" $active={hash === "#comment"}>
           댓글 4,333개
         </ProductNavItem>
       </ProductNav>
 
-      {hash === "#comment" ? <ProductComment /> : hash === "#review" ? <ProductReview/> : <ProductDetailPostImage />}
+      {hash === "#comment" ? (
+        <CommentList comments={comments} />
+      ) : hash === "#review" ? (
+        <ProductReview />
+      ) : (
+        <ProductDetailPostImage />
+      )}
       {/* <ProductDetailPostImage src="https://iws.danawa.com/prod_img/500000/541/312/desc/prod_19312541/add_1/20230314163829604_0GUVMB4J.jpg" /> */}
     </MainLayout>
   );
@@ -70,7 +105,7 @@ const ProductHeader = styled.div`
 const ProductNav = styled.div`
   display: flex;
 `;
-const ProductNavItem = styled(Link)<{ active: boolean }>`
+const ProductNavItem = styled(Link)<{ $active: boolean }>`
   flex: 1;
   padding: 1rem;
   margin-bottom: 3rem;
@@ -79,7 +114,7 @@ const ProductNavItem = styled(Link)<{ active: boolean }>`
     background-color: #f8f2e287;
   }
   ${(props) => {
-    if (props.active)
+    if (props.$active)
       return css`
         font-weight: 600;
         color: var(--primaryColor);

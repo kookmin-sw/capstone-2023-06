@@ -1,3 +1,5 @@
+import { UserData } from "./user";
+
 export type ProductData = {
   name: string;
   tags: string[];
@@ -6,3 +8,8 @@ export type ProductData = {
   detail: string;
   price: string;
 };
+
+export type CommentData = {
+  user: UserData,
+  comment: string,
+}
