@@ -112,7 +112,7 @@ export const getPostList = async (
  */
 export const getPostLike = async (id: string) => {
   try {
-    const res = await uploadAPI.get(`/${id}/like`);
+    const res = await uploadAPI.get(`/${id}/likes`);
     return res.data;
   } catch (err) {
     let msg: string;
