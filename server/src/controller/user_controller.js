@@ -57,12 +57,30 @@ exports.uploadProfile = (req,res) => {
         return;
     }
 
-    res.status(200).send({
-        success: true,
-        message: "사진 업로드 성공",
-        result: req.file.location
-    });
-    return;
+    User.updatePicture(req.user.id, req.file.location, (err, affectedRows) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: "MYSQL ERROR"
+            });
+            return;
+        }
+
+        if (affectedRows != 1) {
+            res.status(500).send({
+                success: false,
+                message: "AFFCTED ERROR"
+            });
+            return;
+        }
+
+        res.status(200).send({
+            success: true,
+            message: "사진 업로드 성공",
+            result: req.file.location
+        });
+        return;
+    });    
 }
 
 exports.findById = function (req, res) {

@@ -79,4 +79,19 @@ User.deleteById = async function (id, result) {
     }
 }
 
+User.updatePicture = async function (id, picture, result) {
+    let conn = await GetConnection();
+
+    const UPDATE_QUERY = `update ${table} set picture = ? where id = ?`;
+    try {
+        const [res] = await conn.execute(UPDATE_QUERY, [picture, id]);
+        result(null, res.affectedRows); 
+    } catch (err) {
+        console.error(err);
+        result(err, null);
+    } finally {
+        await ReleaseConnection(conn);
+    }
+}
+
 module.exports = User;
