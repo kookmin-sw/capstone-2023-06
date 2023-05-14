@@ -20,6 +20,30 @@ const sendResult = (res, msg, result) => {
     });
 }
 
+const getHashtags = async (conn, productId) => {
+    const hashtags = await ProductHashtag.findByProductId(conn, productId);
+    return hashtags.map((hashtag) => hashtag.value);
+}
+
+const getSubthumbnails = async (conn, productId) => {
+    const subthumbnails = await Subthumbnail.findByProductId(conn, productId);
+    return subthumbnails.map((subthumbnail) => subthumbnail.value);
+}
+
+const addInfoAndParseContent = async (conn, product) => {
+    const hashtags = await getHashtags(conn, product.id);
+    const subthumbnails = await getSubthumbnails(conn, product.id);
+
+    const renewProduct = {
+        ...product,
+        content: JSON.parse(product.content),
+        hashtags: hashtags,
+        subthumbnails: subthumbnails
+    };
+
+    return renewProduct;
+}
+
 exports.create = async (req, res) => {
     console.info("Create Posts");
     const conn = await GetConnection();
@@ -87,15 +111,12 @@ exports.findById = async (req, res) => {
         const product = await Products.findByIdWithUser(conn, req.params.id);
         const hashtags = await ProductHashtag.findByProductId(conn, product.id);
         const subthumbnails = await Subthumbnail.findByProductId(conn, product.id);
-        //options 생략
-        const options = [];
         
         const renewProduct = {
             ...product,
             content: JSON.parse(product.content),
             hashtags: hashtags.map((hashtag) => hashtag.value),
             subthumbnails: subthumbnails.map((subthumbnail) => subthumbnail.value),
-            options: options.map((option)=> option.value) //option 바뀌면 여기도 바뀌어야함
         };
         
 
@@ -111,8 +132,82 @@ exports.findById = async (req, res) => {
     }
 }
 
-exports.getProducts = (req, res) => {
 
+const sendDateTypeProducts = async (res, req, reverse, conn) => {
+    const {startTime, endTime, offset, limit, keyword} = req.body;
+
+    const products = await Products.getProductsByDate(
+        conn, startTime, endTime, reverse, limit, offset, keyword?`%${keyword}%`:null
+    );
+    
+    let renewProducts = [];
+    for(product of products) {
+        const renewProduct = await addInfoAndParseContent(conn, product);
+        renewProducts.push(renewProduct);
+    }
+    sendResult(res,"Date로 조회 성공", renewProducts);
+}
+
+exports.getProducts = async (req, res) => {
+    let type;
+    let reverse;
+    if(!req.query.type) {
+        type = "date";
+    } else if(req.query.type === "date" || req.query.type === "user" || req.query.type === "like") {
+        type = req.query.type;
+    } else {
+        sendError(res,"parameter 설정 error",400);
+        return;
+    }
+
+    if(!req.query.reverse) {
+        reverse = false;
+    } else if(req.query.reverse === "true") {
+        reverse = true;
+    } else if(req.query.reverse === "false") {
+        reverse = false;
+    } else {
+        sendError(res,"parameter 설정 error",400);
+        return;
+    }
+
+    if(type === 'date' && (!req.body.startTime || !req.body.endTime)) {
+        sendError(res,"req body 설정 error",400);
+        return;
+    }
+
+    if(typeof req.body.offset != 'number' || typeof req.body.limit != 'number'){
+        sendError(res,"req body 설정 error",400);
+        return;
+    }
+
+    const conn = await GetConnection();
+
+    try {
+        switch(type) {
+            case "date":
+                sendDateTypeProducts(res,req, reverse, conn);                
+                return;
+            case "user":
+                sendDateTypeProducts(res,req, reverse, conn);  
+                return;
+            case "like":
+                sendDateTypeProducts(res,req, reverse, conn);  
+                return;
+            default:
+                sendDateTypeProducts(res,req, reverse, conn);  
+                return;
+        }
+
+    } catch(err) {
+        if (err instanceof MysqlError) {
+            sendError(res, err.message, 500);
+        } else {
+            sendError(res, err.message, 400);
+        }
+    } finally {
+        ReleaseConnection(conn);
+    }
 }
 
 exports.uploadProductsImage = (req, res) => {
