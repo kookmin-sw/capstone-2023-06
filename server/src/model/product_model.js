@@ -21,6 +21,7 @@ Products.create = async (conn, author_id, title, content, thumbnail, price) => {
         const [res] = await conn.execute(INSERT_QUERY, [author_id, title, content, thumbnail, price]);
         return res.insertId;
     } catch(err) {
+        console.error(err);
         throw new MysqlError("MYSQL ERROR");
     }
 };
@@ -36,6 +37,42 @@ Products.findByIdWithUser = async (conn, productId) => {
         `;
         const [products] = await conn.execute(FIND_QUERY, [productId]);
         return products[0];
+    } catch(err) {
+        console.error(err);
+        throw new MysqlError("MYSQL ERROR");
+    }
+}
+
+Products.getProductsByDate = async (conn, startTime, endTime, reverse, limit, offset, keyword) => {
+    try {
+        // created_at 비교에서 스트링이 제대로 안들어가서 이렇게 바꿈
+        const FIND_QUERY = `
+            select p.*, u.nickname as authorNickname, u.email as authorEmail, u.picture as authorPicture
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+            where p.created_at >= '${startTime}' and p.created_at <= '${endTime}'
+            order by p.created_at ${reverse? 'ASC':'DESC'}
+            limit ${limit} offset ${offset}
+        `;
+
+        const FIND_QUERY_KEYWORD = `
+            select p.*, u.nickname as authorNickname, u.email as authorEmail, u.picture as authorPicture
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+            where p.created_at >= '${startTime}' and p.created_at <= '${endTime}' and p.title like '%${keyword}%'
+            order by p.created_at ${reverse? 'ASC':'DESC'}
+            limit ${limit} offset ${offset}
+        `;
+
+        if(!keyword) {
+            const [products] = await conn.execute(FIND_QUERY);
+            return products;
+        }
+
+        const [products] = await conn.execute(FIND_QUERY_KEYWORD);
+        return products;
     } catch(err) {
         console.error(err);
         throw new MysqlError("MYSQL ERROR");

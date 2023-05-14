@@ -6,6 +6,8 @@ const BrandAuthHandler = require("../utils/authHandler/brandAuthHandler.js");
 
 router.post("/", BrandAuthHandler, productController.create);
 router.post("/image", BrandAuthHandler, ImageUploader.single("image"), productController.uploadProductsImage);
+router.post("/list", productController.getProducts);
 router.get("/:id", productController.findById);
+
 module.exports = router;
 

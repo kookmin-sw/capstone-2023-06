@@ -2,12 +2,51 @@
 const request = require("supertest");
 const app = require("../../testServer.js");
 const agent = request.agent(app);
+const Products = require("../../model/product_model.js");
+const {GetConnection, ReleaseConnection} = require("../../../database/connect.js");
 
 const BRANDUSER_INFO = {
     nickname: "ProductTest",
     password: "ProductTestPassword",
     email: "ProductTest@product.com",
     picture: "ProductTestPicture"
+}
+
+let productIds = [];
+const productJson = {
+    title: "DESK 책상",
+    content: ["DESK 책상의 매력은... Content", "hi"],
+    thumbnail: "THUMBNAIL URL",
+    price: 2000,
+    subthumbnails: [
+        "image url1",
+        "image url2",
+        "image url3",
+    ],
+    hashtags: [
+        "hashtag1",
+        "hashtag2",
+        "hashtag3",
+    ],
+    options: [ // 확정된 부분이 아님
+        "options1", 
+        "options2"
+    ],
+};
+
+const ITER = 10;
+const makeProductLoop = async (userId, iter) => {
+    const conn = await GetConnection();
+    try {
+        for(let i=0;i<iter;i++) {
+            const productId = await Products.create(conn, userId, productJson.title + " " + String(i), productJson.content, productJson.thumbnail, productJson.price);
+            productIds.push(productId);
+        }
+    } catch (err) {
+        throw err;
+    } finally {
+        ReleaseConnection(conn);
+    }
 }
 
 beforeAll(async () => {
@@ -22,31 +61,15 @@ beforeAll(async () => {
         email: BRANDUSER_INFO.email,
         password: BRANDUSER_INFO.password
     }).expect(200);
+    
+    // 반복해서 채워놓기
+    const res = await agent.get('/api/user/auto-login');
+    await makeProductLoop(res.body.result.id, ITER);
 });
 
 describe("Product API", ()=>{
     // 업로드하기
     let PRODUCT_ID;
-    const productJson = {
-        title: "DESK 책상",
-        content: ["DESK 책상의 매력은... Content", "hi"],
-        thumbnail: "THUMBNAIL URL",
-        price: 2000,
-        subthumbnails: [
-            "image url1",
-            "image url2",
-            "image url3",
-        ],
-        hashtags: [
-            "hashtag1",
-            "hashtag2",
-            "hashtag3",
-        ],
-        options: [ // 확정된 부분이 아님
-            "options1", 
-            "options2"
-        ],
-    };
 
     test("Create Product", (done) => {
         agent
@@ -57,6 +80,7 @@ describe("Product API", ()=>{
             if(err) throw err;
             expect(res.body.success).toBeTruthy();
             PRODUCT_ID = res.body.result;
+            productIds.push(PRODUCT_ID);
             done();
         });
     });
@@ -83,26 +107,53 @@ describe("Product API", ()=>{
         });
     });
 
-    // // 업로드하기 반복문 
-    // test("Make Some Products (10)", (done)=> {
-    //     for(let i=0;i<10;i++) {
-    //         agent
-    //         .post(`/api/product`)
-    //         .send()
-    //         .expect(200)
-    //         .end((err, res) => {
-    //             if(err) throw err;
-    //             expect(res.body.success).toBe(true);
-    //             PRODUCT_ID = res.body.result;
-    //             done();
-    //         });
-    //     }
-    // });
+    // 에러 검증
+    test("Get Products ERR: Params", (done) => {
+        request(app)
+        .post(`/api/product/list`)
+        .send()
+        .expect(400)
+        .end((err, res) => {
+            if(err) throw err;
+            expect(res.body.success).toBeFalsy();
+        });
 
-    // // 여러개 조회하기, 무한 스크롤
-    // test("Get Products", (done) => {
-    //     done();
-    // });
+        request(app)
+        .post(`/api/product/list?type=none`)
+        .send()
+        .expect(400)
+        .end((err, res) => {
+            if(err) throw err;
+            expect(res.body.success).toBeFalsy();
+            done();
+        });
+    });
+
+    // 에러 검증
+    test("Get Products ERR: body", (done) => {
+        request(app)
+        .post(`/api/product/list?type=date`)
+        .send({})
+        .expect(400, done);
+    });
+
+    test("Get Products : Date", (done) => {
+        request(app)
+        .post(`/api/product/list?type=date&reverse=true`)
+        .send({
+            startTime: "2022-02-01T01:01:01",
+            endTime: "2030-02-01T01:01:01",
+            limit: 200,
+            offset: 0,
+            keyword: null
+        })
+        .expect(200)
+        .end((err, res) => {
+            if(err) throw err;
+            expect(res.body.result.length).toBe(ITER+1);
+            done();
+        });
+    })
 
     // // 삭제하기
     // test("Delete Products", (done) => {
