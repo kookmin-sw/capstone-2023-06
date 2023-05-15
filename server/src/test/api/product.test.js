@@ -153,7 +153,8 @@ describe("Product API", ()=>{
             expect(res.body.result.length).toBe(ITER+1);
             done();
         });
-    })
+    });
+
 
     // // 삭제하기
     // test("Delete Products", (done) => {
