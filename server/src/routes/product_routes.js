@@ -23,6 +23,8 @@ router.get("/:id", productController.findById);
 // TODO: 2. 유저 팔로우 / 해제
 // TODO: 3. 유저 추천 스케줄러
 // TODO: 4. 유저 추천 API
+// TODO: 5. 유저가 쓴 스타일링
+// TODO: 6. 프로덕트 키워드 검색
 
 module.exports = router;
 
