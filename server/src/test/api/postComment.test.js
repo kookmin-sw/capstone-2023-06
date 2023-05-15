@@ -52,7 +52,7 @@ beforeAll(async ()=>{
     POST_ID = await Posts.create(PARENT_USER_ID, "Title", "thumbnail", ["hashtag1"], {content: "content"});
 });
 
-describe("PosttComment API", () => {
+describe("PostComment API", () => {
     const PARENT_COMMENT = "혹시 궁금한 거 있으시면 질문해주세요!";
     const CHILD_COMMENT = "저 있어요🤚";
     const CHILD_UPDTE_COMMENT = "앗 아닙니다...";

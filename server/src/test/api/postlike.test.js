@@ -13,8 +13,6 @@ const USER_INFO = {
 };
 const USER_ROLE = 1;
 
-let USER_ID;
-let POST_ID;
 beforeAll(async ()=>{
     const hashedPassword = await Encryption(USER_INFO.password);
     await User.create(USER_INFO.nickname, hashedPassword, 
@@ -72,6 +70,5 @@ describe("PostLike API", () => {
 });
 
 afterAll(async ()=>{
-    await Posts.deleteById(POST_ID, USER_ID);
     await agent.delete("/api/user").send().expect(200);
 });
