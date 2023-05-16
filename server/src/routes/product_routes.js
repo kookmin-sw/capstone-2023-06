@@ -20,11 +20,9 @@ router.post("/:id/comment", AuthHandler, productcommentsController.create);
 router.get("/:id/comments", productcommentsController.getComments);
 router.get("/:id", productController.findById);
 
-// TODO: 1. 유저가 쓴 스타일링
-// TODO: 2. 유저 추천 스케줄러
-// TODO: 3. 유저 추천 API
-// TODO: 4. 라이크 순으로 조회
-
+// TODO: 1. 유저 추천 스케줄러
+// TODO: 2. 유저 추천 API
+// TODO: 3. 라이크 순으로 조회
 
 module.exports = router;
 

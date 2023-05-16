@@ -21,6 +21,7 @@ const productJson = {
     content: ["DESK 책상의 매력은... Content", "hi"],
     thumbnail: "THUMBNAIL URL",
     price: 2000,
+    description: "설명",
     subthumbnails: [
         "image url1",
         "image url2",

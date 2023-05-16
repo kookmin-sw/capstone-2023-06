@@ -17,6 +17,7 @@ const productJson = {
     title: "DESK 책상",
     content: ["DESK 책상의 매력은... Content", "hi"],
     thumbnail: "THUMBNAIL URL",
+    description: "설명",
     price: 2000,
     subthumbnails: [
         "image url1",
@@ -39,7 +40,7 @@ const makeProductLoop = async (userId, iter) => {
     const conn = await GetConnection();
     try {
         for(let i=0;i<iter;i++) {
-            const productId = await Products.create(conn, userId, productJson.title + " " + String(i), productJson.content, productJson.thumbnail, productJson.price);
+            const productId = await Products.create(conn, userId, productJson.title + " " + String(i), productJson.content, productJson.thumbnail, productJson.price, productJson.description);
             productIds.push(productId);
         }
     } catch (err) {
