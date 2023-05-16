@@ -24,6 +24,5 @@ router.get("/:id", productController.findById);
 // TODO: 2. 유저 추천 API
 // TODO: 3. 라이크 순으로 조회
 
-
 module.exports = router;
 
