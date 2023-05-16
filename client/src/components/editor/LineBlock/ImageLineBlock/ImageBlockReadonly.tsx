@@ -146,7 +146,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
       {openProductDetail && (
         <>
           <ProductCard product={product} summary />
-          <ExitButton onClick={() => {setOpenProductDetail(false)}}>X</ExitButton>
+          <ExitButton type="button" onClick={() => {setOpenProductDetail(false)}}>X</ExitButton>
         </>
       )}
     </div>

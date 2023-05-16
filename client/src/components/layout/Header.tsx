@@ -9,7 +9,7 @@ import { setUser, resetUser } from "../../modules/users";
 
 import styled from "styled-components";
 import { Button } from "../common/Button";
-import { IconUser } from "@tabler/icons-react";
+import { IconPencil, IconUser } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { IconLogout } from "@tabler/icons-react";
 
@@ -35,7 +35,12 @@ const Header = () => {
       const res = await autoLogin();
 
       if (res.success) {
-        dispatch(setUser(res.result));
+        dispatch(setUser({
+            id: res.result.id,
+            nickname: res.result.nickname,
+            image: res.result.picture,
+            email: res.result.email,
+        }));
       }
     } catch (err) {
       console.error(err);
@@ -63,6 +68,9 @@ const Header = () => {
           {/* <NavLinkItem to="/">메인</NavLinkItem> */}
           {isLoggedIn ? (
             <LoggedInMenu>
+            <Link to={`/write`}>
+              <IconPencil size={16}></IconPencil>
+            </Link>
               <Link to={`/user/${id}`}>
                 <IconUser size={16}></IconUser>
               </Link>

@@ -24,6 +24,8 @@ import {
   updateRefers,
 } from "../../../../modules/images";
 import { uploadImage } from "../../../../api/upload";
+import ProductCard, { ProductType } from "./ProductCard";
+import { getProduct } from "../../../../api/product";
 
 const ImageBlock = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -35,6 +37,52 @@ const ImageBlock = ({ id }: { id: string }) => {
   // const [refers, setRefers] = React.useState<Refer[]>([]);
   const [imgRect, setImgRect] = React.useState<DOMRect>();
   const [curReferId, setCurReferId] = React.useState<string>("");
+
+  const [searchProduct, setSearchProduct] = React.useState<string>("");
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
+
+  const [searchList, setSearchList] = React.useState<ProductType[]>([
+    {
+      id: "1",
+      title: "어쩌구",
+      thumbnail:
+        "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+        description:
+        "ㄴㅁㅇ럼ㄴㄹㅇㅁㄴㅇㄻㄴㅇㄻㄴ ㅁㄴㅇㄻㄴ ㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㄴㅁㄹㄴㅁ ㅇㄻㄴㅇㄻㄴㅇ",
+    },
+    {
+      id: "2",
+      title: "어쩌구",
+      thumbnail:
+        "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+        description:
+        "ㄴㅁㅇ럼ㄴㄹㅇㅁㄴㅇㄻㄴㅇㄻㄴ ㅁㄴㅇㄻㄴ ㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㄴㅁㄹㄴㅁ ㅇㄻㄴㅇㄻㄴㅇ",
+    },
+    {
+      id: "3",
+      title: "어쩌구",
+      thumbnail:
+        "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+        description:
+        "ㄴㅁㅇ럼ㄴㄹㅇㅁㄴㅇㄻㄴㅇㄻㄴ ㅁㄴㅇㄻㄴ ㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㄴㅁㄹㄴㅁ ㅇㄻㄴㅇㄻㄴㅇ",
+    },
+    {
+      id: "3",
+      title: "어쩌구",
+      thumbnail:
+        "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+        description:
+        "ㄴㅁㅇ럼ㄴㄹㅇㅁㄴㅇㄻㄴㅇㄻㄴ ㅁㄴㅇㄻㄴ ㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㄴㅁㄹㄴㅁ ㅇㄻㄴㅇㄻㄴㅇ",
+    },
+    {
+      id: "3",
+      title: "어쩌구",
+      thumbnail:
+        "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
+        description:
+        "ㄴㅁㅇ럼ㄴㄹㅇㅁㄴㅇㄻㄴㅇㄻㄴ ㅁㄴㅇㄻㄴ ㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㅁㄴㅇㄹ ㄴㅁㄹㄴㅁ ㅇㄻㄴㅇㄻㄴㅇ",
+    },
+  ]);
 
   React.useEffect(() => {
     // 데이터 생성
@@ -132,12 +180,16 @@ const ImageBlock = ({ id }: { id: string }) => {
     checkBeforeCurCreate();
     // e.stopPropagation();
     setCurReferId(refer.id);
+
+    if (refer.data && !isEditMode) getReferProduct(refer.data);
   }
 
   function isSelectingRefer() {
     if (curReferId === "") return false;
 
     const idx = images[id].refers.findIndex((r) => r.id === curReferId);
+
+    // setOpenModal(true);
     return idx > -1;
   }
 
@@ -157,6 +209,11 @@ const ImageBlock = ({ id }: { id: string }) => {
   function getReferValue() {
     const idx = images[id].refers.findIndex((r) => r.id === curReferId);
     return images[id].refers[idx].data || "";
+  }
+
+  function getCurRefer() {
+    const idx = images[id].refers.findIndex((r) => r.id === curReferId);
+    return images[id].refers[idx];
   }
 
   // const [files, setFiles] = React.useState<FileList | undefined>();
@@ -190,6 +247,31 @@ const ImageBlock = ({ id }: { id: string }) => {
     }
   };
 
+  const [curReferProduct, setCurReferProduct] = React.useState<ProductType>();
+  const getReferProduct = async (data: string) => {
+    try {
+      const res = await getProduct(data);
+
+      if (res.success) {
+        setCurReferProduct(res.result);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const selectProductHandler = (product_id: string) => {
+    const idx = getRefers().findIndex((r) => r.id === curReferId);
+    if (idx > -1) {
+      getRefers()[idx].data = product_id;
+      dispatch(updateRefers(id, getRefers()));
+      // refers[idx].data = e.target.value;
+      // setRefers([...refers]);
+      // setOpenModal(false);
+      setCurReferId("");
+    }
+  };
+
   return (
     <div style={{ position: "relative" }}>
       <input
@@ -213,6 +295,7 @@ const ImageBlock = ({ id }: { id: string }) => {
         getRefers().map((refer, idx) => {
           return (
             <ReferButton
+              type="button"
               onClick={() => {
                 selectRefer(refer);
               }}
@@ -223,29 +306,45 @@ const ImageBlock = ({ id }: { id: string }) => {
             </ReferButton>
           );
         })}
-      {isEditMode && isSelectingRefer() && (
-        <>
-          <RemoveButton
-            onClick={() => {
-              deleteRefer();
-            }}
-          >
-            <IconTrash />
-          </RemoveButton>
-          <ReferInput
-            value={getReferValue()}
-            onChange={(e) => {
-              const idx = getRefers().findIndex((r) => r.id === curReferId);
-              if (idx > -1) {
-                getRefers()[idx].data = e.target.value;
-                dispatch(updateRefers(id, getRefers()));
-                // refers[idx].data = e.target.value;
-                // setRefers([...refers]);
-              }
-            }}
-          ></ReferInput>
-        </>
+      {isSelectingRefer() && isEditMode ? (
+        <SearchModal {...getPos(getCurRefer())}>
+          <SearchHeader>
+            <ReferInput
+              value={searchProduct}
+              onChange={(e) => {
+                setSearchProduct(e.target.value);
+                // const idx = getRefers().findIndex((r) => r.id === curReferId);
+                // if (idx > -1) {
+                //   getRefers()[idx].data = e.target.value;
+                //   dispatch(updateRefers(id, getRefers()));
+                //   // refers[idx].data = e.target.value;
+                //   // setRefers([...refers]);
+                // }
+              }}
+            ></ReferInput>
+            <RemoveButton
+              onClick={() => {
+                deleteRefer();
+              }}
+            >
+              <IconTrash />
+            </RemoveButton>
+          </SearchHeader>
+          <SearchBody>
+            {searchList.map((p) => (
+              <ProductCard {...p} onClick={() => selectProductHandler(p.id)} />
+            ))}
+          </SearchBody>
+        </SearchModal>
+      ) : (
+        curReferProduct && (
+          <ProductModal {...getPos(getCurRefer())}>
+            <ProductCard {...curReferProduct} />
+            <ProductModalClose onClick={() => { setCurReferId('') }}>X</ProductModalClose>
+          </ProductModal>
+        )
       )}
+
       {/* {curReferId}
             <div>
                 { refers.map(e => JSON.stringify(e)) }
@@ -269,3 +368,58 @@ const ImageBlock = ({ id }: { id: string }) => {
 };
 
 export default ImageBlock;
+
+const SearchModal = styled.div`
+  background-color: white;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  transform: translateX(-50%);
+  top: ${(props: POSITION) => props.posY + 30}px;
+  left: ${(props: POSITION) => props.posX}px;
+  display: flex;
+  flex-direction: column;
+  width: 375px;
+  height: 450px;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.48);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.48);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.48);
+`;
+
+const SearchHeader = styled.div`
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+`;
+const SearchBody = styled.div`
+padding: 1rem;
+overflow-y: auto;
+overflow-x: hidden;
+`;
+
+const ProductModal = styled(SearchModal)`
+  width: 359px;
+  height: auto;
+  padding: 1rem;
+`;
+
+const ProductModalClose = styled.button`
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  
+  background-color: #f8f2e2;
+  color: ${({ theme }) => theme.colors.primary};
+  font-weight: 700;
+  position: absolute;
+  z-index: 2;
+  transform: translate(0px, -50%);
+  top: 50%;
+  right: -1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 2rem;
+  border: 1px solid #d9d9d9;
+`;
+// const ProductBody = styled.di

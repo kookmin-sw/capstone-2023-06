@@ -89,7 +89,7 @@ export const getPostList = async (
   reverse: boolean = false
 ) => {
   try {
-    const res = await uploadAPI.post(`/list?type=${type}&rever=${reverse}`, {
+    const res = await uploadAPI.post(`/list?type=${type}&reverse=${reverse}`, {
       "startTime": "2022-02-01T01:01:01",
       "endTime": "2022-02-01T01:01:01",
       "offset": 0,

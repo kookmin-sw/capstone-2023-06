@@ -14,14 +14,14 @@ import CommentList from "../components/Comment/CommentList";
 import { CommentData, ProductData } from "../type/product";
 import ProductCard from "../components/product/ProductCard";
 import ProductReview from "../components/product/ProductReview";
-import { getComments } from "../api/upload";
+import { getProduct, getProductList } from "../api/product";
 
 type ProductSample = {
   src: string;
 };
 const Product = () => {
   const { hash } = useLocation();
-  const { id } = useParams();
+  const { product_id } = useParams();
   const [product, setProduct] = React.useState<ProductData>({
     name: "Lorem Ipsum",
     tags: ["태그", "태그2", "태그3"],
@@ -38,12 +38,35 @@ const Product = () => {
   });
   const [comments, setComments] = React.useState<CommentData[]>([]);
 
+  React.useEffect(() => {
+    initProduct();
+    // initComments();
+  }, [product_id]);
+
+  
+
+  const initProduct = async () => {
+    if (!product_id) return;
+    try {
+
+      // TODO : 상품 댓글 불러오기 API 로 변경하기
+      const res = await getProductList("date");
+      
+      console.log(res);
+      if (res.success) {
+        console.log(res);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // const initComments = async () => {
-  //   if (!id) return;
+  //   if (!product_id) return;
   //   try {
 
-  //     TODO : 상품 댓글 불러오기 API 로 변경하기
-  //     const res = await getComments(id);
+  //     // TODO : 상품 댓글 불러오기 API 로 변경하기
+  //     const res = await getComments(product_id);
       
   //     console.log(res);
   //     if (res.success) {

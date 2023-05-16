@@ -5,7 +5,7 @@ import styled from "styled-components";
 import React from "react";
 import { getuserByID, updateProfile } from "../api/users";
 import { UserData } from "../type/user";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { RootState } from "../modules";
 import { uploadImage } from "../api/upload";
 import { setProfileImage } from "../modules/users";
@@ -13,14 +13,14 @@ import { IconPencil } from "@tabler/icons-react";
 
 const User = () => {
   const { user_id } = useParams();
-  const { id, nickname, isLoggedIn } = useSelector(
+  const { id, isLoggedIn } = useSelector(
     (state: RootState) => ({
       id: state.users.id,
-      nickname: state.users.nickname,
       isLoggedIn: state.users.isLoggedIn,
     }),
     shallowEqual
   );
+  const dispatch = useDispatch();
   const [user, setUser] = React.useState<UserData>();
   const [reviews, setReviews] = React.useState();
   const [products, setProducts] = React.useState();
@@ -70,7 +70,8 @@ const User = () => {
 
       console.log(res);
       if (res.success) {
-        setProfileImage(res.result);
+
+        dispatch(setProfileImage(res.result));
         // setThumbnail(res.result.url);
         if (user)
           setUser({

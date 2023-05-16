@@ -26,7 +26,7 @@ function App() {
           <Route path="/findaccount" element={<FindAccount />} />
           <Route path="/write" element={<Write />} />
           <Route path="/user/:user_id" element={<User />} />
-          <Route path="/product/:id" element={<Product />} />
+          <Route path="/product/:product_id" element={<Product />} />
           <Route path="/post/:post_id" element={<Post />} />
           <Route path="/*" element={<Error />} />
         </Routes>

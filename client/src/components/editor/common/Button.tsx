@@ -68,9 +68,9 @@ export const ModeButton = styled.button`
 export const RemoveButton = styled.button`
     border-radius: .125rem;
     background: #0000007a;
-    position: absolute;
-    bottom: 1rem;
-    right: 12rem;
+    // position: absolute;
+    // bottom: 1rem;
+    // right: 12rem;
     border: none;
     svg {
         color: white;
