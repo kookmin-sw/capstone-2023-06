@@ -139,11 +139,27 @@ exports.findById = async (req, res) => {
         res.status(200).send({
             success:true,
             message: "포스트 조회 완료",
-            post: searchPost
+            result: searchPost
         });
         return;
     } catch (err) {
         sendError(res,err.message,400);
+        return;
+    }
+}
+
+// 세션 유저의 게시글 가져오기
+exports.myPost = async (req,res) => {
+    try {
+        const posts = await Posts.findByAuthorId(req.user.id);
+        res.status(200).send({
+            success: true,
+            message: "유저의 포스트 조회 성공",
+            result: posts
+        });
+        return;
+    } catch (err) {
+        sendError(res,err.message,500);
         return;
     }
 }

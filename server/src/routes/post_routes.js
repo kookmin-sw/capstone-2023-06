@@ -7,6 +7,7 @@ const ImageUploader = require("../utils/imageUploader/imageUploader.js");
 const AuthHandler = require("../utils/authHandler/authHandler.js")
 
 router.post("/", AuthHandler, postController.create);
+router.get("/mine", AuthHandler, postController.myPost);
 router.post("/list", postController.list);
 router.post("/image", AuthHandler, ImageUploader.single('image'), postController.uploadImage);
 router.post("/:id/like", AuthHandler, postlikesController.toggle);

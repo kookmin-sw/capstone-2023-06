@@ -56,6 +56,22 @@ Posts.create = async (author_id, title, thumbnail, hashtags, content) => {
     }
 }
 
+Posts.findByAuthorId = async (userId) => {
+    const conn = await GetConnection();
+    try {
+        const FIND_QUERY = `
+            select * from ${TABLE} where author_id = ?;
+        `;
+        const [posts] = await conn.execute(FIND_QUERY, [userId]);
+        return posts;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    } finally {
+        ReleaseConnection(conn);
+    }
+}
+
 Posts.findById = async (id) => {
     const FIND_QUERY = `
         select * from ${TABLE} where id = ?;
