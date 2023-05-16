@@ -59,7 +59,6 @@ exports.isFollow = async (req,res) => {
     }
 }
 
-// TODO: 나의 팔로우 리스트 보기
 exports.myFollower = async (req,res) => {
     const conn = await GetConnection();
     try {
@@ -73,7 +72,6 @@ exports.myFollower = async (req,res) => {
     }
 }
 
-// TODO: 상대방 팔로워 리스트 보기
 exports.followers = async (req,res) => {
     const conn = await GetConnection();
     try {
