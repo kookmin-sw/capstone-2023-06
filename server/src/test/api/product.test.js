@@ -155,6 +155,23 @@ describe("Product API", ()=>{
         });
     });
 
+    // 검색하기
+    test("Search Products", (done) => {
+        request(app)
+        .post(`/api/product/search`)
+        .send({
+            keyword: "DESK 책상 1"
+        })
+        .expect(200)
+        .end((err,res) => {
+            if(err) throw err;
+            expect(res.body.result.length).toBe(1);
+            expect(res.body.result[0].title).toBe("DESK 책상 1");
+            console.log(res.body);
+            done();
+        });
+    })
+
 
     // // 삭제하기
     // test("Delete Products", (done) => {

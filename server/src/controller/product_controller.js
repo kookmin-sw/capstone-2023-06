@@ -210,6 +210,25 @@ exports.getProducts = async (req, res) => {
     }
 }
 
+exports.search = async (req, res) => {
+    const conn = await GetConnection();
+    try {
+        const products = await Products.search(conn, req.body.keyword);
+        let renewProducts = [];
+
+        for(product of products) {
+            const renewProduct = await addInfoAndParseContent(conn, product);
+            renewProducts.push(renewProduct);
+        }
+        sendResult(res,"상품 키워드 검색", renewProducts);
+        return;
+    } catch(err) {
+        sendError(res, err.message, 500);
+    } finally {
+        ReleaseConnection(conn);
+    }
+}
+
 exports.uploadProductsImage = (req, res) => {
     if(!req.file) {
         sendError(res, "사진 업로드 실패", 400);

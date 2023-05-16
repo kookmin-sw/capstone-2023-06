@@ -10,6 +10,7 @@ const AuthHandler = require("../utils/authHandler/authHandler.js");
 router.post("/", BrandAuthHandler, productController.create);
 router.post("/:id/like", AuthHandler, productlikesController.toggle);
 router.get("/:id/likes", productlikesController.getProductLikes);
+router.post("/search", productController.search);
 router.post("/image", BrandAuthHandler, ImageUploader.single("image"), productController.uploadProductsImage);
 router.post("/list", productController.getProducts);
 router.get("/:productId/comment/:commentId", productcommentsController.findById);
@@ -19,12 +20,11 @@ router.post("/:id/comment", AuthHandler, productcommentsController.create);
 router.get("/:id/comments", productcommentsController.getComments);
 router.get("/:id", productController.findById);
 
-// TODO: 1. 라이크 순으로 조회
-// TODO: 2. 유저 팔로우 / 해제
-// TODO: 3. 유저 추천 스케줄러
-// TODO: 4. 유저 추천 API
-// TODO: 5. 유저가 쓴 스타일링
-// TODO: 6. 프로덕트 키워드 검색
+// TODO: 1. 유저가 쓴 스타일링
+// TODO: 2. 유저 추천 스케줄러
+// TODO: 3. 유저 추천 API
+// TODO: 4. 라이크 순으로 조회
+
 
 module.exports = router;
 
