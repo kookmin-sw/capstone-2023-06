@@ -122,7 +122,7 @@ describe("Follower API", () => {
     // 유저가 팔로우 하는 사람들
     test("Get My Follows", (done) => {
         leftAgent
-        .get(`/api/user/follow`)
+        .get(`/api/user/my-followers`)
         .expect(200)
         .end((err,res) => {
             if(err) throw err;

@@ -14,7 +14,7 @@ router.get("/logout", userController.logout);
 router.post("/:id/follow", AuthHandler, followerController.toggle);
 router.get("/:id/follow", AuthHandler, followerController.isFollow);
 router.get("/:id/followers", followerController.followers);
-router.get("/follow", AuthHandler, followerController.myFollower);
+router.get("/my-followers", AuthHandler, followerController.myFollower);
 router.get("/id/:id", userController.findById)
 router.get("/email/:email", userController.findByEmail);
 router.post("/profile", AuthHandler, ImageUploader.single("image"), userController.uploadProfile);

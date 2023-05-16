@@ -12,13 +12,13 @@ const Products = (products) => {
     this.price = products.price;
 }
 
-Products.create = async (conn, author_id, title, content, thumbnail, price) => {
+Products.create = async (conn, author_id, title, content, thumbnail, price, description) => {
     try {
         const INSERT_QUERY = `
-            insert into ${TABLE} (author_id, title, content, thumbnail, price)
-            values (?, ?, ?, ?, ?);
+            insert into ${TABLE} (author_id, title, content, thumbnail, price, description)
+            values (?, ?, ?, ?, ?, ?);
         `
-        const [res] = await conn.execute(INSERT_QUERY, [author_id, title, content, thumbnail, price]);
+        const [res] = await conn.execute(INSERT_QUERY, [author_id, title, content, thumbnail, price, description]);
         return res.insertId;
     } catch(err) {
         console.error(err);

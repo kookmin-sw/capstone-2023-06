@@ -49,12 +49,12 @@ exports.create = async (req, res) => {
     const conn = await GetConnection();
     let pictureIdList = [];
 
-    const {title, content, thumbnail, price, subthumbnails, hashtags, options} = req.body;
+    const {title, content, thumbnail, price, subthumbnails, hashtags, options, description} = req.body;
     try {
         await conn.beginTransaction();
         // 프로덕트 올리기
         
-        const productId = await Products.create(conn, req.user.id, title, content, thumbnail, price);
+        const productId = await Products.create(conn, req.user.id, title, content, thumbnail, price, description);
         console.info("product Create");
 
         // 서브 섬네일 로직
