@@ -164,6 +164,22 @@ exports.myPost = async (req,res) => {
     }
 }
 
+// 유저가 쓴 게시글 가져오기 유저 라우트에 위치
+exports.findByAuthorId = async (req,res) => {
+    try {
+        const posts = await Posts.findByAuthorId(req.params.id);
+        res.status(200).send({
+            success: true,
+            message: "유저의 포스트 조회 성공",
+            result: posts
+        });
+        return;
+    } catch (err) {
+        sendError(res,err.message,500);
+        return;
+    }
+}
+
 // async await으로 처리 완료
 exports.deleteById = async (req, res) => {
     try {

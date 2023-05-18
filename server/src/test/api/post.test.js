@@ -8,8 +8,10 @@ const USER_INFO = {
     picture: "base"
 }
 const agent = request.agent(app);
+let USER_ID;
 beforeAll(async () => {
-    await agent.post("/api/user/sign-up").send(USER_INFO);
+    const res = await agent.post("/api/user/sign-up").send(USER_INFO);
+    USER_ID = res.body.result;
     await agent.post('/api/user/login').send({
         email: USER_INFO.email,
         password: USER_INFO.password
@@ -78,6 +80,19 @@ describe("Post API", () => {
             done();
         });
     })
+
+    test("Find By Author ID", (done) => {
+        agent
+        .get(`/api/user/${USER_ID}/posts`)
+        .expect(200)
+        .end((err, res) => {
+            if(err) throw err;
+            expect(res.body.success).toBeTruthy();
+            const {result} = res.body;
+            expect(result.length).toBe(2);
+            done();
+        })
+    });
 
 });
 

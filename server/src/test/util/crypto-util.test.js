@@ -1,5 +1,5 @@
-const {Encryption, Decryption} = require("../../../utils/crypto-util/crypto_util.js");
-const NullPointError = require("../../../utils/errors/NullPointError.js");
+const {Encryption, Decryption} = require("../../utils/crypto-util/crypto_util.js");
+const NullPointError = require("../../utils/errors/NullPointError.js");
 
 describe("Crypto-Util", () => {
     test("Hashed Password", async () => {
