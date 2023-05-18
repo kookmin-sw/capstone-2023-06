@@ -3,7 +3,7 @@ import { MainLayout } from "../components/layout/Layout";
 import Profile from "../components/profile/Profile";
 import styled from "styled-components";
 import React from "react";
-import { getuserByID, updateProfile } from "../api/users";
+import { getFollowerList, getuserByID, updateProfile } from "../api/users";
 import { UserData } from "../type/user";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { RootState } from "../modules";
@@ -24,6 +24,7 @@ const User = () => {
   const [user, setUser] = React.useState<UserData>();
   const [reviews, setReviews] = React.useState();
   const [products, setProducts] = React.useState();
+  const [followers, setFollowers] = React.useState<UserData[]>();
   const fileInputRef = React.useRef<any>(null);
 
   React.useEffect(() => {
@@ -34,7 +35,7 @@ const User = () => {
     if (!user_id) return;
     try {
       const res = await getuserByID(user_id);
-
+      
       if (res.success) {
         setUser({
           id: res.result.id,
@@ -42,6 +43,22 @@ const User = () => {
           image: res.result.picture,
           email: res.result.email,
         });
+      }
+
+      const res2 = await getFollowerList(user_id);
+
+      console.log(res2);
+      if (res2.success) {
+        setFollowers(
+          res2.result.map((r: { nickname: any; picture: any; email: any }) => {
+            return {
+              id: 0,
+              nickname: r.nickname,
+              image: r.picture,
+              email: r.email,
+            };
+          })
+        );
       }
     } catch (err) {
       console.error(err);
@@ -70,7 +87,6 @@ const User = () => {
 
       console.log(res);
       if (res.success) {
-
         dispatch(setProfileImage(res.result));
         // setThumbnail(res.result.url);
         if (user)
@@ -136,6 +152,18 @@ const User = () => {
             </NoneDataCol>
           )}
         </div>
+      </PostWrapper>
+      <PostWrapper>
+        <h2>팔로워</h2>
+        {followers && followers.length !== 0 ? (
+          followers.map((f) => <Profile profileID={f.id} img={f.image} />)
+        ) : (
+          <div className="row">
+            <NoneDataCol className="col-12">
+              <span>팔로워 목록이 없습니다.</span>
+            </NoneDataCol>
+          </div>
+        )}
       </PostWrapper>
     </MainLayout>
   );
