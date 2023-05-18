@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { CommentInput } from "../common/Input";
 import Profile from "../profile/Profile";
 import { Button } from "../common/Button";
@@ -10,9 +10,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { RootState } from "../../modules";
+import { productComments } from "../../api/product";
 
-const CommentList = ({ comments }: { comments: CommentData[] }) => {
-  const { post_id } = useParams();
+const CommentList = ({
+  comments,
+  fluid,
+}: {
+  comments: CommentData[];
+  fluid?: boolean;
+}) => {
+  const { post_id, product_id } = useParams();
   const { id, image, isLoggedIn } = useSelector(
     (state: RootState) => ({
       id: state.users.id,
@@ -32,10 +39,10 @@ const CommentList = ({ comments }: { comments: CommentData[] }) => {
       return;
     }
 
-    if (!post_id) return;
-
     try {
-      const res = await postComments(post_id, 1, commentInput);
+      if (product_id) var res = await productComments(product_id, 1, commentInput);
+      else if (post_id) res = await postComments(post_id, 1, commentInput);
+      else return;
 
       console.log(res);
 
@@ -57,7 +64,7 @@ const CommentList = ({ comments }: { comments: CommentData[] }) => {
   };
 
   return (
-    <CommentListStyled>
+    <CommentListStyled fluid={fluid}>
       {isLoggedIn && (
         <CommentForm onSubmit={submitComment} method="post">
           <Profile profileID={id} marginright="1.5rem" size={4} img={image} />
@@ -79,13 +86,19 @@ const CommentList = ({ comments }: { comments: CommentData[] }) => {
 
 export default CommentList;
 
-const CommentListStyled = styled.div`
+const CommentListStyled = styled.div<{ fluid?: boolean }>`
   padding-left: 0rem;
   padding-right: 0rem;
 
   ${({ theme }) => theme.devices.desktop} {
-    padding-left: 12rem;
-    padding-right: 12rem;
+    ${(props) => {
+      if (!props.fluid) {
+        return css`
+          padding-left: 12rem;
+          padding-right: 12rem;
+        `;
+      }
+    }}
   }
 `;
 

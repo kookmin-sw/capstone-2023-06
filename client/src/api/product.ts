@@ -37,7 +37,7 @@ export const getProductList = async (
   try {
     const res = await productAPI.post(`/list?type=${type}&reverse=${reverse}`, {
       startTime: "2022-02-01T01:01:01",
-      endTime: "2022-02-01T01:01:01",
+      endTime: "2024-02-01T01:01:01",
       offset: 0,
       limit: 4,
       keyward: "스타일링페이지",

@@ -63,14 +63,14 @@ const Post = () => {
       console.log(res);
 
       if (res.success) {
-        setPost({ ...res.post, content: res.post.content.content });
+        setPost({ ...res.result, content: res.result.content.content });
         setAuthor({
-          id: res.post.author_id,
-          nickname: res.post.authorNickname,
-          image: res.post.authorImage,
-          email: res.post.authorEmail,
+          id: res.result.author_id,
+          nickname: res.result.authorNickname,
+          image: res.result.authorImage,
+          email: res.result.authorEmail,
         });
-        dispatch(resetImages(res.post.content.images));
+        dispatch(resetImages(res.result.content.images));
       }
     } catch (err) {
       console.error(err);
@@ -134,7 +134,7 @@ const Post = () => {
   const followHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!post_id) return;
+    if (!post_id || !isLoggedIn) return;
     try {
       const res = await postLike(post_id);
 

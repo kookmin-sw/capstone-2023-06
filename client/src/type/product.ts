@@ -7,6 +7,7 @@ export type ProductData = {
   subThumbnail: string[];
   detail: string;
   price: string;
+  content: string;
 };
 
 export type CommentData = {

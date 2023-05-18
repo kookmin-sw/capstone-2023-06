@@ -116,7 +116,8 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     price: "45,600",
     detail:
       "nisi est. ex est. commodo volutpat non nisl. odio hendrerit hendrerit ac ipsum quis ipsum Donec elementum efficitur. consectetur nisl. Donec tortor. at, Nunc leo. ex viverra in tincidunt nibh nec In faucibus Ut cursus dui. urna. ac elit",
-  });
+    content:''
+    });
 
   const [openProductDetail, setOpenProductDetail] =
     React.useState<boolean>(false);
