@@ -26,6 +26,7 @@ import {
 import { uploadImage } from "../../../../api/upload";
 import ProductCard, { ProductType } from "./ProductCard";
 import { getProduct, productSearch } from "../../../../api/product";
+import { changeTag } from "../../../../modules/editor";
 
 const ImageBlock = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -152,7 +153,7 @@ const ImageBlock = ({ id }: { id: string }) => {
   }
 
   // const [files, setFiles] = React.useState<FileList | undefined>();
-  const [showImage, setShowImage] = React.useState<string>("");
+  const [showImage, setShowImage] = React.useState<string>("https://cdn.dribbble.com/users/310943/screenshots/2792692/empty-state-illustrations.gif");
 
   const handleAddImages = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -256,11 +257,14 @@ const ImageBlock = ({ id }: { id: string }) => {
             </ReferButton>
           );
         })}
-      {(isSelectingRefer() && isEditMode) ? (
+      {isSelectingRefer() && isEditMode ? (
         <SearchModal {...getPos(getCurRefer())}>
           <SearchHeader>
             <ReferInput
-            onPaste={(e:any)=>{ console.log('23232'); e.stopPropagation();}}
+              onPaste={(e: any) => {
+                console.log("23232");
+                e.stopPropagation();
+              }}
               value={searchProduct}
               onChange={searchProductHandler}
             ></ReferInput>

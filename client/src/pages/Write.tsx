@@ -29,12 +29,27 @@ const Write = () => {
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (title.replace(/^\s+|\s+$/g, "") === "") {
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
+    if (thumbnail.replace(/^\s+|\s+$/g, "") === "") {
+      alert("썸네일 이미지를 추가해주세요.");
+      return;
+    }
+
+    if (content.length < 5) {
+      alert("내용이 너무 적습니다.");
+      return;
+    }
+
     // 글 업로드
     try {
       const res = await upload({
         title: title,
         thumbnail: thumbnail,
-        hashtags: tags.split(" "),
+        hashtags: tags.replace(/#/g, "").split(" "),
         content: {
           content: content,
           images: images,
@@ -85,8 +100,9 @@ const Write = () => {
   return (
     <FluidLayout>
       <PostHeaderImage thumbnail={thumbnail}>
-        {thumbnail}
-        <p style={{ marginBottom: "1rem" }}>썸네일을 추가해주세요.</p>
+        {!thumbnail && (
+          <p style={{ marginBottom: "1rem" }}>썸네일을 추가해주세요.</p>
+        )}
         <PrimaryButton
           type="button"
           onClick={(e: any) => {

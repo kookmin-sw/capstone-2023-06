@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styled, { css } from "styled-components";
 import Profile, { ProfileProps } from "./Profile";
@@ -25,6 +25,7 @@ const ProfileBar = ({
   padding = "1rem 0rem",
   img,
 }: ProfileBarProps) => {
+  const navigate = useNavigate();
   const { id, isLoggedIn } = useSelector(
     (state: RootState) => ({
       id: state.users.id,
@@ -32,7 +33,6 @@ const ProfileBar = ({
     }),
     shallowEqual
   );
-
   const [isFollowing, setIsFollowing] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -56,6 +56,14 @@ const ProfileBar = ({
 
   const followHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (!isLoggedIn) {
+      if (
+        window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")
+      ) {
+        navigate("/login");
+      }
+    }
 
     if (!profileID) return;
     try {
@@ -87,7 +95,7 @@ const ProfileBar = ({
         </span>
         {subContent && <span className="sub-content">{subContent}</span>}
       </ProfileDetail>
-      {activeFollow && (
+      {id !== profileID && activeFollow && (
         <FollowButton onClick={followHandler} isFollowing={isFollowing}>
           {isFollowing ? (
             <>
