@@ -1,6 +1,7 @@
 import { UserData } from "./user";
 
 export type ProductData = {
+  id?: string;
   name: string;
   tags: string[];
   thumbnail: string;

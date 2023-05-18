@@ -50,7 +50,7 @@ const ProductCard = ({
             </LikeButton>
           </ProductPurchaseBlock>
         ) : (
-          <Shortcuts to="/product/1">상품 자세히 보러 가기 &#187;</Shortcuts>
+          <Shortcuts to={`/product/${product.id}`}>상품 자세히 보러 가기 &#187;</Shortcuts>
         )}
       </div>
     </ProductCardContainer>

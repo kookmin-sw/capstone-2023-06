@@ -44,21 +44,23 @@ const User = () => {
           email: res.result.email,
         });
       }
-
+console.log(res);
       const res2 = await getFollowerList(user_id);
 
       console.log(res2);
       if (res2.success) {
         setFollowers(
-          res2.result.map((r: { nickname: any; picture: any; email: any }) => {
+          res2.result.map((r: { id:any; nickname: any; picture: any; email: any }) => {
             return {
-              id: 0,
+              id: r.id,
               nickname: r.nickname,
               image: r.picture,
               email: r.email,
             };
           })
         );
+      } else {
+        setFollowers([]);
       }
     } catch (err) {
       console.error(err);
@@ -117,7 +119,6 @@ const User = () => {
                 onClick={(e: any) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log("#####");
                   fileInputRef.current.click();
                 }}
               >

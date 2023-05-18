@@ -60,7 +60,6 @@ const Post = () => {
     // 이미지 업로드
     try {
       const res = await getPost(post_id);
-      console.log(res);
 
       if (res.success) {
         setPost({ ...res.result, content: res.result.content.content });
@@ -83,7 +82,6 @@ const Post = () => {
     try {
       const res = await getComments(post_id);
 
-      console.log(res);
       if (res.success) {
         setComments(
           res.result.map(

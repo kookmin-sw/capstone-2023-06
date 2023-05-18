@@ -11,12 +11,15 @@ import { RootState } from "../modules";
 import { useSelector } from "react-redux";
 import { upload, uploadImage } from "../api/upload";
 import { PostHeaderImage } from "../components/Image/PostHeaderImage";
+import { useNavigate } from "react-router-dom";
 
 const Write = () => {
+  const navigate = useNavigate();
+  const thumbnailInputRef = React.useRef<any>(null);
   const [title, setTitle] = React.useState<string>("");
   // const [tags, setTags] = React.useState<string[]>(['어쩌구', '저쩌구', 'ABC']);
   // const [tags, setTags] = React.useState<string[]>([]); // 만약 분리식으로 저장해야 한다면 윗줄식으로로 변경
-  const [tags, setTags] = React.useState<string>(""); // 
+  const [tags, setTags] = React.useState<string>(""); //
 
   const [thumbnail, setThumbnail] = React.useState<string>("");
 
@@ -38,9 +41,8 @@ const Write = () => {
         },
       });
 
-      console.log(res);
-
       if (res.success) {
+        navigate(`/post/${res.result}`);
       }
     } catch (err) {
       console.error(err);
@@ -84,9 +86,24 @@ const Write = () => {
     <FluidLayout>
       <PostHeaderImage thumbnail={thumbnail}>
         {thumbnail}
-        <p>썸네일을 추가해주세요.</p>
-        <PrimaryButton>업로드</PrimaryButton>
-        <input type="file" name="thumbnail_file" onChange={handleAddImages} />
+        <p style={{ marginBottom: "1rem" }}>썸네일을 추가해주세요.</p>
+        <PrimaryButton
+          type="button"
+          onClick={(e: any) => {
+            e.preventDefault();
+            e.stopPropagation();
+            thumbnailInputRef.current.click();
+          }}
+        >
+          업로드
+        </PrimaryButton>
+        <input
+          ref={thumbnailInputRef}
+          type="file"
+          name="thumbnail_file"
+          onChange={handleAddImages}
+          style={{ display: "none" }}
+        />
       </PostHeaderImage>
       <Container>
         <form onSubmit={submitHandler}>
@@ -115,7 +132,9 @@ const Write = () => {
           />
           {/* <hr/> */}
           <Editor></Editor>
-          <PrimaryButton type="submit">작성</PrimaryButton>
+          <EndLine>
+            <PrimaryButton type="submit">작성</PrimaryButton>
+          </EndLine>
         </form>
       </Container>
     </FluidLayout>
@@ -123,3 +142,8 @@ const Write = () => {
 };
 
 export default Write;
+
+const EndLine = styled.div`
+  display: flex;
+  justify-content: center;
+`;

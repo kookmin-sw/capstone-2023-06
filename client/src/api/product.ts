@@ -135,7 +135,9 @@ export const productLike = async (id: string) => {
  */
 export const productSearch = async (msg: string) => {
   try {
-    const res = await productAPI.get(`/search`);
+    const res = await productAPI.post(`/search`, {
+      keyword: msg
+    });
     return res.data;
   } catch (err) {
     let msg: string;
