@@ -60,7 +60,9 @@ Posts.findByAuthorId = async (userId) => {
     const conn = await GetConnection();
     try {
         const FIND_QUERY = `
-            select * from ${TABLE} where author_id = ?;
+            select * 
+            from ${TABLE}
+            where author_id = ?;
         `;
         const [posts] = await conn.execute(FIND_QUERY, [userId]);
         return posts;
@@ -126,7 +128,20 @@ Posts.deleteById = async (id, author_id) => {
     }
 }
 
+Posts.getAll = async (conn) => {
+    try {
+        const [posts] = await conn.execute(`
+            select p.*, u.nickname as authorNickname, u.email as authorEmail, u.picture as authorPicture 
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+        `);
 
+        return posts;
+    } catch (err) {
+        throw err;
+    }
+}
 
 
 Posts.list = async (condition) => {

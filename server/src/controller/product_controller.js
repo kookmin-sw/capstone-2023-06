@@ -4,6 +4,7 @@ const Hashtag = require("../model/hashtag_model.js");
 const ProductHashtag = require("../model/product_hashtag_model.js");
 const Subthumbnail = require("../model/subthumbnail_model.js");
 const MysqlError = require("../utils/errors/MysqlError.js");
+const Posts = require("../model/post_model.js");
 const {GetConnection, ReleaseConnection} = require("../../database/connect.js");
 const sendError = (res, msg, status) => {
     res.status(status).send({
@@ -237,4 +238,52 @@ exports.uploadProductsImage = (req, res) => {
 
     sendResult(res,"상품 사진 업로드 성공", req.file.location);
     return;
+}
+
+const inProduct = (post, productId) => {
+    const images = Object.values(JSON.parse(post.content).content.images);
+    for(image of images) {
+        for(tag of image.refers) {
+            if(tag.data===productId) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+exports.getReviews = async (req, res) => {
+    const PRODUCT_ID = parseInt(req.params.id);
+    const conn = await GetConnection();
+    try {
+        const allPosts = await Posts.getAll(conn);
+        const reviewList = [];
+        const FIND_HASHTAGS = `
+            select h.title
+            from post_hashtag p
+            left join hashtag h
+            on p.hashtag_id = h.id
+            where p.post_id = ?
+        `;
+
+        for(post of allPosts) {
+            if(inProduct(post, PRODUCT_ID)) {
+                const [hashtagData] = await conn.execute(FIND_HASHTAGS, [post.id]);
+                const hashtags = hashtagData.map((hashtag)=>hashtag.title);
+                reviewList.push({
+                        ...post,
+                        content: JSON.parse(post.content).content,
+                        hashtags: hashtags
+                });
+            }
+        }
+        sendResult(res, "상품 리뷰 조회", reviewList);
+        return;
+    } catch (err) {
+        console.error(err);
+        sendError(res, err.message, 500);
+    } finally {
+        ReleaseConnection(conn);
+    }
 }

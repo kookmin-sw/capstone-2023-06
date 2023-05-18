@@ -18,6 +18,7 @@ router.delete("/:productId/comment/:commentId", AuthHandler, productcommentsCont
 router.put("/:productId/comment/:commentId", AuthHandler, productcommentsController.update);
 router.post("/:id/comment", AuthHandler, productcommentsController.create);
 router.get("/:id/comments", productcommentsController.getComments);
+router.get("/:id/reviews", productController.getReviews);
 router.get("/:id", productController.findById);
 
 // TODO: 1. 유저 추천 스케줄러

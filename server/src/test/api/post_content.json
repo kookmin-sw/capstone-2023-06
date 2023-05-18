@@ -1,0 +1,39 @@
+{
+    "content":[
+        {
+            "id":"lhsz55auia8pchd5vql",
+            "html":"",
+            "tag":"img",
+            "flag":0
+        },
+        {
+            "id":"lhsz7q14bls434r87ev",
+            "html":"ㅁㄹㄴㅇ",
+            "tag":"p",
+            "flag":0
+        },
+        {
+            "id":"lhsz7r8t4ul8do96bkj",
+            "html":"",
+            "tag":"img","flag":0
+        }
+    ],
+            
+    "images":
+    {
+        "lhsz55auia8pchd5vql":{
+            "id":"",
+            "refers":[
+                {"id":"lhsz71rkrz17zg62bok","data":2,"posX":0.33,"posY":0.27},
+                {"id":"lhsz7fenklibkzwmxff","data":4,"posX":0.3,"posY":0.37}
+            ],
+            "src":"https://deskit-bucket-1.s3.ap-northeast-2.amazonaws.com/post/image/1684404828362_14146566.png"},    
+        "lhsz7r8t4ul8do96bkj":{
+            "id":"",
+            "refers":[
+                {"id":"lhsz7vnq7r5lpet1l7o","data":5,"posX":0.71,"posY":0.47}
+            ],
+            "src":"https://deskit-bucket-1.s3.ap-northeast-2.amazonaws.com/post/image/1684404949838_14146566.png"
+        }
+    }
+}
