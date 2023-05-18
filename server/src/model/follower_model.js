@@ -54,7 +54,7 @@ Follower.deleteByUserIdAndFollowerId = async (conn, userId, followerId) => {
 Follower.findByUserId = async (conn, userId) => {
     try {
         const FIND_QUERY = `
-            select u.nickname, u.email, u.picture 
+            select f.id, u.nickname, u.email, u.picture 
             from ${TABLE} f
             left join user u
             on f.follower_id = u.id
@@ -72,7 +72,7 @@ Follower.findByUserId = async (conn, userId) => {
 Follower.findByFollowerId = async (conn, followerId) => {
     try {
         const FIND_QUERY = `
-            select u.nickname, u.email, u.picture 
+            select f.id, u.nickname, u.email, u.picture 
             from ${TABLE} f
             left join user u
             on f.user_id = u.id
