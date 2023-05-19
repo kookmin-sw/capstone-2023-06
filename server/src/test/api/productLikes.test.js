@@ -40,7 +40,7 @@ const productJson = {
 };
 
 let PRODUCT_ID;
-
+let USER_ID;
 beforeAll(async () => {
     await agent.post("/api/user/brand/sign-up").send({
         nickname: BRANDUSER_INFO.nickname,
@@ -48,7 +48,7 @@ beforeAll(async () => {
         email: BRANDUSER_INFO.email,
         picture: BRANDUSER_INFO.picture
     }).expect(201);
-    
+
     await agent.post("/api/user/login").send({
         email: BRANDUSER_INFO.email,
         password: BRANDUSER_INFO.password
@@ -57,12 +57,14 @@ beforeAll(async () => {
     const res = await agent.post("/api/product").send(productJson);
     PRODUCT_ID = res.body.result;
 
-    await user.post("/api/user/sign-up").send({
+    const userRes = await user.post("/api/user/sign-up").send({
         nickname: USER_INFO.nickname,
         password: USER_INFO.password,
         email: USER_INFO.email,
         picture: USER_INFO.picture
     });
+
+    USER_ID = userRes.body.result;
 
     await user.post("/api/user/login").send({
         email: USER_INFO.email,
@@ -95,6 +97,22 @@ describe("Product Likes API", () => {
             expect(success).toBeTruthy();
             expect(result.length).toBe(1);
             expect(result[0].userNickname).toBe(USER_INFO.nickname);
+            done();
+        });
+    });
+
+    test("User's Like Product List", (done)=> {
+        request(app)
+        .get(`/api/user/${USER_ID}/like-products`)
+        .expect(200)
+        .end((err, res) => {
+            if(err) throw err;
+            const {success, result} = res.body;
+            expect(success).toBeTruthy();
+            expect(result.length).toBe(1);
+            expect(result[0].authorNickname).toBe(BRANDUSER_INFO.nickname);
+            expect(result[0].hashtags.length).toBe(3);
+            expect(result[0].subthumbnails.length).toBe(3);
             done();
         });
     });

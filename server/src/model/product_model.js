@@ -62,6 +62,25 @@ Products.search = async (conn, keyword) => {
     }
 }
 
+Products.findByUserLike = async (conn, userId) => {
+    try {
+        const FIND_QUERY = `
+            select p.*, u.nickname as authorNickname, u.email as authorEmail, u.picture as authorPicture
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+            left join product_likes l
+            on l.product_id = p.id
+            where l.user_id = ?;
+        `;
+        const [products] = await conn.execute(FIND_QUERY, [userId]);
+        return products;
+    } catch (err) {
+        console.error(err);
+        throw new MysqlError("MYSQL ERROR");
+    }
+}
+
 Products.getProductsByDate = async (conn, startTime, endTime, reverse, limit, offset, keyword) => {
     try {
         // created_at 비교에서 스트링이 제대로 안들어가서 이렇게 바꿈

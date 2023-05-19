@@ -240,6 +240,32 @@ exports.uploadProductsImage = (req, res) => {
     return;
 }
 
+exports.getLikeProduct = async (req, res) => {
+    const conn = await GetConnection();
+    try {
+        const products = await Products.findByUserLike(conn, req.params.id);
+        let renewProducts = [];
+
+        for(product of products) {
+            const hashtags = await ProductHashtag.findByProductId(conn, product.id);
+            const subthumbnails = await Subthumbnail.findByProductId(conn, product.id);
+            renewProducts.push({
+                ...product,
+                content: JSON.parse(product.content),
+                hashtags: hashtags.map((hashtag) => hashtag.value),
+                subthumbnails: subthumbnails.map((subthumbnail) => subthumbnail.value),
+            });
+        }
+        sendResult(res,"유저가 찜한 상품들", renewProducts);
+        return;
+    } catch(err) {
+        console.error(err);
+        sendError(res,err.message,500);
+    } finally {
+        ReleaseConnection(conn);
+    }
+}
+
 const inProduct = (post, productId) => {
     const images = Object.values(JSON.parse(post.content).content.images);
     for(image of images) {

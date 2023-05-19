@@ -90,6 +90,7 @@ describe("Post API", () => {
             expect(res.body.success).toBeTruthy();
             const {result} = res.body;
             expect(result.length).toBe(2);
+            expect(result[0].hashtags[0]).toBe("hashtag");
             done();
         })
     });

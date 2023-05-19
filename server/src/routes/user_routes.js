@@ -5,6 +5,7 @@ const userController = require("../controller/user_controller.js");
 const ImageUploader = require("../utils/imageUploader/imageUploader.js");
 const followerController = require("../controller/follower_controller.js");
 const postController = require("../controller/post_controller.js");
+const productController = require("../controller/product_controller.js");
 const AuthHandler = require("../utils/authHandler/authHandler.js");
 
 router.post("/brand/sign-up", userController.brandUserSignUp);
@@ -15,6 +16,7 @@ router.get("/logout", userController.logout);
 router.post("/:id/follow", AuthHandler, followerController.toggle);
 router.get("/:id/follow", AuthHandler, followerController.isFollow);
 router.get("/:id/followers", followerController.followers);
+router.get("/:id/like-products", productController.getLikeProduct);
 router.get("/my-followers", AuthHandler, followerController.myFollower);
 router.get("/:id/posts", postController.findByAuthorId);
 router.get("/id/:id", userController.findById)

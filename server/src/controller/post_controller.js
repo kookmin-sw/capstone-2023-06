@@ -1,6 +1,7 @@
 const Posts = require("../model/post_model.js");
 const Picture = require("../model/picture_model.js");
-
+const PostHashtag = require("../model/post_hashtag_model.js");
+const {GetConnection, ReleaseConnection} = require("../../database/connect.js");
 
 const sendError = (res, msg, status) => {
     res.status(status).send({
@@ -166,17 +167,31 @@ exports.myPost = async (req,res) => {
 
 // 유저가 쓴 게시글 가져오기 유저 라우트에 위치
 exports.findByAuthorId = async (req,res) => {
+    const conn = await GetConnection();
     try {
-        const posts = await Posts.findByAuthorId(req.params.id);
+        let posts = await Posts.findByAuthorId(req.params.id);
+        let renewPosts = [];
+        for(post of posts) {
+            const hashtagData = await PostHashtag.findByPostId(conn, post.id);
+            const hashtags = hashtagData.map((hashtag) => hashtag.title);
+            renewPosts.push({
+                ...post,
+                hashtags: hashtags
+            });
+        }
+        
         res.status(200).send({
             success: true,
             message: "유저의 포스트 조회 성공",
-            result: posts
+            result: renewPosts
         });
         return;
     } catch (err) {
+        console.error(err);
         sendError(res,err.message,500);
         return;
+    } finally {
+        ReleaseConnection(conn);
     }
 }
 
