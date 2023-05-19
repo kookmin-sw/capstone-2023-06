@@ -109,8 +109,8 @@ const Main = () => {
       <div style={{ marginBottom: "1rem" }}></div>
       <div className="row">
         {recommendPost?.map((post, index) => (
-          <div className="col-md-3">
-            <Review key={index} {...post} />
+          <div className="col-md-3" key={index}>
+            <Review  {...post} />
           </div>
           // <MainPost key={index} post={post} />
         ))}

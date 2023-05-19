@@ -204,3 +204,38 @@ export const getFollowerList = async (id: string) => {
     throw new Error(msg);
   }
 };
+
+
+/**
+ * id 가 작성한 글들 조회
+ * @param {string} id 유저 고유 id
+ * @returns 성공 여부
+ */
+export const getUserPost = async (id: string) => {
+  try {
+    const res = await userAPI.get(`/${id}/posts`);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+/**
+ * 특정 유저가 좋아요한 제품
+ * @param {string} id 유저 고유 id
+ * @returns 성공 여부
+ */
+export const getUserProductLike = async (id: string) => {
+  try {
+    const res = await userAPI.get(`/${id}/products`);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};

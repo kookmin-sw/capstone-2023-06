@@ -87,6 +87,9 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
   function selectRefer(refer: Refer) {
     checkBeforeCurCreate();
     // e.stopPropagation();
+    
+    console.log(refer);
+
     setCurReferId(refer.id);
     initProduct(refer.data);
 
@@ -116,10 +119,14 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
   });
 
   const initProduct = async (product_id: string) => {
+
+    console.log(product_id);
+
     if (!product_id) return;
     try {
       const res = await getProduct(product_id);
 
+      console.log(res);
       if (res.success) {
         setProduct({
           id: product_id,

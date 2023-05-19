@@ -1,41 +1,106 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MainLayout } from "../components/layout/Layout";
 import Profile from "../components/profile/Profile";
 import styled from "styled-components";
 import React from "react";
-import { getFollowerList, getuserByID, updateProfile } from "../api/users";
+import {
+  getFollowerList,
+  getUserPost,
+  getuserByID,
+  getUserProductLike,
+  updateProfile,
+} from "../api/users";
 import { UserData } from "../type/user";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { RootState } from "../modules";
 import { uploadImage } from "../api/upload";
 import { setProfileImage } from "../modules/users";
 import { IconPencil } from "@tabler/icons-react";
+import Review from "../components/Review";
+import ProductLink from "../components/product/ProductLink";
+
+export type MyReviewType = {
+  id: number | string;
+  thumbnail: string;
+  title: string;
+  hashtags: string[];
+  created_at: string;
+};
+
+export type MyProductType = {
+  id: string;
+  thumbnail: string;
+  title: string;
+};
 
 const User = () => {
   const { user_id } = useParams();
-  const { id, isLoggedIn } = useSelector(
+  const { id, nickname, email, image, isLoggedIn } = useSelector(
     (state: RootState) => ({
       id: state.users.id,
+      nickname: state.users.nickname,
+      email: state.users.email,
+      image: state.users.image,
       isLoggedIn: state.users.isLoggedIn,
     }),
     shallowEqual
   );
   const dispatch = useDispatch();
-  const [user, setUser] = React.useState<UserData>();
-  const [reviews, setReviews] = React.useState();
-  const [products, setProducts] = React.useState();
+  const [user, setUser] = React.useState<UserData>({
+    id: "",
+    nickname: "",
+    image: "",
+    email: "",
+  });
+  const [reviews, setReviews] = React.useState<MyReviewType[]>();
+  const [products, setProducts] = React.useState<MyProductType[]>();
   const [followers, setFollowers] = React.useState<UserData[]>();
   const fileInputRef = React.useRef<any>(null);
 
   React.useEffect(() => {
     initUser();
+    initReviews();
+    // initProducts();
   }, [user_id]);
+
+  const initReviews = async () => {
+    if (!user_id) return;
+    try {
+      const res = await getUserPost(user_id);
+
+      if (res.success) {
+        setReviews(res.result);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const initProducts = async () => {
+    if (!user_id) return;
+    try {
+      const res = await getUserProductLike(user_id);
+      console.log(res);
+      if (res.success) {
+        setProducts(
+          res.result.map((r: { id: any; title: any; thumbnail: any }) => {
+            return {
+              id: r.id,
+              title: r.title,
+              thumbnail: r.thumbnail,
+            };
+          })
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const initUser = async () => {
     if (!user_id) return;
     try {
       const res = await getuserByID(user_id);
-      
       if (res.success) {
         setUser({
           id: res.result.id,
@@ -44,20 +109,20 @@ const User = () => {
           email: res.result.email,
         });
       }
-console.log(res);
-      const res2 = await getFollowerList(user_id);
 
-      console.log(res2);
+      const res2 = await getFollowerList(user_id);
       if (res2.success) {
         setFollowers(
-          res2.result.map((r: { id:any; nickname: any; picture: any; email: any }) => {
-            return {
-              id: r.id,
-              nickname: r.nickname,
-              image: r.picture,
-              email: r.email,
-            };
-          })
+          res2.result.map(
+            (r: { id: any; nickname: any; picture: any; email: any }) => {
+              return {
+                id: r.id,
+                nickname: r.nickname,
+                image: r.picture,
+                email: r.email,
+              };
+            }
+          )
         );
       } else {
         setFollowers([]);
@@ -134,7 +199,18 @@ console.log(res);
         <h2>작성 리뷰</h2>
         <div className="row">
           {reviews ? (
-            <></>
+            reviews.map((review, index) => (
+              <div className="col-md-3" key={`my-r-${index}`}>
+                <Review
+                  id={review.id}
+                  thumbnail={review.thumbnail}
+                  title={review.title}
+                  author={user}
+                  date={review.created_at}
+                  tags={[]}
+                />
+              </div>
+            ))
           ) : (
             <NoneDataCol className="col-12">
               <span>작성한 리뷰가 없습니다.</span>
@@ -146,7 +222,15 @@ console.log(res);
         <h2>관심 제품</h2>
         <div className="row">
           {products ? (
-            <></>
+            products.map((p) => (
+              <div className="col-md-3" key={`my-p-0`}>
+                <ProductLink
+                  id={p.id}
+                  thumbnail={p.thumbnail}
+                  title={p.title}
+                />
+              </div>
+            ))
           ) : (
             <NoneDataCol className="col-12">
               <span>관심 제품이 없습니다.</span>
@@ -169,7 +253,6 @@ console.log(res);
     </MainLayout>
   );
 };
-
 export default User;
 
 const UserCard = styled.div`
@@ -188,7 +271,7 @@ const PostWrapper = styled.div`
   margin: 4rem 0rem;
   h2 {
     margin-bottom: 1rem;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 500;
   }
 `;
