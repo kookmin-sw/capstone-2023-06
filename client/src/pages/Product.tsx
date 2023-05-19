@@ -8,7 +8,14 @@ import {
 } from "../components/common/Button";
 import { SecondaryButton } from "../components/common/Button";
 import ProductDetailPostImage from "../components/product/ProductDetailPost";
-import { Link, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import ProductDetailPost from "../components/product/ProductDetailPost";
 import CommentList from "../components/Comment/CommentList";
 import { CommentData, ProductData } from "../type/product";
@@ -19,9 +26,11 @@ import {
   getProduct,
   getProductLike,
   productLike,
+  productReviews,
 } from "../api/product";
 import { useSelector } from "react-redux";
 import { RootState } from "../modules";
+import { ReviewType } from "../components/Review";
 
 const Product = () => {
   const { hash } = useLocation();
@@ -37,6 +46,7 @@ const Product = () => {
     content: "",
   });
   const [comments, setComments] = React.useState<CommentData[]>([]);
+  const [reviews, setReviews] = React.useState<ReviewType[]>([]);
   const [isFollowing, setIsFollowing] = React.useState<boolean>();
   const { id, isLoggedIn } = useSelector((state: RootState) => ({
     id: state.users.id,
@@ -45,9 +55,10 @@ const Product = () => {
 
   React.useEffect(() => {
     initProduct();
+    initReviews();
     initComments();
   }, [product_id]);
-  
+
   React.useEffect(() => {
     initFollowing();
   }, [product_id, isLoggedIn]);
@@ -67,6 +78,46 @@ const Product = () => {
           detail: res.result.description,
           content: res.result.content,
         });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const initReviews = async () => {
+    if (!product_id) return;
+    try {
+      const res = await productReviews(product_id);
+      if (res.success) {
+        setReviews(
+          res.result.map(
+            (r: {
+              id: any;
+              thumbnail: any;
+              title: any;
+              author_id: any;
+              authorNickname: any;
+              authorImage: any;
+              authorEmail: any;
+              created_at: any;
+              hashtags: any;
+            }) => {
+              return {
+                id: r.id,
+                thumbnail: r.thumbnail,
+                title: r.title,
+                author: {
+                  id: r.author_id,
+                  nickname: r.authorNickname,
+                  image: r.authorImage,
+                  email: r.authorEmail,
+                },
+                date: r.created_at,
+                tags: r.hashtags,
+              };
+            }
+          )
+        );
       }
     } catch (err) {
       console.error(err);
@@ -151,7 +202,11 @@ const Product = () => {
   return (
     <MainLayout>
       <ProductHeader>
-        <ProductCard product={product} likeEvent={followHandler} isLike={isFollowing} />
+        <ProductCard
+          product={product}
+          likeEvent={followHandler}
+          isLike={isFollowing}
+        />
       </ProductHeader>
 
       <DottedLine />
@@ -160,7 +215,7 @@ const Product = () => {
           제품 상세 정보
         </ProductNavItem>
         <ProductNavItem to="#review" $active={hash === "#review"}>
-          리뷰 28개
+          리뷰 {reviews.length}개
         </ProductNavItem>
         <ProductNavItem to="#comment" $active={hash === "#comment"}>
           댓글 {comments.length}개
@@ -170,7 +225,7 @@ const Product = () => {
       {hash === "#comment" ? (
         <CommentList comments={comments} fluid />
       ) : hash === "#review" ? (
-        <ProductReview />
+        <ProductReview reviews={reviews} />
       ) : (
         <ProductDetailPostImage content={product.content} />
       )}

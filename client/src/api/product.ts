@@ -146,3 +146,20 @@ export const productSearch = async (msg: string) => {
     throw new Error(msg);
   }
 };
+
+/**
+ * 제품 관련 리뷰
+ * @param {string} id 제품 id
+ * @returns 성공 여부
+ */
+export const productReviews = async (id: string) => {
+  try {
+    const res = await productAPI.get(`/${id}/reviews`);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
