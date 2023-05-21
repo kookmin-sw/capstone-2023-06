@@ -51,11 +51,11 @@ app.get('/*', function (req, res) {
 // 초(옵션), 분(0~59), 시간(0~23), 일(1~31), 월(1~12), 요일(0~7) 0,7 모두 일요일
 // * */4 * * * //4시간마다 실행 
 const CYCLE_PATTERN = '*/5 * * * *'; // 릴리즈 시 바꿀 필요 있음 (1분 마다 실행)
-cron.schedule(CYCLE_PATTERN, () => {
+cron.schedule(CYCLE_PATTERN, async () => {
   const now = moment().format('YYYY-MM-DD HH:mm:ss');
   console.log(`[${now}] Recommend Updater Start`);
   try {
-    RecommendUpdater.UpdateAllHashtag(1000);
+    await RecommendUpdater.UpdateAllHashtag(1000);
   } catch(err) {
     const errNow = moment().format('YYYY-MM-DD HH:mm:ss');
     console.log(`[${errNow}]: Recommend Updater Error`);
