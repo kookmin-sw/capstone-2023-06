@@ -4,7 +4,7 @@ const app = express();
 const moment = require("moment");
 
 const cron = require('node-cron');
-const RecommendUpdater = require("./utils/RecommendUpdater/recommendUpdater.js");
+const UpdateAllHashtag = require("./utils/RecommendUpdater/recommendUpdater.js");
 
 const session = require('express-session');
 const passport = require('passport');
@@ -55,7 +55,7 @@ cron.schedule(CYCLE_PATTERN, () => {
   const now = moment().format('YYYY-MM-DD HH:mm:ss');
   console.log(`[${now}] Recommend Updater Start`);
   try {
-    RecommendUpdater.updateAllPost();
+    UpdateAllHashtag(1000);
   } catch(err) {
     const errNow = moment().format('YYYY-MM-DD HH:mm:ss');
     console.error(`[${errNow}]: Recommend Updater Error`);
