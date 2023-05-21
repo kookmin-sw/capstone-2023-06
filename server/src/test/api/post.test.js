@@ -159,6 +159,23 @@ describe("Post API", () => {
             done();
         })
     });
+
+    test("Get Posts UserWeight", (done) => {
+        request(app)
+        .post(`/api/post/list`)
+        .query({type:'user'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+        }).expect(200)
+        .end((err, res) => {
+            if(err) throw err;
+            console.log(res.body);
+            done();
+        })
+    });
 });
 
 afterAll(async () => {
