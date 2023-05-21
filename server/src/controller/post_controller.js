@@ -25,6 +25,7 @@ const addHashtags = async (conn, posts) => {
         const hashtags = hashtagData.map((hashtag) => hashtag.title);
         renewPosts.push({
             ...post,
+            content: JSON.parse(post.content).content,
             hashtags: hashtags
         });
     }
