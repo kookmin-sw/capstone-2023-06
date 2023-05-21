@@ -135,6 +135,7 @@ exports.list = async (req,res) => {
                 return;
         }
     } catch (err) {
+        console.error(err);
         sendError(res, err.message, 400);
         return;
     } finally {
