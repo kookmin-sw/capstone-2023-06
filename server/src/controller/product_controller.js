@@ -151,7 +151,38 @@ const sendDateTypeProducts = async (res, req, reverse, conn) => {
     sendResult(res,"Date로 조회 성공", renewProducts);
 }
 
+const sendLikeTypeProducts = async (res, req, reverse, conn) => {
+    const {startTime, endTime, offset, limit, keyword} = req.body;
+
+    const products = await Products.getProductsByLike(
+        conn, startTime, endTime, reverse, limit, offset, keyword?`%${keyword}%`:null
+    );
+    
+    let renewProducts = [];
+    for(product of products) {
+        const renewProduct = await addInfoAndParseContent(conn, product);
+        renewProducts.push(renewProduct);
+    }
+    sendResult(res,"Date로 조회 성공", renewProducts);
+}
+
+const sendUserTypeProducts = async (res, req, reverse, conn) => {
+    const {startTime, endTime, offset, limit, keyword} = req.body;
+
+    const products = await Products.getProductsByLike(
+        conn, startTime, endTime, reverse, limit, offset, keyword?`%${keyword}%`:null
+    );
+    
+    let renewProducts = [];
+    for(product of products) {
+        const renewProduct = await addInfoAndParseContent(conn, product);
+        renewProducts.push(renewProduct);
+    }
+    sendResult(res,"Date로 조회 성공", renewProducts);
+}
+
 exports.getProducts = async (req, res) => {
+    console.log(req.originalUrl);
     let type;
     let reverse;
     if(!req.query.type) {
@@ -192,10 +223,14 @@ exports.getProducts = async (req, res) => {
                 sendDateTypeProducts(res,req, reverse, conn);                
                 return;
             case "user":
-                sendDateTypeProducts(res,req, reverse, conn);  
+                if(req.user) {
+                    sendUserTypeProducts(res,req, reverse, conn);  
+                    return;
+                }
+                sendLikeTypeProducts(res,req, reverse, conn);  
                 return;
             case "like":
-                sendDateTypeProducts(res,req, reverse, conn);  
+                sendLikeTypeProducts(res,req, reverse, conn);  
                 return;
             default:
                 sendDateTypeProducts(res,req, reverse, conn);  
@@ -203,6 +238,7 @@ exports.getProducts = async (req, res) => {
         }
 
     } catch(err) {
+        console.error(err);
         if (err instanceof MysqlError) {
             sendError(res, err.message, 500);
         } else {

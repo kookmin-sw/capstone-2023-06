@@ -173,6 +173,80 @@ describe("Product API", ()=>{
         });
     })
 
+    test("Product List: like", (done)=> {
+        request(app)
+        .post(`/api/product/list`)
+        .query({type:'like'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+        })
+        .expect(200)
+        .end((err,res) => {
+            if(err) throw err;
+            expect(res.body.result).toBeTruthy();
+            console.log(res.body.result);
+            done();
+        })
+    });
+
+    test("Product List: user", (done)=> {
+        agent
+        .post(`/api/product/list`)
+        .query({type:'user'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+        })
+        .expect(200)
+        .end((err,res) => {
+            if(err) throw err;
+            expect(res.body.result).toBeTruthy();
+            console.log(res.body.result);
+            done();
+        })
+    });
+
+    test("Product List: not user", (done)=> {
+        request(app)
+        .post(`/api/product/list`)
+        .query({type:'user'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+        })
+        .expect(200)
+        .end((err,res) => {
+            if(err) throw err;
+            expect(res.body.result).toBeTruthy();
+            done();
+        })
+    });
+
+    test("Product List: date", (done)=> {
+        request(app)
+        .post(`/api/product/list`)
+        .query({type:'date'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+        })
+        .expect(200)
+        .end((err,res) => {
+            if(err) throw err;
+            expect(res.body.result).toBeTruthy();
+            done();
+        })
+    });
+
 
     // // 삭제하기
     // test("Delete Products", (done) => {
