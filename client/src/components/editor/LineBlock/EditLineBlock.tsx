@@ -272,7 +272,16 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
      * @param event Clipboard 이벤트
      * @returns 
      */
-    function pasteHandler(event :  React.ClipboardEvent<HTMLDivElement>) {
+    function pasteHandler(event :  any) {
+        event.preventDefault();
+
+        // input 태그에서 paste 일어났다면 무시, 예를 들면 제품 검색 input 때는 무시해야함
+        if (event.target.tagName === 'INPUT') {
+            return;
+        }
+
+        // if (event.)
+
         const paste = (event.clipboardData || event.clipboardData).getData('text');
         // const reversed = Array.from(paste).join('');
 
@@ -281,7 +290,6 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
         selection.deleteFromDocument();
         selection.getRangeAt(0).insertNode(document.createTextNode(paste));
 
-        event.preventDefault();
         
         dispatch(updateHtml(line.id, lineRef.current?.innerHTML || ''));
     }

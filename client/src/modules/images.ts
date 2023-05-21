@@ -84,7 +84,7 @@ function editor(
         [action.id]: {
           id: "",
           refers: [],
-          src: "",
+          src: "https://cdn.dribbble.com/users/310943/screenshots/2792692/empty-state-illustrations.gif",
         },
       };
     // return [

@@ -108,36 +108,36 @@ const Main = () => {
     <AdBanner/>
     <TagScroller/>
     <div style={{ marginBottom: "3rem" }}></div>
-    <h2 style={{ color: "#386437" }}>추천 제품</h2>
-    <h5>고롱스를 위한 추천 제품</h5>
+    <h2 style={{ color: "#386437" }}>추천 게시물</h2>
+    <h5>당신을 위한 추천 게시물</h5>
     <div style={{ marginBottom: "1rem" }}></div>
     <div className="row">
-      {recommendPost?.map((product) => (
-        <div className="col-md-3">
-          <Review key={product.id} {...product} />
-        </div>
-        // <MainPost key={index} post={post} />
-      ))}
+        {recommendPost?.map((post, index) => (
+          <div className="col-md-3" key={index}>
+            <Review  {...post} />
+          </div>
+          // <MainPost key={index} post={post} />
+        ))}
     </div>
-    <h2 style={{ color: "#386437" }}>인기 제품</h2>
-    <h5>최근 인기 제품</h5>
+    <h2 style={{ color: "#386437" }}>인기 게시물</h2>
+    <h5>최근 인기 게시물</h5>
     <div className="row">
-      {popularPost?.map((product) => (
-        <div className="col-md-3">
-          <Review key={product.id} {...product} />
-        </div>
-        // <MainPost key={index} post={post} />
-      ))}
+        {popularPost?.map((post, index) => (
+          <div className="col-md-3">
+            <Review key={index} {...post} />
+          </div>
+          // <MainPost key={index} post={post} />
+        ))}
     </div>
-    <h2 style={{ color: "#386437" }}>셀럽 제품</h2>
-    <h5>드라마 속 그 제품</h5>
+    <h2 style={{ color: "#386437" }}>셀럽 게시물</h2>
+    <h5>드라마 속 그 게시물</h5>
     <div className="row">
-      {celebPost?.map((product) => (
-        <div className="col-md-3">
-          <Review key={product.id} {...product} />
-        </div>
-        // <MainPost key={index} post={post} />
-      ))}
+        {celebPost?.map((post, index) => (
+          <div className="col-md-3">
+            <Review key={index} {...post} />
+          </div>
+          // <MainPost key={index} post={post} />
+        ))}
     </div>
   </MainLayout>
   );

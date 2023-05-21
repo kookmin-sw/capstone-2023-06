@@ -6,7 +6,7 @@ const baseURL = process.env.REACT_APP_API_URL;
 
 const userAPI = axios.create({
   baseURL: `/api/user`,
-  withCredentials: true
+  withCredentials: true,
 });
 userAPI.defaults.withCredentials = true; // 세션
 
@@ -139,12 +139,98 @@ export const removeUser = async () => {
 
 /**
  * 유저 정보 수정
- * @param {File} image 프로필 이미지
+ * @param {FormData} uploadData 프로필 이미지
  * @returns 성공 여부
  */
-export const updateProfile = async (image: File) => {
+export const updateProfile = async (uploadData: FormData) => {
   try {
-    const res = await userAPI.post(`/profile`, { image });
+    const res = await userAPI.post(`/profile`, uploadData);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+/**
+ * 팔로우 하기
+ * @param {string} id 대상
+ * @returns 성공 여부
+ */
+export const followUser = async (id: string) => {
+  try {
+    const res = await userAPI.post(`/${id}/follow`);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+/**
+ * 팔로우 중인지 확인
+ * @param {string} id 대상
+ * @returns 성공 여부
+ */
+export const getIsFollowing = async (id: string) => {
+  try {
+    const res = await userAPI.get(`/${id}/follow`);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+/**
+ * 팔로워 리스트
+ * @param {string} id 대상
+ * @returns 성공 여부
+ */
+export const getFollowerList = async (id: string) => {
+  try {
+    const res = await userAPI.get(`/${id}/followers`);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+
+/**
+ * id 가 작성한 글들 조회
+ * @param {string} id 유저 고유 id
+ * @returns 성공 여부
+ */
+export const getUserPost = async (id: string) => {
+  try {
+    const res = await userAPI.get(`/${id}/posts`);
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+/**
+ * 특정 유저가 좋아요한 제품
+ * @param {string} id 유저 고유 id
+ * @returns 성공 여부
+ */
+export const getUserProductLike = async (id: string) => {
+  try {
+    const res = await userAPI.get(`/${id}/like-products`);
     return res.data;
   } catch (err) {
     let msg: string;

@@ -72,6 +72,7 @@ function editor(
                 state[idx].tag = action.payload;
             return [...state];
 
+
         case ADD_LINE:
             idx = state.findIndex(line => line.id === action.id);
             if (idx > -1) {

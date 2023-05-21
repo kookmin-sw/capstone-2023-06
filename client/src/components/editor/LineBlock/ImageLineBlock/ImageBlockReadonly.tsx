@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addRefer, checkRefers } from "../../../../modules/images";
 import ProductCard from "../../../product/ProductCard";
 import { ProductData } from "../../../../type/product";
+import { getProduct } from "../../../../api/product";
 
 const ImageBlockReadonly = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
 
   // const [files, setFiles] = React.useState<FileList | undefined>();
   const [showImage, setShowImage] = React.useState<string>("");
+  const [isImgLoaded, setIsImgLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setShowImage(images[id].src);
@@ -86,7 +88,11 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
   function selectRefer(refer: Refer) {
     checkBeforeCurCreate();
     // e.stopPropagation();
+
+    console.log(refer);
+
     setCurReferId(refer.id);
+    initProduct(refer.data);
 
     setOpenProductDetail(true);
   }
@@ -104,27 +110,53 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
   }
 
   const [product, setProduct] = React.useState<ProductData>({
-    name: "Lorem Ipsum",
-    tags: ["태그", "태그2", "태그3"],
-    thumbnail:
-      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
-    subThumbnail: [
-      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
-      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
-      "https://retailminded.com/wp-content/uploads/2016/03/EN_GreenOlive-1.jpg",
-    ],
-    price: "45,600",
-    detail:
-      "nisi est. ex est. commodo volutpat non nisl. odio hendrerit hendrerit ac ipsum quis ipsum Donec elementum efficitur. consectetur nisl. Donec tortor. at, Nunc leo. ex viverra in tincidunt nibh nec In faucibus Ut cursus dui. urna. ac elit",
+    name: "",
+    tags: [],
+    thumbnail: "",
+    subThumbnail: [],
+    price: "",
+    detail: "",
+    content: "",
   });
+
+  const initProduct = async (product_id: string) => {
+
+    console.log(product_id);
+
+    if (!product_id) return;
+    try {
+      const res = await getProduct(product_id);
+
+      console.log(res);
+      if (res.success) {
+        setProduct({
+          id: product_id,
+          name: res.result.title,
+          tags: res.result.hashtags,
+          thumbnail: res.result.thumbnail,
+          subThumbnail: res.result.subthumbnails,
+          price: res.result.price,
+          detail: res.result.description,
+          content: res.result.content,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const [openProductDetail, setOpenProductDetail] =
     React.useState<boolean>(false);
 
+  const ImageLoadHandler = () => {
+    setIsImgLoaded(true);
+    handleResize();
+  }
+
   return (
     <div style={{ position: "relative" }}>
-      {showImage !== "" && <FullImage ref={imgRef} src={showImage} />}
-      {showImage !== "" &&
+      {showImage !== "" && <FullImage ref={imgRef} src={showImage} onLoad={ImageLoadHandler} />}
+      {(showImage !== "" && isImgLoaded) &&
         getRefers().map((refer, idx) => {
           return (
             <ReferButton
@@ -138,7 +170,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
             </ReferButton>
           );
         })}
-        {/* {isSelectingRefer() && (
+      {/* {isSelectingRefer() && (
           <>
             <ReferInput value={getReferValue()} readOnly></ReferInput>
           </>
@@ -146,7 +178,14 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
       {openProductDetail && (
         <>
           <ProductCard product={product} summary />
-          <ExitButton onClick={() => {setOpenProductDetail(false)}}>X</ExitButton>
+          <ExitButton
+            type="button"
+            onClick={() => {
+              setOpenProductDetail(false);
+            }}
+          >
+            X
+          </ExitButton>
         </>
       )}
     </div>
