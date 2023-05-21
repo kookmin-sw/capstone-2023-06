@@ -60,7 +60,7 @@ const User = () => {
   React.useEffect(() => {
     initUser();
     initReviews();
-    // initProducts();
+    initProducts();
   }, [user_id]);
 
   const initReviews = async () => {
@@ -68,6 +68,7 @@ const User = () => {
     try {
       const res = await getUserPost(user_id);
 
+      console.log(res);
       if (res.success) {
         setReviews(res.result);
       }
@@ -207,7 +208,7 @@ const User = () => {
                   title={review.title}
                   author={user}
                   date={review.created_at}
-                  tags={[]}
+                  tags={review.hashtags}
                 />
               </div>
             ))

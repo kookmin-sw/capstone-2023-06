@@ -230,7 +230,7 @@ export const getUserPost = async (id: string) => {
  */
 export const getUserProductLike = async (id: string) => {
   try {
-    const res = await userAPI.get(`/${id}/products`);
+    const res = await userAPI.get(`/${id}/like-products`);
     return res.data;
   } catch (err) {
     let msg: string;
