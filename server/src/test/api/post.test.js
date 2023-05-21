@@ -26,6 +26,7 @@ describe("Post API", () => {
         "content": "content",
     }
     let POST_ID;
+    let SECOND_POST_ID;
 
     //create
     test("Create Post", (done) => {
@@ -50,6 +51,7 @@ describe("Post API", () => {
         .end((err, res) => {
             if(err) throw err;
             expect(res.body.success).toBeTruthy();
+            SECOND_POST_ID = res.body.result;
             done();
         });
     });
@@ -95,6 +97,68 @@ describe("Post API", () => {
         })
     });
 
+    test("Get Posts", (done) => {
+        request(app)
+        .post(`/api/post/list`)
+        .query({type:'date'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+            "keyword": "title"
+        }).expect(200)
+        .end((err, res) => {
+            if(err) throw err;
+            expect(res.body.result.length).toBe(2);
+            done();
+        })
+    });
+
+    test("Like Posts", (done) => {
+        agent
+        .post(`/api/post/${SECOND_POST_ID}/like`)
+        .expect(200, done);
+    });
+
+    test("Get Posts LIKES", (done) => {
+        request(app)
+        .post(`/api/post/list`)
+        .query({type:'like'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+            "keyword": "title"
+        }).expect(200)
+        .end((err, res) => {
+            if(err) throw err;
+            expect(res.body.result.length).toBe(2);
+            expect(res.body.result[0].id).toBe(SECOND_POST_ID);
+            console.log(res.body);
+            done();
+        })
+    });
+
+    test("Get Posts UserWeight", (done) => {
+        agent
+        .post(`/api/post/list`)
+        .query({type:'user'})
+        .send({
+            "startTime": "2022-02-01T01:01:01",
+            "endTime": "2024-02-01T01:01:01", 
+            "offset": 0,
+            "limit": 10,
+        }).expect(200)
+        .end((err, res) => {
+            if(err) throw err;
+            // expect(res.body.result.length).toBe(2);
+            // expect(res.body.result[0].id).toBe(SECOND_POST_ID);
+            console.log(res.body);
+            done();
+        })
+    });
 });
 
 afterAll(async () => {

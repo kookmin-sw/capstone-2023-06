@@ -187,4 +187,137 @@ Posts.list = async (condition) => {
     }
 }
 
+Posts.getListByDate = async (conn, startTime, endTime, reverse, limit, offset, keyword) => {
+    try {
+        const FIND_QUERY = `
+            select p.*, u.email as authorEmail, u.picture as authorPicture, u.nickname as authorNickname
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+            where p.created_at >= '${startTime}' and p.created_at <= '${endTime}'
+            order by p.created_at ${reverse? 'ASC':'DESC'} 
+            limit ${limit} offset ${offset};
+        `;
+
+        const FIND_QUERY_KEYWORD = `
+            select p.*, u.email as authorEmail, u.picture as authorPicture, u.nickname as authorNickname
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+            where p.created_at >= '${startTime}' and p.created_at <= '${endTime}'
+            order by p.created_at ${reverse? 'ASC':'DESC'} 
+            limit ${limit} offset ${offset};
+        `;
+
+        if(!keyword) {
+            const [posts] = await conn.execute(FIND_QUERY);
+            return posts;
+        }
+        
+        const [posts] = await conn.execute(FIND_QUERY_KEYWORD);
+        return posts;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+Posts.getListByLike = async (conn, startTime, endTime, reverse, limit, offset, keyword) => {
+    try {
+        const FIND_QUERY = `
+            select p.*, u.email as authorEmail, u.picture as authorPicture, u.nickname as authorNickname, COUNT(l.post_id) AS likes
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+            left join postlikes l
+            on p.id = l.post_id
+            where p.created_at >= '${startTime}' and p.created_at <= '${endTime}'
+            order by likes ${reverse? 'ASC':'DESC'}, p.created_at ${reverse? 'ASC':'DESC'} 
+            limit ${limit} offset ${offset};
+        `;
+
+        const FIND_QUERY_KEYWORD = `
+            select p.*, u.email as authorEmail, u.picture as authorPicture, u.nickname as authorNickname, COUNT(l.post_id) AS likes
+            from ${TABLE} p
+            left join user u
+            on p.author_id = u.id
+            left join postlikes l
+            on p.id = l.post_id
+            where p.created_at >= '${startTime}' and p.created_at <= '${endTime}'
+            group by p.id
+            order by likes ${reverse? 'ASC':'DESC'}, p.created_at ${reverse? 'ASC':'DESC'} 
+            limit ${limit} offset ${offset};
+        `;
+
+        if(!keyword) {
+            const [posts] = await conn.execute(FIND_QUERY);
+            return posts;
+        }
+        
+        const [posts] = await conn.execute(FIND_QUERY_KEYWORD);
+        return posts;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
+Posts.getListByUser = async (conn, limit, offset, userId) => {
+    try {
+        const USER_HASHTAG = `
+            select *
+            from user_hashtag
+            where user_id = ?
+            order by score desc;
+        `;
+        const [userHashtagData] = await conn.execute(USER_HASHTAG, [userId]);
+
+        const FIND_QUERY = `
+            select p.id, u.email as authorEmail, u.nickname as authorNickname, u.picture as authorPicture ,COUNT(l.post_id) AS likes
+            from posts p
+            left join postlikes l
+            on p.id = l.post_id
+            left join user u
+            on p.author_id = u.id
+            where p.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) and p.created_at <= now()
+            group by p.id
+            order by likes desc limit 1500;
+        `;
+
+        const [posts] = await conn.execute(FIND_QUERY);
+
+        let renewPosts = [];
+
+        const scoreCalculator = (postHashtagIds) => {
+            let score = 0;
+            for(userHashtag of userHashtagData) {
+                if(userHashtag.hashtag_id in postHashtagIds) {
+                    score += userHashtag.score;
+                }
+            }
+            return score;
+        }
+        
+        for(post of posts) {
+            const [postHashtags] = await conn.execute('select hashtag_id from post_hashtag where post_id = ?', [post.id]);
+            const postHashtagIds = postHashtags.map((h) => h.hashtag_id);
+            const score = scoreCalculator(postHashtagIds); 
+            renewPosts.push({
+                ...post,
+                score: score
+            });
+        }
+
+        renewPosts.sort((a,b) => b.score - a.score);
+        
+        const newLimit = offset+limit > 1500? 1000: offset+limit;
+        renewPosts = renewPosts.slice(offset, newLimit);
+
+        return renewPosts;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
 module.exports = Posts;
