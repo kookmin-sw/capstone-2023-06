@@ -280,12 +280,12 @@ Posts.getListByUser = async (conn, limit, offset, userId) => {
             on p.id = l.post_id
             left join user u
             on p.author_id = u.id
-            where p.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) and p.created_at <= now()
+            where p.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH) and p.created_at <= now() and p.author_id != ?
             group by p.id
             order by likes desc limit 1500;
         `;
 
-        const [posts] = await conn.execute(FIND_QUERY);
+        const [posts] = await conn.execute(FIND_QUERY, [userId]);
 
         let renewPosts = [];
 
