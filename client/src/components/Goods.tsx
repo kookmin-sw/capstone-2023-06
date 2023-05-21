@@ -1,27 +1,26 @@
 import styled from "styled-components";
 import ProfileBar from "./profile/ProfileBar";
 import { Link } from "react-router-dom";
-import { UserData } from "../type/user";
 
-export type ReviewType = {
-    id: number | string,
-    thumbnail: string,
+
+export type GoodsType = {
     title: string,
-    author: UserData,
-    date: string,
-    tags: string[],
+    author: string,
+    price: string,
+    review: string,
+    tags : string[]
 }
-const Review = ({ id, thumbnail, title, author, date, tags }: ReviewType) => {
+const Review = ({ title, author, price, review, tags }: GoodsType) => {
     return (
-        <Link to={`/post/${id}`}>
+        <Link to="">
             <ReviewCard>
-                <ReviewThumbnail src={thumbnail} />
+                <ReviewThumbnail src="https://image.ohou.se/i/bucketplace-v2-development/uploads/productions/167176095297175810.jpg?gif=1&w=1280&h=1280&c=c&webp=1" />
                 <div className="card-body">
                     <ReviewTags>
                         {tags.map(tag => `#${tag} `)}
                     </ReviewTags>
                     <ReviewTitle>{title}</ReviewTitle>
-                    <ProfileBar profileID={author.id} nickname={author.nickname} size={1.5} padding="0.125rem 0rem" subContent={date} img={author.image} />
+                    
                 </div>
             </ReviewCard>
         </Link>
@@ -52,7 +51,7 @@ const ReviewThumbnail = styled.img`
     width: 100%;
     height: 10rem;
     object-fit: cover;
-    border: 1px solid black;
+    border-radius: 1rem;
 `;
 const ReviewTags = styled.span`
     color: ${({ theme }) => theme.colors.primary};

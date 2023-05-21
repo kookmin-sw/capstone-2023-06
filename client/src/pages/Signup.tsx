@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginLayout } from '../components/layout/Layout';
 import { ExtraLinkButton, SubmitButton } from '../components/common/Button';
 import { LoginInput } from '../components/common/Input';
+import { signup } from '../api/users'; // Assuming your signup API function is exported from ./api
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -12,10 +14,23 @@ const Signup = () => {
     const [password, setPassword] = React.useState<string>("");
     const [confirmPassword, setConfirmPassword] = React.useState<string>("");
   
-    const submitSignup = (e: React.FormEvent<HTMLFormElement>) => {
+    const submitSignup = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      //console.log(name, email, password, confirmPassword);
-      navigate('/login');
+      if (password !== confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+      try {
+        const response = await signup({
+          nickname: name, password: password, email: email,pickture: ''});
+        if (response.success) {
+          navigate('/login');
+        } else {
+          alert(response.message);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     return (

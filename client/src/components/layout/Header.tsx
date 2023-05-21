@@ -52,7 +52,8 @@ const Header = () => {
             <Container>
                 <NavBar>
                     <NavLinkItem to="/">메인</NavLinkItem>
-                    { nickname }
+                    <NavLinkItem to="/store">스토어</NavLinkItem>
+                    <NavLinkItem to="/userpage">{nickname}</NavLinkItem> 
                     {
                         isLoggedIn ? 
                         <button onClick={logoutHandler}>로그아웃</button> :
