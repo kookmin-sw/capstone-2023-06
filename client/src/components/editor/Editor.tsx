@@ -144,14 +144,6 @@ const Editor = () => {
                 onClick={() => { dispatch(newLine()); }}
             />
 
-
-            <div>
-                { content.map(e => JSON.stringify(e)) }
-            </div>
-            <br/>
-            <div>
-                { JSON.stringify(images) }
-            </div>
             <br/>
             <br/>
             <br/>

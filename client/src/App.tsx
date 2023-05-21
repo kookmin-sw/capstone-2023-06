@@ -11,7 +11,6 @@ import Write from "./pages/Write";
 import Product from "./pages/Product";
 import Error from "./pages/Error";
 import Post from "./pages/Post";
-import UserPage from "./pages/UserPage";
 import Store from "./pages/Store";
 import User from "./pages/User";
 import ScrollToTop from "./components/layout/ScrollToTop";
@@ -27,7 +26,6 @@ function App() {
           <Route path="/signup" element={<Singup />} />
           <Route path="/findaccount" element={<FindAccount />} />
           <Route path="/write" element={<Write />} />
-          <Route path="/userpage" element={<UserPage />} />
           <Route path="/store" element={<Store />} />
           <Route path="/user/:user_id" element={<User />} />
           <Route path="/product/:product_id" element={<Product />} />

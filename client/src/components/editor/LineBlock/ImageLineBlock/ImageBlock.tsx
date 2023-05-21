@@ -122,8 +122,9 @@ const ImageBlock = ({ id }: { id: string }) => {
   function selectRefer(refer: Refer) {
     checkBeforeCurCreate();
     setCurReferId(refer.id);
-    setSearchProduct("");
-    setSearchList([]);
+    // setSearchProduct("");
+    // setSearchList([]);
+    getReferProductWhenSearch(refer.data);
 
     if (refer.data && !isEditMode) getReferProduct(refer.data);
   }
@@ -190,6 +191,18 @@ const ImageBlock = ({ id }: { id: string }) => {
 
       if (res.success) {
         setCurReferProduct(res.result);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const getReferProductWhenSearch = async (data: string) => {
+    try {
+      const res = await getProduct(data);
+
+      if (res.success) {
+        setSearchProduct(res.result.title);
+        setSearchList([res.result]);
       }
     } catch (err) {
       console.error(err);
@@ -262,14 +275,15 @@ const ImageBlock = ({ id }: { id: string }) => {
           <SearchHeader>
             <ReferInput
               onPaste={(e: any) => {
-                console.log("23232");
                 e.stopPropagation();
               }}
-              value={searchProduct}
+              value={searchProduct || ""}
               onChange={searchProductHandler}
             ></ReferInput>
             <RemoveButton
-              onClick={() => {
+              type="button"
+              onClick={(e: any) => {
+                e.preventDefault();
                 deleteRefer();
               }}
             >
@@ -278,7 +292,7 @@ const ImageBlock = ({ id }: { id: string }) => {
           </SearchHeader>
           <SearchBody>
             {searchList.map((p) => (
-              <ProductCard {...p} onClick={() => selectProductHandler(p.id)} />
+              <ProductCard key={p.id} {...p} onClick={(e: any) => { e.preventDefault(); selectProductHandler(p.id) }} />
             ))}
           </SearchBody>
         </SearchModal>

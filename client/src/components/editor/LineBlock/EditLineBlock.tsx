@@ -301,7 +301,6 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
      */
     function clickedSettingBT(e: React.MouseEvent<HTMLElement>) {
         const { left, top } = e.currentTarget.getBoundingClientRect();
-        
         e.preventDefault();
 
         changeCurLine(line.id, left + 24, top + 16);

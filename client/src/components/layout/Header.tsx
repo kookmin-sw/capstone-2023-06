@@ -36,10 +36,10 @@ const Header = () => {
 
       if (res.success) {
         dispatch(setUser({
-            id: res.result.id,
-            nickname: res.result.nickname,
-            image: res.result.picture,
-            email: res.result.email,
+          id: res.result.id,
+          nickname: res.result.nickname,
+          image: res.result.picture,
+          email: res.result.email,
         }));
       }
     } catch (err) {
@@ -65,14 +65,12 @@ const Header = () => {
     <NavHeader>
       <Container>
         <NavBar>
-                    <NavLinkItem to="/">메인</NavLinkItem>
-                    <NavLinkItem to="/store">스토어</NavLinkItem>
-                    <NavLinkItem to="/userpage">{nickname}</NavLinkItem> 
+          <NavLinkItem to="/store">스토어</NavLinkItem>
           {isLoggedIn ? (
             <LoggedInMenu>
-            <Link to={`/write`}>
-              <IconPencil size={16}></IconPencil>
-            </Link>
+              <Link to={`/write`}>
+                <IconPencil size={16}></IconPencil>
+              </Link>
               <Link to={`/user/${id}`}>
                 <IconUser size={16}></IconUser>
               </Link>

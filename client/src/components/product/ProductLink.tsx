@@ -4,10 +4,12 @@ import styled from "styled-components";
 const ProductLink = ({
   id,
   thumbnail,
+  tags,
   title,
 }: {
   id: string;
   thumbnail: string;
+  tags: string[];
   title: string;
 }) => {
   return (
@@ -15,6 +17,9 @@ const ProductLink = ({
       <ProductCard>
         <ProductThumbnail src={thumbnail} />
         <div className="card-body">
+          <ProductTags>
+            {tags.length > 1 && tags.map(tag => `#${tag} `)}
+          </ProductTags>
           <ProductTitle>{title}</ProductTitle>
         </div>
       </ProductCard>
@@ -42,6 +47,10 @@ const ProductCard = styled.div`
   }
 `;
 
+const ProductTags = styled.span`
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: 0.75rem;
+`;
 const ProductThumbnail = styled.img`
   width: 100%;
   height: 10rem;

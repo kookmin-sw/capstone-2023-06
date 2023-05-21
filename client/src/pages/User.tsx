@@ -31,6 +31,7 @@ export type MyProductType = {
   id: string;
   thumbnail: string;
   title: string;
+  tags: string[];
 };
 
 const User = () => {
@@ -84,11 +85,12 @@ const User = () => {
       console.log(res);
       if (res.success) {
         setProducts(
-          res.result.map((r: { id: any; title: any; thumbnail: any }) => {
+          res.result.map((r: { id: any; title: any; thumbnail: any, hashtags: any; }) => {
             return {
               id: r.id,
               title: r.title,
               thumbnail: r.thumbnail,
+              tags: r.hashtags,
             };
           })
         );
@@ -228,6 +230,7 @@ const User = () => {
                 <ProductLink
                   id={p.id}
                   thumbnail={p.thumbnail}
+                  tags={p.tags}
                   title={p.title}
                 />
               </div>

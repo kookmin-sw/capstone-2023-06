@@ -10,7 +10,7 @@ import { POSITION } from '../type';
 import { MenuButton } from '../common/Button';
 
 const EditMenuBlock = styled.div`
-    position: absolute;
+    position: fixed;
     top: ${(props: POSITION) => props.posY}px;
     left: ${(props: POSITION) => props.posX}px;
     display: flex;

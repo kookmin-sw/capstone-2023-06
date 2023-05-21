@@ -8,13 +8,19 @@ import { Button, PrimaryButton } from "../components/common/Button";
 import Editor from "../components/editor/Editor";
 import { TagInput, TitleInput } from "../components/common/Input";
 import { RootState } from "../modules";
-import { useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import { upload, uploadImage } from "../api/upload";
 import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 import { useNavigate } from "react-router-dom";
 
 const Write = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useSelector(
+    (state: RootState) => ({
+      isLoggedIn: state.users.isLoggedIn,
+    }),
+    shallowEqual
+  );
   const thumbnailInputRef = React.useRef<any>(null);
   const [title, setTitle] = React.useState<string>("");
   // const [tags, setTags] = React.useState<string[]>(['어쩌구', '저쩌구', 'ABC']);
@@ -25,6 +31,19 @@ const Write = () => {
 
   const content = useSelector((state: RootState) => state.editor);
   const images = useSelector((state: RootState) => state.images);
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+
+      if (
+        window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")
+      ) {
+        navigate("/login");
+      } else {
+        navigate('/');
+      }
+    }
+  }, [isLoggedIn])
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

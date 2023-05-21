@@ -27,7 +27,6 @@
     ]
   },
   "dependencies": {
-    "@emotion/react": "^11.11.0",
     "@tabler/icons-react": "^2.10.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

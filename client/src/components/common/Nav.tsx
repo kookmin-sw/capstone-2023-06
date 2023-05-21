@@ -29,7 +29,7 @@ export const NavBarStyle = styled.nav`
 const NavBarCollapse = styled(NavBarStyle)`
     flex-basis: auto;
     flex-grow: 1;
-    justify-content: end;
+    justify-content: space-between;
 `;
 
 export const NavLinkItem = styled(NavLink)`
