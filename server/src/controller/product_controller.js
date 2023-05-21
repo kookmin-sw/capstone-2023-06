@@ -74,7 +74,8 @@ exports.create = async (req, res) => {
         // 해시태그 삽입
         if(hashtags) {
             for (const hashtagTitle of hashtags) {
-                const findHashtag = await Hashtag.findById(conn, hashtagTitle);
+                console.log(hashtagTitle);
+                const findHashtag = await Hashtag.findByTitle(conn, hashtagTitle);
                 if(!findHashtag) { //해시태그가 없으면
                     const hashtagId = await Hashtag.create(conn, hashtagTitle);
                     ProductHashtag.create(conn, productId, hashtagId);
@@ -96,6 +97,7 @@ exports.create = async (req, res) => {
         return;
     } catch(err) {
         conn.rollback();
+        console.error(err);
         if (err instanceof MysqlError) {
             sendError(res, err.message, 500);
         } else {

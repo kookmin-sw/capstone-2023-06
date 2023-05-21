@@ -18,7 +18,8 @@ ProductHashtag.create = async (conn, productId, hashtagId) => {
         const [res] = await conn.execute(INSERT_QUERY, [productId, hashtagId]);
         return res.insertId;
     } catch (err) {
-        console.error(err.message);
+        console.error("Product Hashtag error");
+        console.error(err);
         throw new MysqlError("MYSQL ERROR");
     }
 }
