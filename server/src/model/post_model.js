@@ -232,6 +232,7 @@ Posts.getListByLike = async (conn, startTime, endTime, reverse, limit, offset, k
             left join postlikes l
             on p.id = l.post_id
             where p.created_at >= '${startTime}' and p.created_at <= '${endTime}'
+            group by p.id
             order by likes ${reverse? 'ASC':'DESC'}, p.created_at ${reverse? 'ASC':'DESC'} 
             limit ${limit} offset ${offset};
         `;
@@ -273,7 +274,7 @@ Posts.getListByUser = async (conn, limit, offset, userId) => {
         const [userHashtagData] = await conn.execute(USER_HASHTAG, [userId]);
 
         const FIND_QUERY = `
-            select p.id, u.email as authorEmail, u.nickname as authorNickname, u.picture as authorPicture ,COUNT(l.post_id) AS likes
+            select p.*, u.email as authorEmail, u.nickname as authorNickname, u.picture as authorPicture ,COUNT(l.post_id) AS likes
             from posts p
             left join postlikes l
             on p.id = l.post_id
