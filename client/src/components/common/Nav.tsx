@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import logo from '../../assets/DESKIT.png';
 import { Link, NavLink } from 'react-router-dom';
-
 
 export const NavBar = ({ children } : { children: React.ReactNode}) => {
     return (
         <NavBarStyle>
-            <Link to="/">로고</Link>
+            <Link to="/">
+              <img src={logo} alt="logo" width={130} height={40}/>
+            </Link>
             <NavBarCollapse>
                 { children }
             </NavBarCollapse>

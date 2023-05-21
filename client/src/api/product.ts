@@ -40,7 +40,6 @@ export const getProductList = async (
       endTime: "2024-02-01T01:01:01",
       offset: 0,
       limit: 4,
-      keyward: "스타일링페이지",
     });
     return res.data;
   } catch (err) {
