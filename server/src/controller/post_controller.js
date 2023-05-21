@@ -105,7 +105,7 @@ exports.list = async (req,res) => {
                 sendResult(res,"리스트 가져오기 성공", renewPosts);
                 return;
             case 'user':
-                if(req.user.id) {
+                if(req.user) {
                     posts = await Posts.getListByUser(
                         conn, req.body.limit, req.body.offset, req.user.id
                     );
