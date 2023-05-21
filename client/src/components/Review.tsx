@@ -13,18 +13,20 @@ export type ReviewType = {
 }
 const Review = ({ id, thumbnail, title, author, date, tags }: ReviewType) => {
     return (
-        <Link to={`/post/${id}`}>
-            <ReviewCard>
+        <ReviewCard>
+            <Link to={`/post/${id}`}>
                 <ReviewThumbnail src={thumbnail} />
-                <div className="card-body">
-                    <ReviewTags>
-                        {tags.length > 1 && tags.map(tag => `#${tag} `)}
-                    </ReviewTags>
+            </Link>
+            <div className="card-body">
+                <ReviewTags>
+                    {tags.length > 1 && tags.map(tag => `#${tag} `)}
+                </ReviewTags>
+                <Link to={`/post/${id}`}>
                     <ReviewTitle>{title}</ReviewTitle>
-                    <ProfileBar profileID={author.id} nickname={author.nickname} size={1.5} padding="0.125rem 0rem" subContent={date} img={author.image} />
-                </div>
-            </ReviewCard>
-        </Link>
+                </Link>
+                <ProfileBar profileID={author.id} nickname={author.nickname} size={1.5} padding="0.125rem 0rem" subContent={date} img={author.image} />
+            </div>
+        </ReviewCard>
     );
 }
 

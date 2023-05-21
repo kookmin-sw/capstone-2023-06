@@ -31,6 +31,7 @@ export type MyProductType = {
   id: string;
   thumbnail: string;
   title: string;
+  tags: string[];
 };
 
 const User = () => {
@@ -84,11 +85,12 @@ const User = () => {
       console.log(res);
       if (res.success) {
         setProducts(
-          res.result.map((r: { id: any; title: any; thumbnail: any }) => {
+          res.result.map((r: { id: any; title: any; thumbnail: any, hashtags: any; }) => {
             return {
               id: r.id,
               title: r.title,
               thumbnail: r.thumbnail,
+              tags: r.hashtags,
             };
           })
         );
@@ -223,11 +225,12 @@ const User = () => {
         <h2>관심 제품</h2>
         <div className="row">
           {products ? (
-            products.map((p) => (
-              <div className="col-md-3" key={`my-p-0`}>
+            products.map((p, index) => (
+              <div className="col-md-3" key={`my-p-${index}`}>
                 <ProductLink
                   id={p.id}
                   thumbnail={p.thumbnail}
+                  tags={p.tags}
                   title={p.title}
                 />
               </div>
@@ -242,7 +245,7 @@ const User = () => {
       <PostWrapper>
         <h2>팔로워</h2>
         {followers && followers.length !== 0 ? (
-          followers.map((f) => <Profile profileID={f.id} img={f.image} />)
+          followers.map((f) => <Profile key={`profile-${f.id}`} profileID={f.id} img={f.image} />)
         ) : (
           <div className="row">
             <NoneDataCol className="col-12">

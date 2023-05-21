@@ -120,9 +120,6 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
   });
 
   const initProduct = async (product_id: string) => {
-
-    console.log(product_id);
-
     if (!product_id) return;
     try {
       const res = await getProduct(product_id);

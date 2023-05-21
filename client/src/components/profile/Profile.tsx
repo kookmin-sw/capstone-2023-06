@@ -88,12 +88,12 @@ const ProfileImg = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgb(149, 61, 147);
-  background: linear-gradient(
-    125deg,
-    rgba(149, 61, 147, 1) 0%,
-    rgba(234, 136, 76, 1) 100%
-  );
+  // background: rgb(149, 61, 147);
+  // background: linear-gradient(
+  //   125deg,
+  //   rgba(149, 61, 147, 1) 0%,
+  //   rgba(234, 136, 76, 1) 100%
+  // );
 `;
 
 export default Profile;
