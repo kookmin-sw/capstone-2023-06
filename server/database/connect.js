@@ -27,3 +27,8 @@ exports.ReleaseConnection = async (conn) => {
         console.error(`release error: ${err.message}`);
     }
 }
+
+//테스트 때를 위함 실제 서비스에서는 들어가면 절대 안됨
+exports.DeletePool = async () => {
+    await pool.end();
+}
