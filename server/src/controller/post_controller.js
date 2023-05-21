@@ -10,6 +10,28 @@ const sendError = (res, msg, status) => {
     })  
 }
 
+const sendResult = (res, msg, result) => {
+    res.status(200).send({
+        success: true,
+        message: msg,
+        result: result
+    });
+}
+
+const addHashtags = async (conn, posts) => {
+    let renewPosts = [];
+    for(post of posts) {
+        const hashtagData = await PostHashtag.findByPostId(conn, post.id);
+        const hashtags = hashtagData.map((hashtag) => hashtag.title);
+        renewPosts.push({
+            ...post,
+            hashtags: hashtags
+        });
+    }
+
+    return renewPosts;
+}
+
 exports.list = async (req,res) => {
     console.info(req.originalUrl, 'type: list');
     let type;
@@ -56,22 +78,66 @@ exports.list = async (req,res) => {
         return;
     }
 
-    const condition = {
-        ...req.body,
-        type: type,
-        reverse: reverse,
-    }
-
+    // const condition = {
+    //     ...req.body,
+    //     type: type,
+    //     reverse: reverse,
+    // }
+    const conn = await GetConnection();
     try {
-        const posts = await Posts.list(condition);
-        res.status(200).send({
-            success:true,
-            message: "리스트 가져오기 성공",
-            result: posts
-        });
+        // const posts = await Posts.list(condition);
+        // res.status(200).send({
+        //     success:true,
+        //     message: "리스트 가져오기 성공",
+        //     result: posts
+        // });
+        let posts;
+        let renewPosts;
+        switch(type) {
+            case 'date':
+                posts = await Posts.getListByDate(
+                    conn, req.body.startTime, req.body.endTime, reverse,
+                    req.body.limit, req.body.offset, req.body.keyword
+                );
+
+                renewPosts = await addHashtags(conn, posts);
+                sendResult(res,"리스트 가져오기 성공", renewPosts);
+                return;
+            case 'user':
+                if(req.user.id) {
+                    posts = await Posts.getListByUser(
+                        conn, req.body.limit, req.body.offset, req.user.id
+                    );
+    
+                    renewPosts = await addHashtags(conn, posts);
+                    sendResult(res,"리스트 가져오기 성공", renewPosts);
+                } else {
+                    posts = await Posts.getListByLike(
+                        conn, req.body.startTime, req.body.endTime, reverse,
+                        req.body.limit, req.body.offset, req.body.keyword
+                    );
+    
+                    renewPosts = await addHashtags(conn, posts);
+                    sendResult(res,"리스트 가져오기 성공", renewPosts);
+                }
+                return;
+            case 'like':
+                posts = await Posts.getListByLike(
+                    conn, req.body.startTime, req.body.endTime, reverse,
+                    req.body.limit, req.body.offset, req.body.keyword
+                );
+
+                renewPosts = await addHashtags(conn, posts);
+                sendResult(res,"리스트 가져오기 성공", renewPosts);
+                return;
+            default:
+                return;
+        }
     } catch (err) {
         sendError(res, err.message, 400);
         return;
+    } finally {
+        ReleaseConnection(conn);
     }
 }
 
@@ -129,7 +195,7 @@ exports.findById = async (req, res) => {
             res.status(200).send({
                 success:true,
                 message: "포스트 조회 완료",
-                post: post
+                result: post
             });
             return;
         }
