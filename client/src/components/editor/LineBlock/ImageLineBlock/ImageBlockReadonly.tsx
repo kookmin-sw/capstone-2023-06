@@ -29,6 +29,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
 
   // const [files, setFiles] = React.useState<FileList | undefined>();
   const [showImage, setShowImage] = React.useState<string>("");
+  const [isImgLoaded, setIsImgLoaded] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setShowImage(images[id].src);
@@ -87,7 +88,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
   function selectRefer(refer: Refer) {
     checkBeforeCurCreate();
     // e.stopPropagation();
-    
+
     console.log(refer);
 
     setCurReferId(refer.id);
@@ -147,10 +148,15 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
   const [openProductDetail, setOpenProductDetail] =
     React.useState<boolean>(false);
 
+  const ImageLoadHandler = () => {
+    setIsImgLoaded(true);
+    handleResize();
+  }
+
   return (
     <div style={{ position: "relative" }}>
-      {showImage !== "" && <FullImage ref={imgRef} src={showImage} />}
-      {showImage !== "" &&
+      {showImage !== "" && <FullImage ref={imgRef} src={showImage} onLoad={ImageLoadHandler} />}
+      {(showImage !== "" && isImgLoaded) &&
         getRefers().map((refer, idx) => {
           return (
             <ReferButton
