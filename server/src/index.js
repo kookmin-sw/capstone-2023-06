@@ -58,6 +58,7 @@ cron.schedule(CYCLE_PATTERN, () => {
     RecommendUpdater.UpdateAllHashtag(1000);
   } catch(err) {
     const errNow = moment().format('YYYY-MM-DD HH:mm:ss');
+    console.log(`[${errNow}]: Recommend Updater Error`);
     console.error(`[${errNow}]: Recommend Updater Error`);
     console.error(err);
   }

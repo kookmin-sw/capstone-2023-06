@@ -281,13 +281,15 @@ const saveWeight = async (conn, userId, hashtagTable) => {
             }
         }
 
-
-        const insertValues = stringValue.join(`,\n`);
-        const INSERT_QUERY = `
-            insert into user_hashtag (user_id, hashtag_id, score)
-            values ${insertValues}
-        `;
-        await conn.execute(INSERT_QUERY);
+        console.log(stringValue);
+        // const insertValues = stringValue.join(`,\n`);
+        for(value of stringValue) {
+            const INSERT_QUERY = `
+                insert into user_hashtag (user_id, hashtag_id, score)
+                values ${value};
+            `;
+            await conn.execute(INSERT_QUERY);
+        }
     } catch(err) {
         console.error(err);
         throw err;
