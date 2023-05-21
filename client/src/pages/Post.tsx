@@ -5,10 +5,10 @@ import styled from "styled-components";
 import { ImagesObjectType, LINE_TYPE } from "../components/editor/type";
 import { DynamicTagReadOnly } from "../components/editor/LineBlock/DynamicTag";
 import { useNavigate, useParams } from "react-router-dom";
-import { getComments, getPost } from "../api/upload";
+import { getComments, getPost, getPostLike, postLike } from "../api/upload";
 import { PostHeaderImage } from "../components/Image/PostHeaderImage";
 import ImageBlock from "../components/editor/LineBlock/ImageLineBlock/ImageBlock";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { resetImages } from "../modules/images";
 import ImageBlockReadonly from "../components/editor/LineBlock/ImageLineBlock/ImageBlockReadonly";
 import { Line, LineStyle } from "../components/editor/common/LineStyle";
@@ -17,6 +17,8 @@ import ProfileBar from "../components/profile/ProfileBar";
 import { CommentData } from "../type/product";
 import CommentList from "../components/Comment/CommentList";
 import { UserData } from "../type/user";
+import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import { RootState } from "../modules";
 // import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
 
@@ -32,33 +34,42 @@ const Post = () => {
   const dispatch = useDispatch();
   const { post_id } = useParams();
   const navigate = useNavigate();
+  const { id, nickname, isLoggedIn } = useSelector((state: RootState) => ({
+    id: state.users.id,
+    nickname: state.users.nickname,
+    isLoggedIn: state.users.isLoggedIn,
+  }));
 
   const [post, setPost] = React.useState<PostData>();
   const [author, setAuthor] = React.useState<UserData>();
 
   const [comments, setComments] = React.useState<CommentData[]>([]);
+  const [cntFollow, setCntFollow] = React.useState<number>(0);
+  const [isFollowing, setIsFollowing] = React.useState<boolean>();
 
   React.useEffect(() => {
     initPost();
     initComments();
   }, [post_id]);
+  React.useEffect(() => {
+    initFollowing();
+  }, [post_id, id]);
 
   const initPost = async () => {
     if (!post_id) return;
     // 이미지 업로드
     try {
       const res = await getPost(post_id);
-      console.log(res);
 
       if (res.success) {
-        setPost({ ...res.post, content: res.post.content.content });
+        setPost({ ...res.result, content: res.result.content.content });
         setAuthor({
-          id: res.post.author_id,
-          nickname: res.post.authorNickname,
-          image: res.post.authorImage,
-          email: res.post.authorEmail,
+          id: res.result.author_id,
+          nickname: res.result.authorNickname,
+          image: res.result.authorImage,
+          email: res.result.authorEmail,
         });
-        dispatch(resetImages(res.post.content.images));
+        dispatch(resetImages(res.result.content.images));
       }
     } catch (err) {
       console.error(err);
@@ -66,25 +77,72 @@ const Post = () => {
     }
   };
 
-
   const initComments = async () => {
     if (!post_id) return;
     try {
       const res = await getComments(post_id);
-      
-      console.log(res);
+
       if (res.success) {
-        setComments(res.result.map((co: { comment: any; user_id: any; userNickname: any; userPicture: any; userEmail: any; }) => {
-          return {
-            comment: co.comment,
-            user: {
-              id: co.user_id,
-              nickname: co.userNickname,
-              image: co.userPicture,
-              email: co.userEmail,
+        setComments(
+          res.result.map(
+            (co: {
+              comment: any;
+              user_id: any;
+              userNickname: any;
+              userPicture: any;
+              userEmail: any;
+            }) => {
+              return {
+                comment: co.comment,
+                user: {
+                  id: co.user_id,
+                  nickname: co.userNickname,
+                  image: co.userPicture,
+                  email: co.userEmail,
+                },
+              };
             }
-          }
-        }))
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const initFollowing = async () => {
+    if (!post_id) return;
+    try {
+      const res = await getPostLike(post_id);
+
+      if (res.success) {
+        setCntFollow(res.result.length);
+
+        if (
+          res.result.find((e: { user_id: string | number }) => e.user_id === id)
+        ) {
+          setIsFollowing(true);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const followHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (!post_id || !isLoggedIn) return;
+    try {
+      const res = await postLike(post_id);
+
+      if (res.success) {
+        setIsFollowing(res.result);
+        if (res.result) {
+          setCntFollow(prev => prev + 1);
+        } else {
+          setCntFollow(prev => prev - 1);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -112,6 +170,18 @@ const Post = () => {
               <HR />
             </PostHead>
             <Content>
+              <SideWrapper>
+                <SideMenu>
+                  <SideMenuButton onClick={followHandler}>
+                    {isFollowing ? (
+                      <IconHeartFilled width={32} height={32} strokeWidth={1} />
+                    ) : (
+                      <IconHeart width={32} height={32} strokeWidth={1} />
+                    )}
+                  </SideMenuButton>
+                  <span>{cntFollow}</span>
+                </SideMenu>
+              </SideWrapper>
               {post.content.map((line) => {
                 return (
                   <Line key={line.id}>
@@ -175,4 +245,40 @@ const HR = styled.hr`
   background: ${({ theme }) => theme.colors.lightGrey};
   height: 1px;
   border: 0;
+`;
+
+const SideWrapper = styled.div`
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 200;
+  ${({ theme }) => theme.devices.desktop} {
+    left: auto;
+    top: 600px;
+  }
+`;
+const SideMenu = styled.div`
+  display: inline-flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1rem;
+  gap: 0.675rem;
+  color: #606060;
+  span {
+    display: none;
+    ${({ theme }) => theme.devices.desktop} {
+      display: block;
+    }
+  }
+`;
+const SideMenuButton = styled.button`
+  border: 1px solid ${({ theme }) => theme.colors.lightGrey};
+  background-color: white;
+  padding: 1rem;
+  border-radius: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #606060;
 `;

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { CommentInput } from "../common/Input";
 import Profile from "../profile/Profile";
 import { Button } from "../common/Button";
@@ -8,9 +8,26 @@ import { CommentData } from "../../type/product";
 import { postComments } from "../../api/upload";
 import { useNavigate, useParams } from "react-router-dom";
 import React from "react";
+import { shallowEqual, useSelector } from "react-redux";
+import { RootState } from "../../modules";
+import { productComments } from "../../api/product";
 
-const CommentList = ({ comments }: { comments: CommentData[] }) => {
-  const { post_id } = useParams();
+const CommentList = ({
+  comments,
+  fluid,
+}: {
+  comments: CommentData[];
+  fluid?: boolean;
+}) => {
+  const { post_id, product_id } = useParams();
+  const { id, image, isLoggedIn } = useSelector(
+    (state: RootState) => ({
+      id: state.users.id,
+      image: state.users.image,
+      isLoggedIn: state.users.isLoggedIn,
+    }),
+    shallowEqual
+  );
   const navigate = useNavigate();
   const [commentInput, setCommentInput] = React.useState<string>("");
 
@@ -22,10 +39,10 @@ const CommentList = ({ comments }: { comments: CommentData[] }) => {
       return;
     }
 
-    if (!post_id) return;
-
     try {
-      const res = await postComments(post_id, 1, commentInput);
+      if (product_id) var res = await productComments(product_id, 1, commentInput);
+      else if (post_id) res = await postComments(post_id, 1, commentInput);
+      else return;
 
       console.log(res);
 
@@ -34,7 +51,9 @@ const CommentList = ({ comments }: { comments: CommentData[] }) => {
       }
     } catch (err) {
       console.error(err);
-      if (window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+      if (
+        window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")
+      ) {
         navigate("/login");
       }
     }
@@ -45,25 +64,43 @@ const CommentList = ({ comments }: { comments: CommentData[] }) => {
   };
 
   return (
-    <div>
-      <CommentForm onSubmit={submitComment} method="post">
-        <Profile profileID="3" marginright="1.5rem" img="" />
-        <CommentInput
-          placeholder="댓글을 남겨주세요."
-          value={commentInput}
-          onChange={handleChange}
-        />
-        <Button type="submit">작성</Button>
-      </CommentForm>
-      {comments.map((comment) => (
-        <Comment {...comment} />
+    <CommentListStyled fluid={fluid}>
+      {isLoggedIn && (
+        <CommentForm onSubmit={submitComment} method="post">
+          <Profile profileID={id} marginright="1.5rem" size={4} img={image} />
+          <CommentInput
+            placeholder="댓글을 남겨주세요."
+            value={commentInput}
+            onChange={handleChange}
+          />
+          <Button type="submit">작성</Button>
+        </CommentForm>
+      )}
+      {comments.map((comment, idx) => (
+        <Comment key={`c-${idx}`} {...comment} />
       ))}
       <div className="row"></div>
-    </div>
+    </CommentListStyled>
   );
 };
 
 export default CommentList;
+
+const CommentListStyled = styled.div<{ fluid?: boolean }>`
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  ${({ theme }) => theme.devices.desktop} {
+    ${(props) => {
+      if (!props.fluid) {
+        return css`
+          padding-left: 12rem;
+          padding-right: 12rem;
+        `;
+      }
+    }}
+  }
+`;
 
 const CommentForm = styled.form`
   display: flex;

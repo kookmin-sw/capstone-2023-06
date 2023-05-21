@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { IconBasketFilled, IconHeartFilled } from "@tabler/icons-react";
+import { IconBasketFilled, IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { ProductData } from "../../type/product";
 import { LightButton, PrimaryButton } from "../common/Button";
 import { Link } from "react-router-dom";
@@ -8,17 +8,21 @@ import { Link } from "react-router-dom";
 const ProductCard = ({
   product,
   summary = false,
+  likeEvent,
+  isLike,
 }: {
   product: ProductData;
   summary?: boolean;
+  likeEvent?: any;
+  isLike?: boolean;
 }) => {
   return (
     <ProductCardContainer className="row" $summary={summary}>
       <div className="col-lg-6">
         <ProductImage src={product.thumbnail} alt=" " />
         <SubImageList>
-          {product.subThumbnail.map((s) => (
-            <ProductSub>
+          {product.subThumbnail.map((s, idx) => (
+            <ProductSub key={`sT-${idx}`}>
               <ProductImage src={s} className="sub" />
             </ProductSub>
           ))}
@@ -28,7 +32,7 @@ const ProductCard = ({
         <ProductMakeInfo>제조사명 | 브랜드명명 | 등록일</ProductMakeInfo>
         <ProductName>{product.name}</ProductName>
         {product.tags.map((tag) => (
-          <ProductTag>#{tag}</ProductTag>
+          <ProductTag key={tag}>#{tag}</ProductTag>
         ))}
         <ProductPrice>
           가격 <span className="price-cost">{product.price}</span>원
@@ -36,17 +40,17 @@ const ProductCard = ({
         <ProductDetail>{product.detail}</ProductDetail>
         {!summary ? (
           <ProductPurchaseBlock>
-            <BuyButton>
+            <BuyButton type="button">
               <IconBasketFilled className="icon" />
               상품 구매
             </BuyButton>
-            <LikeButton>
-              <IconHeartFilled className="icon" />
-              찜하기
+            <LikeButton type="button" onClick={likeEvent}>
+              
+              {isLike ?  <><IconHeartFilled className="icon" />찜 해제</> : <><IconHeart className="icon" />찜 하기</> }
             </LikeButton>
           </ProductPurchaseBlock>
         ) : (
-          <Shortcuts to="/product/1">상품 자세히 보러 가기 &#187;</Shortcuts>
+          <Shortcuts to={`/product/${product.id}`}>상품 자세히 보러 가기 &#187;</Shortcuts>
         )}
       </div>
     </ProductCardContainer>

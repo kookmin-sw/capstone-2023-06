@@ -18,7 +18,7 @@ const Review = ({ id, thumbnail, title, author, date, tags }: ReviewType) => {
                 <ReviewThumbnail src={thumbnail} />
                 <div className="card-body">
                     <ReviewTags>
-                        {tags.map(tag => `#${tag} `)}
+                        {tags.length > 1 && tags.map(tag => `#${tag} `)}
                     </ReviewTags>
                     <ReviewTitle>{title}</ReviewTitle>
                     <ProfileBar profileID={author.id} nickname={author.nickname} size={1.5} padding="0.125rem 0rem" subContent={date} img={author.image} />

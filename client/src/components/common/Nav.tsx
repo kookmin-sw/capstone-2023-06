@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 
 export const NavBar = ({ children } : { children: React.ReactNode}) => {
     return (
         <NavBarStyle>
-            <span>로고</span>
+            <Link to="/">로고</Link>
             <NavBarCollapse>
                 { children }
             </NavBarCollapse>
