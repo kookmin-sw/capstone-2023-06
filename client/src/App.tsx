@@ -15,6 +15,7 @@ import UserPage from "./pages/UserPage";
 import Store from "./pages/Store";
 import User from "./pages/User";
 import ScrollToTop from "./components/layout/ScrollToTop";
+import Styling from "./pages/Styling"
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/styling" element={<Styling  />} />
           <Route path="/signup" element={<Singup />} />
           <Route path="/findaccount" element={<FindAccount />} />
           <Route path="/write" element={<Write />} />

@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { LoginLayout } from '../components/layout/Layout';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../api/users'; // 로그인 API 추가
+import { login } from '../api/users'; 
 import { ExtraLinkButton, SubmitButton } from '../components/common/Button';
 import { LoginInput } from '../components/common/Input';
 
@@ -11,10 +10,10 @@ const Login = () => {
 
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+  const [alertMessage, setAlertMessage] = React.useState<string|null>(null); // State for alert message
 
   const submitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 로그인 API를 호출하는 로직 추가
     try {
       const res = await login({
         email,
@@ -23,7 +22,7 @@ const Login = () => {
       if (res.success) {
         navigate('/');
       } else {
-        console.error(res.message); // 에러 메시지 출력
+        setAlertMessage(res.message); // Set the alert message if login fails
       }
     } catch (err) {
       console.error(err);

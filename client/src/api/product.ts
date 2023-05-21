@@ -51,6 +51,33 @@ export const getProductList = async (
 };
 
 /**
+ * 글 목록 불러오기
+ * @param {"user" | "date" | "like"} type 정렬 기준
+ * @param {string} reverse 정렬 반대 여부
+ * @returns 성공 여부
+ */
+export const getProductListInfinity = async (
+  type: "user" | "date" | "like",
+  reverse: boolean = false,
+  offset: number = 0
+) => {
+  try {
+    const res = await productAPI.post(`/list?type=${type}&reverse=${reverse}`, {
+      startTime: "2022-02-01T01:01:01",
+      endTime: "2024-02-01T01:01:01",
+      offset: offset,
+      limit: 20,
+    });
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+/**
  * 특정 글의 댓글 가져오기
  * @param {string} id 글 고유 id
  * @returns 성공 여부

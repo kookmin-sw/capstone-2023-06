@@ -52,7 +52,7 @@ const ReviewThumbnail = styled.img`
     width: 100%;
     height: 10rem;
     object-fit: cover;
-    border: 1px solid black;
+    border-radius: 1rem;
 `;
 const ReviewTags = styled.span`
     color: ${({ theme }) => theme.colors.primary};
