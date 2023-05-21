@@ -91,10 +91,36 @@ export const getPostList = async (
   try {
     const res = await uploadAPI.post(`/list?type=${type}&reverse=${reverse}`, {
       "startTime": "2022-02-01T01:01:01",
-      "endTime": "2022-02-01T01:01:01",
+      "endTime": "2025-02-01T01:01:01",
       "offset": 0,
       "limit": 4,
-      "keyward": "스타일링페이지"
+    });
+    return res.data;
+  } catch (err) {
+    let msg: string;
+    if (err instanceof Error) msg = err.message;
+    else msg = String(err);
+    throw new Error(msg);
+  }
+};
+
+/**
+ * 글 목록 불러오기
+ * @param {"user" | "date" | "like"} type 정렬 기준
+ * @param {string} reverse 정렬 반대 여부
+ * @returns 성공 여부
+ */
+export const getPostListInfinity = async (
+  type: "user" | "date" | "like" | any,
+  reverse: boolean = false,
+  offset: number = 0
+) => {
+  try {
+    const res = await uploadAPI.post(`/list?type=${type}&reverse=${reverse}`, {
+      "startTime": "2022-02-01T01:01:01",
+      "endTime": "2025-02-01T01:01:01",
+      "offset": offset,
+      "limit": 20,
     });
     return res.data;
   } catch (err) {
