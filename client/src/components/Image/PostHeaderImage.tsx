@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const PostHeaderImage = styled.div`
   height: 30rem;
-  margin-top: 1rem;
+  margin-top: 0rem;
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;

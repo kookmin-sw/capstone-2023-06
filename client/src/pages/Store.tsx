@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { MainLayout } from "../components/layout/Layout";
 import AdBanner from "../components/main/adbanner/AdBanner";
 import { ReviewType } from "../components/Review";
-import { getProductListInfinity } from "../api/product";
+import { productSearch, getProductListInfinity } from "../api/product";
 import ProductList from "../components/store/Productlist";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSearchParams } from "react-router-dom";
+import Search from "../components/Search";
 import { throttle } from "lodash";
 
 type ProductType = {
@@ -25,12 +26,11 @@ const Store = () => {
   const [type, setType] = React.useState<string>("");
   const [products, setProducts] = useState<ReviewType[]>([]);
   const [offset, setOffset] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
   const [isDataEnd, setIsDataEnd] = useState<boolean>(false);
+  const limit = 20;
 
   useEffect(() => {
     setProducts([]);
-    console.log(search.get("type"), "@@@@@@@");
     setType(search.get("type") || "date");
     //loadHandler();
   }, [search]);
@@ -39,8 +39,6 @@ const Store = () => {
   useEffect(() => {
     loadHandler();
   }, [type]);
-
-
 
   const loadHandler = throttle(() => {
     if (isDataEnd || type === "") {
@@ -54,9 +52,8 @@ const Store = () => {
     try {
       const res = await getProductListInfinity("date", false, offset);
       if (res.success) {
-        if (res.result.length === 0) {
-          setHasMore(false);
-          return;
+        if (res.result.length < limit) {
+          setIsDataEnd(true);
         }
         setProducts(prevProducts => [
           ...prevProducts,
@@ -74,7 +71,7 @@ const Store = () => {
             tags: product.hashtags,
           }))
         ]);
-        setOffset(prevOffset => prevOffset + 20);
+        setOffset(prevOffset => prevOffset + limit);
       }
     } catch (err) {
       console.error(err);
@@ -82,24 +79,53 @@ const Store = () => {
     }
   };
 
+  const searchProduct = async (data: string) => {
+    try {
+      console.log(data);
+      const res = await productSearch(data);
+
+      if (res.success) {
+        setProducts(
+          res.result.map((product: ProductType) => ({
+            id: product.id,
+            thumbnail: product.thumbnail,
+            title: product.title,
+            author: {
+              nickname: product.authorNickname,
+              id: product.author_id,
+              email: product.authorEmail,
+              img: product.authorImagep,
+            },
+            date: product.createdAt,
+            tags: product.hashtags,
+          }))
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <MainLayout>
       <AdBanner />
+      <Search msgType="제품" searchEvent={searchProduct} placeholder="데스크 의자" />
       <div style={{ marginBottom: "3rem" }} />
       <InfiniteScroll
         dataLength={products.length}
         next={loadHandler}
-        hasMore={hasMore}
+        hasMore={!isDataEnd}
         loader={<h4>로딩 중...</h4>}
         endMessage={
-          <p style={{ textAlign: 'center' }}>
+          <p style={{ textAlign: 'center', opacity: '0.2' }}>
             <b>모든 제품을 보셨습니다.</b>
           </p>
         }
+        style={{overflow: "hidden"}}
       >
         <ProductList
           title="추천 제품"
-          subtitle="고롱스를 위한 추천 제품"
+          subtitle="당신을 위한 추천 제품"
           products={products}
         />
       </InfiniteScroll>

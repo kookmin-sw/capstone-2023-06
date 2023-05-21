@@ -4,15 +4,12 @@ import { ReferButton } from "../../common/Button";
 import { POSITION, Refer } from "../../type";
 
 import { debounce } from "lodash";
-import { PrimaryButton } from "../../../common/Button";
 import { IconTag } from "@tabler/icons-react";
-import { generateRandomID } from "../../../../utils/randomID";
 
-import { ReferInput } from "../../common/Input";
 import { FullImage } from "../../common/Image";
 import { RootState } from "../../../../modules";
 import { useDispatch, useSelector } from "react-redux";
-import { addRefer, checkRefers } from "../../../../modules/images";
+import { checkRefers } from "../../../../modules/images";
 import ProductCard from "../../../product/ProductCard";
 import { ProductData } from "../../../../type/product";
 import { getProduct } from "../../../../api/product";
@@ -89,7 +86,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     checkBeforeCurCreate();
     // e.stopPropagation();
 
-    console.log(refer);
+    // console.log(refer);
 
     setCurReferId(refer.id);
     initProduct(refer.data);
@@ -124,7 +121,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     try {
       const res = await getProduct(product_id);
 
-      console.log(res);
+      // console.log(res);
       if (res.success) {
         setProduct({
           id: product_id,

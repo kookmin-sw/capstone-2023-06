@@ -2,6 +2,7 @@
 
 import styled from "styled-components";
 import Review, { ReviewType } from "../Review";
+import ProductLink from "../product/ProductLink";
 
 
 const ProductSection = styled.div`
@@ -20,8 +21,6 @@ const ProductSection = styled.div`
   }
 
   .product-list-item {
-    flex: 0 0 calc(25% - 1rem); // Substitute for "col-md-3"
-    margin-bottom: 1rem; // Add some vertical margin between rows
   }
 `;
 
@@ -33,12 +32,12 @@ type ProductListProps = {
 
 const ProductList: React.FC<ProductListProps> = ({ title, subtitle, products }) => (
   <ProductSection>
-    <h2 className="product-section-header">{title}</h2>
-    <h5 className="product-section-subheader">{subtitle}</h5>
-    <div className="product-list">
+    {/* <h2 className="product-section-header">{title}</h2>
+    <h5 className="product-section-subheader">{subtitle}</h5> */}
+    <div className="row">
       {products.map((product) => (
-        <div className="product-list-item" key={product.id}>
-          <Review {...product} />
+        <div className="product-list-item col-md-3" key={product.id}>
+          <ProductLink id={product.id.toString()} title={product.title} tags={product.tags} thumbnail={product.thumbnail} />
         </div>
       ))}
     </div>

@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 type SearchProps = {
+    msgType: string;
+    placeholder?: string;
     searchEvent: (data: string) => void;
 }
 
-const Search = ({ searchEvent }: SearchProps) => {
+const Search = ({ msgType, placeholder, searchEvent }: SearchProps) => {
     const [value, setValue] = React.useState<string>('');
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,9 +22,9 @@ const Search = ({ searchEvent }: SearchProps) => {
 
     return (
         <SearchContainer>
-            <SearchHeader>찾으시는 제품이 있으신가요?</SearchHeader>
+            <SearchHeader>찾으시는 {msgType}이 있으신가요?</SearchHeader>
             <SearchWrapper>
-                <SearchInput type="text" value={value} onChange={inputHandler} placeholder="데스크 의자" spellCheck={false} />
+                <SearchInput type="text" value={value} onChange={inputHandler} placeholder={placeholder} spellCheck={false} />
                 <SearchButton type="button" onClick={searchHandler}>검색</SearchButton>
             </SearchWrapper>
         </SearchContainer>

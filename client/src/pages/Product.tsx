@@ -1,22 +1,13 @@
 import React from "react";
 import { MainLayout } from "../components/layout/Layout";
 import styled, { css } from "styled-components";
-import {
-  Button,
-  LightButton,
-  PrimaryButton,
-} from "../components/common/Button";
-import { SecondaryButton } from "../components/common/Button";
 import ProductDetailPostImage from "../components/product/ProductDetailPost";
 import {
   Link,
-  Route,
-  Routes,
   useLocation,
   useNavigate,
   useParams,
 } from "react-router-dom";
-import ProductDetailPost from "../components/product/ProductDetailPost";
 import CommentList from "../components/Comment/CommentList";
 import { CommentData, ProductData } from "../type/product";
 import ProductCard from "../components/product/ProductCard";

@@ -138,7 +138,7 @@ export const getPostListInfinity = async (
  */
 export const getPostLike = async (id: string) => {
   try {
-    const res = await uploadAPI.get(`/${id}/like`);
+    const res = await uploadAPI.get(`/${id}/likes`);
     return res.data;
   } catch (err) {
     let msg: string;
@@ -172,7 +172,7 @@ export const postLike = async (id: string) => {
  */
 export const getComments = async (id: string) => {
   try {
-    const res = await uploadAPI.get(`/${id}/comment`);
+    const res = await uploadAPI.get(`/${id}/comments`);
     return res.data;
   } catch (err) {
     let msg: string;

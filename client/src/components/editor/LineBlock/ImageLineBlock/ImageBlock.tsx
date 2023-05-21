@@ -4,7 +4,6 @@ import { ReferButton } from "../../common/Button";
 import { POSITION, Refer } from "../../type";
 
 import { debounce } from "lodash";
-import { PrimaryButton } from "../../../common/Button";
 import { IconTag, IconTrash } from "@tabler/icons-react";
 import { generateRandomID } from "../../../../utils/randomID";
 
@@ -26,7 +25,6 @@ import {
 import { uploadImage } from "../../../../api/upload";
 import ProductCard, { ProductType } from "./ProductCard";
 import { getProduct, productSearch } from "../../../../api/product";
-import { changeTag } from "../../../../modules/editor";
 
 const ImageBlock = ({ id }: { id: string }) => {
   const dispatch = useDispatch();

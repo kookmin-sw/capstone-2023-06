@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Review, { ReviewType } from "../components/Review";
 import { getPostListInfinity } from "../api/upload";
-import { FluidLayout, MainLayout } from "../components/layout/Layout";
+import { MainLayout } from "../components/layout/Layout";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Container } from "../components/common/Grid";
-import App from "../App";
-import { debounce, throttle } from "lodash";
-import { useParams, useSearchParams } from "react-router-dom";
+import { throttle } from "lodash";
+import { useSearchParams } from "react-router-dom";
+import Search from "../components/Search";
 
 type PostType = {
     id: string;
@@ -39,16 +38,12 @@ const Styling: React.FC<StylingProps> = () => {
         //loadHandler();
     }, [search]);
 
-
     useEffect(() => {
         loadHandler();
     }, [type]);
 
-
-
     const loadHandler = throttle(() => {
         if (isDataEnd || type === "") {
-            console.log("asdf");
             return;
         }
         loadPosts();
@@ -80,18 +75,27 @@ const Styling: React.FC<StylingProps> = () => {
         }
     };
 
+    const searchStyling = (data: string) => {
+
+    }
+
     return (
         <MainLayout>
+            {/* <Search msgType="스타일링" searchEvent={searchStyling} placeholder="게이밍"/> */}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <InfiniteScroll
                 dataLength={postList.length}
                 next={loadHandler}
-                hasMore={true}
+                hasMore={!isDataEnd}
                 loader={<h4>Loading...</h4>}
                 scrollThreshold={0.9}
                 style={{ overflow: "hidden" }}
                 endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>모든 제품을 보셨습니다.</b>
+                    <p style={{ textAlign: 'center', opacity: '0.2' }}>
+                        <b>모든 스타일링을 보셨습니다.</b>
                     </p>
                 }
             >

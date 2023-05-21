@@ -51,6 +51,7 @@ const Post = () => {
     initPost();
     initComments();
   }, [post_id]);
+
   React.useEffect(() => {
     initFollowing();
   }, [post_id, id]);
@@ -80,7 +81,7 @@ const Post = () => {
   const initComments = async () => {
     if (!post_id) return;
     try {
-      const res = await getComments(post_id);
+      const res = await getComments(post_id);      
 
       if (res.success) {
         setComments(
@@ -111,6 +112,7 @@ const Post = () => {
   };
 
   const initFollowing = async () => {
+    console.log(post_id);
     if (!post_id) return;
     try {
       const res = await getPostLike(post_id);

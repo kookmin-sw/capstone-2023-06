@@ -65,7 +65,10 @@ const Header = () => {
     <NavHeader>
       <Container>
         <NavBar>
-          <NavLinkItem to="/store">스토어</NavLinkItem>
+          <div>
+            <NavLinkItem to="/styling">스타일링</NavLinkItem>
+            <NavLinkItem to="/store">스토어</NavLinkItem>
+          </div>
           {isLoggedIn ? (
             <LoggedInMenu>
               <Link to={`/write`}>

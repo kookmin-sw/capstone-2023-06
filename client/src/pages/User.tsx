@@ -201,7 +201,7 @@ const User = () => {
       <PostWrapper>
         <h2>작성 리뷰</h2>
         <div className="row">
-          {reviews ? (
+          {reviews && reviews.length > 0 ? (
             reviews.map((review, index) => (
               <div className="col-md-3" key={`my-r-${index}`}>
                 <Review
@@ -224,7 +224,7 @@ const User = () => {
       <PostWrapper>
         <h2>관심 제품</h2>
         <div className="row">
-          {products ? (
+          {products && products.length > 0 ? (
             products.map((p, index) => (
               <div className="col-md-3" key={`my-p-${index}`}>
                 <ProductLink

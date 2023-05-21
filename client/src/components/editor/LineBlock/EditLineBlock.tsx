@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { LINE_TYPE } from '../type';
 
 import { IconPlus, IconGripVertical } from '@tabler/icons-react';

@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-
 import styled, { css } from "styled-components";
 import Profile, { ProfileProps } from "./Profile";
 import React from "react";
@@ -70,7 +69,7 @@ const ProfileBar = ({
       const res = await followUser(profileID.toString());
 
       if (res.success) {
-        console.log(res);
+        // console.log(res);
         setIsFollowing(res.result);
       }
     } catch (err) {

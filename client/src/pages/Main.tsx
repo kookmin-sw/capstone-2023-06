@@ -1,14 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { MainLayout } from "../components/layout/Layout";
-import { MainPost } from "../components/main/postbanner/Thumbnail"; //이렇게 분리하는게 맞는지?
-import { PostWrapper } from "../components/main/postbanner/Thumbnail.styles";
 import AdBanner from "../components/main/adbanner/AdBanner";
-import TagScroller from '../components/main/tagscroller/Tagscroller';
 import Review, { ReviewType } from "../components/Review";
 import { getPostList } from "../api/upload";
 import { Link } from "react-router-dom";
-import { NavLinkItem } from "../components/common/Nav";
 
 
 type PostType = {
@@ -106,50 +102,63 @@ const Main = () => {
 
   return (
     <MainLayout>
-    <AdBanner/>
-    {/* <TagScroller/> */}
-    <div style={{ marginBottom: "3rem" }}></div>
-    <h2 style={{ color: "#386437" }}>추천 게시물</h2>
-    <h5>당신을 위한 추천 게시물</h5>
-    <div style={{ marginBottom: "1rem" }}></div>
-    <div className="row">
+      <AdBanner />
+      {/* <TagScroller/> */}
+      <div style={{ marginBottom: "3rem" }}></div>
+      <SubHeader style={{ color: "#386437" }}>추천 게시물
+        <MoreLink to="/styling?type=user">더보기</MoreLink>
+      </SubHeader>
+      <h5>당신을 위한 추천 게시물</h5>
+      <div style={{ marginBottom: "1rem" }}></div>
+      <div className="row">
         {recommendPost?.map((post, index) => (
           <div className="col-md-3" key={index}>
             <Review  {...post} />
           </div>
         ))}
-    </div>
-    <Link to="/styling?type=user">더보기</Link> 
+      </div>
 
 
-    <div style={{ marginBottom: "3rem" }}></div>
-    <h2 style={{ color: "#386437" }}>추천 게시물</h2>
-    <h5>당신을 위한 추천 게시물</h5>
-    <div style={{ marginBottom: "1rem" }}></div>
-    <div className="row">
+      <div style={{ marginBottom: "3rem" }}></div>
+      <SubHeader style={{ color: "#386437" }}>인기 게시물
+        <MoreLink to="/styling?type=like">더보기</MoreLink>
+      </SubHeader>
+      <h5>지금 인기있는 게시물</h5>
+      <div style={{ marginBottom: "1rem" }}></div>
+      <div className="row">
         {popularPost?.map((post, index) => (
           <div className="col-md-3" key={index}>
             <Review  {...post} />
           </div>
         ))}
-    </div>
-    <Link to="/styling?type=like">더보기</Link> 
+      </div>
 
 
-    <div style={{ marginBottom: "3rem" }}></div>
-    <h2 style={{ color: "#386437" }}>추천 게시물</h2>
-    <h5>당신을 위한 추천 게시물</h5>
-    <div style={{ marginBottom: "1rem" }}></div>
-    <div className="row">
+      <div style={{ marginBottom: "3rem" }}></div>
+      <SubHeader style={{ color: "#386437" }}>최신 게시물
+        <MoreLink to="/styling?type=date">더보기</MoreLink>
+      </SubHeader>
+      <h5>따끈따끈, 최근에 작성된 게시물</h5>
+      <div style={{ marginBottom: "1rem" }}></div>
+      <div className="row">
         {celebPost?.map((post, index) => (
           <div className="col-md-3" key={index}>
             <Review  {...post} />
           </div>
         ))}
-    </div>
-    <Link to="/styling?type=date">더보기</Link> 
-  </MainLayout>
+      </div>
+    </MainLayout>
   );
 };
 
 export default Main;
+
+const SubHeader = styled.h2`
+display: flex;
+justify-content: space-between;
+align-items: center;
+`
+const MoreLink = styled(Link)`
+  font-size: 1rem;
+  color: black;
+`;

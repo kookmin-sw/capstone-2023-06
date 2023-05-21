@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
 import { LoginLayout } from '../components/layout/Layout';
 import { ExtraLinkButton, SubmitButton, SwapButton } from '../components/common/Button';
