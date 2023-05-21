@@ -43,7 +43,7 @@ Hashtag.findByTitle = async (conn, title) => {
         const [hashtags] = await conn.execute(SELECT_QUERY, [title]);
         return hashtags[0];
     } catch(err) {
-        console.error(err.message);
+        console.error(err);
         throw new MysqlError("MYSQL ERROR");
     }
 }

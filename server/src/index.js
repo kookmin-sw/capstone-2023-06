@@ -1,8 +1,10 @@
 const express = require("express");
 const cors = require('cors');
 const app = express();
+const moment = require("moment");
 
 const cron = require('node-cron');
+const RecommendUpdater = require("./utils/RecommendUpdater/recommendUpdater.js");
 
 const session = require('express-session');
 const passport = require('passport');
@@ -43,6 +45,22 @@ app.use(express.static(path.join(__dirname, '../../client/build')));
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../../client/build/index.html'));
+});
+
+
+// 초(옵션), 분(0~59), 시간(0~23), 일(1~31), 월(1~12), 요일(0~7) 0,7 모두 일요일
+// * */4 * * * //4시간마다 실행 
+const CYCLE_PATTERN = '* */4s * * *'; // 릴리즈 시 바꿀 필요 있음 (1분 마다 실행)
+cron.schedule(CYCLE_PATTERN, () => {
+  const now = moment().format('YYYY-MM-DD HH:mm:ss');
+  console.log(`[${now}] Recommend Updater Start`);
+  try {
+    RecommendUpdater.updateAllPost();
+  } catch(err) {
+    const errNow = moment().format('YYYY-MM-DD HH:mm:ss');
+    console.error(`[${errNow}]: Recommend Updater Error`);
+    console.error(err);
+  }
 });
 
 app.listen(process.env.SERVER_PORT, () => console.log("server start"));
