@@ -97,7 +97,7 @@ const Product = () => {
               title: any;
               author_id: any;
               authorNickname: any;
-              authorImage: any;
+              authorPicture: any;
               authorEmail: any;
               created_at: any;
               hashtags: any;
@@ -109,7 +109,7 @@ const Product = () => {
                 author: {
                   id: r.author_id,
                   nickname: r.authorNickname,
-                  image: r.authorImage,
+                  image: r.authorPicture,
                   email: r.authorEmail,
                 },
                 date: r.created_at,

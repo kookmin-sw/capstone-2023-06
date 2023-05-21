@@ -225,8 +225,8 @@ const User = () => {
         <h2>관심 제품</h2>
         <div className="row">
           {products ? (
-            products.map((p) => (
-              <div className="col-md-3" key={`my-p-0`}>
+            products.map((p, index) => (
+              <div className="col-md-3" key={`my-p-${index}`}>
                 <ProductLink
                   id={p.id}
                   thumbnail={p.thumbnail}
@@ -245,7 +245,7 @@ const User = () => {
       <PostWrapper>
         <h2>팔로워</h2>
         {followers && followers.length !== 0 ? (
-          followers.map((f) => <Profile profileID={f.id} img={f.image} />)
+          followers.map((f) => <Profile key={`profile-${f.id}`} profileID={f.id} img={f.image} />)
         ) : (
           <div className="row">
             <NoneDataCol className="col-12">

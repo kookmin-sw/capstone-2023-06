@@ -17,7 +17,7 @@ type PostType = {
   authorNickname: string;
   author_id: string;
   authorEmail: string;
-  authorImagep: string;
+  authorPicture: string;
   createdAt: string;
   hashtags: string;
 };
@@ -47,7 +47,7 @@ const Main = () => {
                 nickname: post.authorNickname,
                 id: post.author_id,
                 email: post.authorEmail,
-                img: post.authorImagep,
+                image: post.authorPicture,
               },
               date: post.createdAt,
               tags: post.hashtags,
@@ -58,6 +58,7 @@ const Main = () => {
       const resPopular = await getPostList("user");
 
       if (resPopular.success) {
+        console.log(resPopular);
         setPopularPost([
           ...resPopular.result.map((post: PostType) => {
             return {
@@ -68,7 +69,7 @@ const Main = () => {
                 nickname: post.authorNickname,
                 id: post.author_id,
                 email: post.authorEmail,
-                img: post.authorImagep,
+                image: post.authorPicture,
               },
               date: post.createdAt,
               tags: post.hashtags,
@@ -89,7 +90,7 @@ const Main = () => {
                 nickname: post.authorNickname,
                 id: post.author_id,
                 email: post.authorEmail,
-                img: post.authorImagep,
+                image: post.authorPicture,
               },
               date: post.createdAt,
               tags: post.hashtags,

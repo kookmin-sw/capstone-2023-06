@@ -112,7 +112,7 @@ export const getPostList = async (
  */
 export const getPostLike = async (id: string) => {
   try {
-    const res = await uploadAPI.get(`/${id}/likes`);
+    const res = await uploadAPI.get(`/${id}/like`);
     return res.data;
   } catch (err) {
     let msg: string;
@@ -146,7 +146,7 @@ export const postLike = async (id: string) => {
  */
 export const getComments = async (id: string) => {
   try {
-    const res = await uploadAPI.get(`/${id}/comments`);
+    const res = await uploadAPI.get(`/${id}/comment`);
     return res.data;
   } catch (err) {
     let msg: string;
@@ -157,7 +157,7 @@ export const getComments = async (id: string) => {
 };
 
 /**
- * 특정 글의 댓글 작성하기
+ * 특정 글의 댓글 가져오기
  * @param {string} id 글 고유 id
  * @param {number | null} parent 댓글의 부모, 답글 시 사용, 부모가 없다면 null
  * @param {string} comment 댓글 내용
