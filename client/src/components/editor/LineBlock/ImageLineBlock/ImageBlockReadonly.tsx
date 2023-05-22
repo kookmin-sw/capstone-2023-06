@@ -173,7 +173,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
         )} */}
       {openProductDetail && (
         <>
-          <ProductCard product={product} summary />
+          <ProductCard product={product} setProduct={setProduct} summary />
           <ExitButton
             type="button"
             onClick={() => {

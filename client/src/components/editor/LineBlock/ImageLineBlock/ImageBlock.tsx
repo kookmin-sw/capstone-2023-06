@@ -41,6 +41,8 @@ const ImageBlock = ({ id }: { id: string }) => {
 
   const [searchList, setSearchList] = React.useState<ProductType[]>([]);
 
+  // const [files, setFiles] = React.useState<FileList | undefined>();
+
   React.useEffect(() => {
     // 데이터 생성
     window.addEventListener("resize", handleResize);
@@ -53,6 +55,7 @@ const ImageBlock = ({ id }: { id: string }) => {
   }, [imgRef]);
 
   React.useEffect(() => {
+    if (!images[id] || images[id].src === "")
     fileInputRef.current?.click();
   }, [fileInputRef]);
 
@@ -151,9 +154,6 @@ const ImageBlock = ({ id }: { id: string }) => {
     return images[id].refers[idx];
   }
 
-  // const [files, setFiles] = React.useState<FileList | undefined>();
-  const [showImage, setShowImage] = React.useState<string>("https://cdn.dribbble.com/users/310943/screenshots/2792692/empty-state-illustrations.gif");
-
   const handleAddImages = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -164,8 +164,6 @@ const ImageBlock = ({ id }: { id: string }) => {
       fileInputRef.current.click();
       return;
     }
-
-    setShowImage(URL.createObjectURL(imageLists[0]));
 
     // 이미지 업로드
     try {
@@ -240,6 +238,10 @@ const ImageBlock = ({ id }: { id: string }) => {
     debouncedSearch(e.target.value);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLParagraphElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <div style={{ position: "relative" }}>
       <input
@@ -247,13 +249,14 @@ const ImageBlock = ({ id }: { id: string }) => {
         type="file"
         name="userfile"
         onChange={handleAddImages}
+        onKeyDown={handleKeyPress}
         style={{ display: "none" }}
       />
-      {showImage !== "" && <FullImage ref={imgRef} src={showImage} />}
-      {isEditMode && showImage !== "" && (
+      {images[id] && <FullImage ref={imgRef} src={images[id].src} />}
+      {isEditMode && images[id] && (
         <ClickContainer onClickHandler={onClickHandler}></ClickContainer>
       )}
-      {showImage !== "" &&
+      {images[id] &&
         getRefers().map((refer, idx) => {
           return (
             <ReferButton

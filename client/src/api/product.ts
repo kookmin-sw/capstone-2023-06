@@ -103,12 +103,10 @@ export const getComments = async (id: string) => {
  */
 export const productComments = async (
   id: string,
-  parent: number | null,
   comment: string
 ) => {
   try {
     const res = await productAPI.post(`/${id}/comment`, {
-      parent,
       comment,
     });
     return res.data;

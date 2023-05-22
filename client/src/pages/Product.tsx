@@ -201,6 +201,7 @@ const Product = () => {
           product={product}
           likeEvent={followHandler}
           isLike={isFollowing}
+          setProduct={setProduct}
         />
       </ProductHeader>
 

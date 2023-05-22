@@ -38,10 +38,19 @@ const CommentList = ({
       alert("내용을 입력해주세요");
       return;
     }
+    if (!isLoggedIn) {
+      if (
+        window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")
+      ) {
+        navigate("/login");
+      }
+      return;
+    }
 
     try {
-      if (product_id) var res = await productComments(product_id, 1, commentInput);
-      else if (post_id) res = await postComments(post_id, 1, commentInput);
+      if (product_id)
+        var res = await productComments(product_id, commentInput);
+      else if (post_id) res = await postComments(post_id, commentInput);
       else return;
 
       console.log(res);
@@ -51,11 +60,6 @@ const CommentList = ({
       }
     } catch (err) {
       console.error(err);
-      if (
-        window.confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")
-      ) {
-        navigate("/login");
-      }
     }
   };
 

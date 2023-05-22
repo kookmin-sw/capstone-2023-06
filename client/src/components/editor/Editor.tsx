@@ -15,6 +15,7 @@ import { resetImages } from '../../modules/images';
 
 export const EditorContainer = styled.div`
     font-size: 1.25rem;
+    color: #565353;
     // padding: 1rem 1rem 0rem 1rem;
 `;
 

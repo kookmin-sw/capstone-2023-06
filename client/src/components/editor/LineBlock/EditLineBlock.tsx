@@ -40,6 +40,7 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
      * 라인 새로 생성 되었을때 포커싱 하기
      */
     React.useEffect(() => {
+        console.log(props.line.id);
         focusSelf();
     }, [lineRef]);
 
@@ -69,7 +70,7 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
         }
         
         // 포커스
-        focusSelf();
+        // focusSelf();
 
     }, [line.tag])
 
@@ -169,7 +170,6 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
             // 업데이트
             if (lines) {
                 if (lines?.length >= 2) {
-                    
                     // 현재 줄은 상태에 따라 다시 변경
                     dispatch(updateHtml(line.id, lines[0]));
                     if (lineRef.current) lineRef.current.innerHTML = lines[0];
@@ -180,6 +180,13 @@ const EditLineBlock = React.forwardRef(( props : LineBlockType, ref: React.Ref<H
                 else {
                     dispatch(addLine(line.id));
                 }
+            }
+            let nextSibling = (lineRef.current?.parentElement?.nextSibling?.lastChild as HTMLElement);
+            if (nextSibling) {
+                // 더음 태그가 ol, li 태그라면 child 가 하나 더 있기 떄문에 예외 처리
+                if (['OL', 'LI'].includes(nextSibling.nodeName))
+                   nextSibling = nextSibling.lastChild as HTMLElement;
+                nextSibling.focus();
             }
         }
         // 현재 EditLine 삭제하고 이전 focus 이동 (첫째 줄이라면 제거 되어선 안되므로 무시)

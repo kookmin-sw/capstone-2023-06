@@ -1,29 +1,34 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { IconBasketFilled, IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import {
+  IconBasketFilled,
+  IconHeart,
+  IconHeartFilled,
+} from "@tabler/icons-react";
 import { ProductData } from "../../type/product";
 import { LightButton, PrimaryButton } from "../common/Button";
 import { Link } from "react-router-dom";
 
 const ProductCard = ({
   product,
+  setProduct,
   summary = false,
   likeEvent,
   isLike,
 }: {
   product: ProductData;
+  setProduct: React.Dispatch<React.SetStateAction<ProductData>>;
   summary?: boolean;
   likeEvent?: any;
   isLike?: boolean;
 }) => {
-
   const subHandler = (idx: number) => {
-    // const temp = product.subThumbnail;
-    // temp[idx] = product.thumbnail;
-    // setThumbnail(src);
-    // setSubThumbnail()
-  }
-
+    const temp = product;
+    const thumb = product.thumbnail;
+    temp.thumbnail = product.subThumbnail[idx];
+    temp.subThumbnail[idx] = thumb;
+    setProduct({...temp});
+  };
 
   return (
     <ProductCardContainer className="row" $summary={summary}>
@@ -44,7 +49,13 @@ const ProductCard = ({
           <ProductTag key={tag}>#{tag}</ProductTag>
         ))}
         <ProductPrice>
-          가격 <span className="price-cost">{product.price}</span>원
+          가격{" "}
+          <span className="price-cost">
+            {product.price
+              .toString()
+              .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
+          </span>
+          원
         </ProductPrice>
         <ProductDetail>{product.detail}</ProductDetail>
         {!summary ? (
@@ -53,13 +64,26 @@ const ProductCard = ({
               <IconBasketFilled className="icon" />
               상품 구매
             </BuyButton>
-            <LikeButton type="button" onClick={likeEvent}>
-              
-              {isLike ?  <><IconHeartFilled className="icon" />찜 해제</> : <><IconHeart className="icon" />찜 하기</> }
+            <LikeButton
+              type="button"
+              className={isLike ? "" : "un-active"}
+              onClick={likeEvent}
+            >
+              {isLike ? (
+                <>
+                  <IconHeartFilled className="icon" />찜 해제
+                </>
+              ) : (
+                <>
+                  <IconHeart className="icon" />찜 하기
+                </>
+              )}
             </LikeButton>
           </ProductPurchaseBlock>
         ) : (
-          <Shortcuts to={`/product/${product.id}`}>상품 자세히 보러 가기 &#187;</Shortcuts>
+          <Shortcuts to={`/product/${product.id}`}>
+            상품 자세히 보러 가기 &#187;
+          </Shortcuts>
         )}
       </div>
     </ProductCardContainer>
@@ -74,13 +98,27 @@ const ProductCardContainer = styled.div<{ $summary: boolean }>`
       return css`
         position: absolute;
         top: 0px;
-        height: 100%;
+        min-height: 100%;
         width: 100%;
         left: 1rem;
         background: #f7f7f7;
         border: 1px solid #d9d9d9;
         padding: 2rem 0rem;
         z-index: 1;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        ${ProductMakeInfo} {
+          font-size: 0.875rem;
+        }
+        ${ProductName} {
+          font-size: 2rem;
+          margin: 0rem 0rem 0.5rem 0rem;
+        }
+        ${ProductTag} {
+          font-size: 1rem;
+        }
+        ${ProductPrice} {
+          font-size: 1.5rem;
+        }
       `;
     }
     return ``;
@@ -100,11 +138,13 @@ const ProductSub = styled.div`
   // flex: 1;
   cursor: pointer;
   padding: 0.25rem;
+  flex: 0 0 33.33333%;
+  max-width: 33.33333%;
 `;
 const SubImageList = styled.div`
   width: 100%;
   display: flex;
-  gap: 1rem;
+  justify-content: start;
 `;
 
 const ProductMakeInfo = styled.p`
@@ -119,6 +159,7 @@ const ProductTag = styled.span`
   font-size: 1.25rem;
   color: ${({ theme }) => theme.colors.primary};
   margin-right: 0.5rem;
+  // display: inline-flex;
 `;
 const ProductPrice = styled.p`
   font-size: 2rem;
@@ -167,6 +208,11 @@ const BuyButton = styled(PrimaryButton)`
 `;
 const LikeButton = styled(LightButton)`
   ${ProductButtonStyle}
+  color: rgb(131 171 130);
+  background: rgb(225 229 225);
+  &.un-active {
+    color: rgb(56 100 55);
+  }
 `;
 
 const Shortcuts = styled(Link)`
