@@ -37,7 +37,7 @@ How about using **DESK-IT**? We offer the following services.
   <img width="600" alt="김동원" src="https://github.com/kookmin-sw/capstone-2023-06/assets/63653473/054fe8cf-bfad-4d7e-ad99-91ba4f166dc5">
 </p>
 <p align="center">
-	<a href="www.desksetup.kr">DESK-IT 홈페이지 바로가기</a>   👈  
+	<a href="https://www.desksetup.kr">DESK-IT 홈페이지 바로가기</a>   👈  
 </p>
  
 1. 회원가입 먼저 하기!
