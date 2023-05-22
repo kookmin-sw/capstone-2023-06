@@ -25,12 +25,12 @@ How about using **DESK-IT**? We offer the following services.
 3. Access to product purchase pages directly from other user's posts
 > **We respect your personal space and taste**
 
-<br></br>
+<br>
 
 ## 📹 DESK-IT 소개 영상
 현재는 공란입니다.
 
-<br></br>
+<br>
 
 ## 🖥️ DESK-IT을 사용해보시겠어요?
 <p align="center">
@@ -45,7 +45,7 @@ How about using **DESK-IT**? We offer the following services.
 3. 스타일링에서 상품태그로 상품 둘러보기!
 4. 좋으면 좋아요 / 팔로우 / 댓글 달아보기~!
 5. 이제 데스크셋업에 관심이 생겼으면 실제로 자신의 데스크셋업 환경 공유해보기!
-<br></br>
+<br>
 
 ## 😎 DESK-IT은 이렇게 구현되었습니다
 ### **회의록**
@@ -69,7 +69,7 @@ How about using **DESK-IT**? We offer the following services.
 ### **MORE INFO** 
 [클라이언트](./client/README.md) / [서버](./server/README.md)
 
-<br></br>
+<br>
 
 ## 🏃 올바른 데스크셋업 문화에 앞장서는 사람들
 <table>
