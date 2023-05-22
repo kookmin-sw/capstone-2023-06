@@ -66,6 +66,9 @@ How about using **DESK-IT**? We offer the following services.
   <img width="600" alt="김동원" src="https://github.com/kookmin-sw/capstone-2023-06/assets/63653473/123fb7be-b9dd-4eb6-85c6-e11193f86bac">
 </p>
 
+### ***MORE INFO*** 
+[클라이언트](./client/README.md) / [서버](./server/README.md)
+
 <br></br>
 
 ## 🏃 올바른 데스크셋업 문화에 앞장서는 사람들
