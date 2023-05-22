@@ -50,11 +50,11 @@ How about using **DESK-IT**? We offer the following services.
 ## 😎 DESK-IT은 이렇게 구현되었습니다
 ### **회의록**
 [회의록 Notion 링크](https://square-sofa-e3a.notion.site/b3b6dbf7fa234e43a980e02b94505041)
-### **Use Case***
+### **Use Case**
 [Use Case Notion 링크](https://square-sofa-e3a.notion.site/27ad05f3ebee4642bffeb4bcd72e5893?v=a7c26388b8154cbc8d7fdd4691685f86)
 ### **API 명세서**
 [API 명세서 Notion 링크](https://www.notion.so/fb921d7c18614c73920192bbb75a901f?v=7d524c33f6a24b0c88da61775e97832a&pvs=4)
-### ***디자인 초안***
+### **디자인 초안**
 [디자인 시안 Figma 링크](https://www.figma.com/file/LP7koYF9nmX3Mi85ya40hq/Untitled?type=design&node-id=0-1&t=AspoVeWXeWfDdd4h-0)
 ### **ERD**
 <p align="center">
@@ -66,7 +66,7 @@ How about using **DESK-IT**? We offer the following services.
   <img width="600" alt="김동원" src="https://github.com/kookmin-sw/capstone-2023-06/assets/63653473/123fb7be-b9dd-4eb6-85c6-e11193f86bac">
 </p>
 
-### ***MORE INFO*** 
+### **MORE INFO** 
 [클라이언트](./client/README.md) / [서버](./server/README.md)
 
 <br></br>
