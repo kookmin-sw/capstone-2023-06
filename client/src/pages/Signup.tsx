@@ -5,6 +5,7 @@ import { LoginLayout } from '../components/layout/Layout';
 import { ExtraLinkButton, SubmitButton } from '../components/common/Button';
 import { LoginInput } from '../components/common/Input';
 import { signup } from '../api/users'; // Assuming your signup API function is exported from ./api
+import logo from '../../src/assets/DESKIT.png';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -35,7 +36,9 @@ const Signup = () => {
 
     return (
         <LoginLayout>
-          <Link to="/">홈(이미지)</Link>
+          <Link to="/">
+            <img src={logo} alt="logo" width={130} height={40}/>
+          </Link>
           <form onSubmit={submitSignup} method="post">
             <section>
               <LoginInput id="name" name="name" type="text" autoComplete="name" placeholder="이름" onChange={(e) => setName(e.target.value)} required autoFocus />

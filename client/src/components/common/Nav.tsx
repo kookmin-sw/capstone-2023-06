@@ -7,7 +7,7 @@ export const NavBar = ({ children } : { children: React.ReactNode}) => {
     return (
         <NavBarStyle>
             <Link to="/">
-              <img src={logo} alt="logo" width={130} height={40}/>
+              <img src={logo} alt="logo" width={130} height={45}/>
             </Link>
             <NavBarCollapse>
                 { children }

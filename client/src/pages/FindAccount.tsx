@@ -1,28 +1,49 @@
-import React from 'react';
-
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { LoginLayout } from '../components/layout/Layout';
 import { ExtraLinkButton, SubmitButton, SwapButton } from '../components/common/Button';
 import { LoginInput } from '../components/common/Input';
+import logo from '../../src/assets/DESKIT.png';
+import { Alert } from '../components/auth/FindAccount.styles';
+
 
 const FindPassword = () => {
-  const [email, setEmail] = React.useState<string>("");
-  const [userID, setUserID] = React.useState<string>("");
-  const [showFindID, setShowFindID] = React.useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [userID, setUserID] = useState<string>("");
+  const [showFindID, setShowFindID] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+      navigate('/');
+    }, 10000);
+  }, []);
 
   const submitFindPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log(email, userID);
   };
 
   const submitFindID = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log(email);
   };
 
   return (
     <LoginLayout>
-      <Link to="/">홈(이미지)</Link>
+      {showAlert && (
+        <Link to="/">
+          <Alert>
+            <h2>OPPS!!</h2>
+            <p>아직 지원되지 않는 서비스입니다.</p>
+          </Alert>
+        </Link>
+      )}
+      <Link to="/">
+        <img src={logo} alt="logo" width={130} height={40}/>
+      </Link>
       {!showFindID ? (
         <form onSubmit={submitFindPassword} method="post">
           <section>
