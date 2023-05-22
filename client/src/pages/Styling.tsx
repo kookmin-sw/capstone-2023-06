@@ -14,7 +14,7 @@ type PostType = {
     authorNickname: string;
     author_id: string;
     authorEmail: string;
-    authorImagep: string;
+    authorPicture: string;
     createdAt: string;
     hashtags: string;
 };
@@ -55,6 +55,7 @@ const Styling: React.FC<StylingProps> = () => {
             if (res.result.length < limit) {
                 setIsDataEnd(true);
             }
+            console.log(res);
             setPostList(prevPosts => [
                 ...prevPosts,
                 ...res.result.map((post: PostType) => ({
@@ -65,7 +66,7 @@ const Styling: React.FC<StylingProps> = () => {
                         nickname: post.authorNickname,
                         id: post.author_id,
                         email: post.authorEmail,
-                        img: post.authorImagep,
+                        image: post.authorPicture,
                     },
                     date: post.createdAt,
                     tags: post.hashtags,

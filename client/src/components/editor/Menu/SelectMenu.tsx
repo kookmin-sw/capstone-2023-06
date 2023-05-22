@@ -76,6 +76,11 @@ export const EditMenu = ({ posX, posY, onClickHandler } : EditMenuProps) => {
         }
     ];
 
+    const handleKeyPress = (event: any) => {
+        console.log('asfasdf');
+        event.preventDefault();
+      };
+    
     return (
         <EditMenuBlock
             posX={posX}
@@ -90,6 +95,7 @@ export const EditMenu = ({ posX, posY, onClickHandler } : EditMenuProps) => {
                                 e.preventDefault();
                                 onClickHandler(m.ret);
                             }}
+                            onKeyDown={handleKeyPress}
                         >
                             { m.icon }
                             { m.text }

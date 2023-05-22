@@ -10,7 +10,7 @@ type ProductType = {
   authorNickname: string;
   author_id: string;
   authorEmail: string;
-  authorImagep: string;
+  authorImage: string;
   createdAt: string;
   hashtags: string;
 };
@@ -31,7 +31,7 @@ const InitProductList = ({ type }: { type: "user" | "date" | "like" }) => {
               nickname: product.authorNickname,
               id: product.author_id,
               email: product.authorEmail,
-              img: product.authorImagep,
+              img: product.authorImage,
             },
             date: product.createdAt,
             tags: product.hashtags,

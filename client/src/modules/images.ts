@@ -79,6 +79,7 @@ function editor(
     // return [...state];
 
     case NEW_IMAGE:
+      if (state[action.id]) return {...state};
       return {
         ...state,
         [action.id]: {
@@ -142,7 +143,9 @@ function editor(
       newState = { ...state };
       newState[action.id].src = action.payload;
       return { ...newState };
+
     case REMOVE_IMAGE:
+      if (state[action.id]) return {...state};
       return omit(state, action.id);
     // delete state[action.id];
     // return { ...state };

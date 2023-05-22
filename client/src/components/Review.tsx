@@ -33,7 +33,7 @@ const Review = ({ id, thumbnail, title, author, date, tags }: ReviewType) => {
 export default Review;
 
 const ReviewCard = styled.div`
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
     .user-name {
         font-size: 0.675rem;
         font-weight: 400;
@@ -55,13 +55,15 @@ const ReviewThumbnail = styled.img`
     height: 10rem;
     object-fit: cover;
     border-radius: 1rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 `;
 const ReviewTags = styled.span`
     color: ${({ theme }) => theme.colors.primary};
     font-size: 0.75rem;
+    display: inline-flex;
 `;
 const ReviewTitle = styled.h3`
     font-size: 1.375rem;
-    color: black;
+    color: rgb(90 90 90);
     margin-bottom: 0.25rem;
 `;

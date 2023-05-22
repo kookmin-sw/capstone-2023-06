@@ -6,14 +6,16 @@ import EditLineBlock from './LineBlock/EditLineBlock';
 import EditMenu from './Menu/SelectMenu';
 import Dragond from './Dragond/Dragond';
 
-import { List as MovableContainer , arrayMove } from 'react-movable';
+import { List as MovableContainer, arrayMove } from 'react-movable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
 import { changeTag, newLine, updateContent } from '../../modules/editor';
+import { resetImages } from '../../modules/images';
 
 export const EditorContainer = styled.div`
     font-size: 1.25rem;
+    color: #565353;
     // padding: 1rem 1rem 0rem 1rem;
 `;
 
@@ -32,18 +34,23 @@ const Editor = () => {
     // 선의 속성을 변경 시켜줄 메뉴 state
     const [openMenu, setOpenMenu] = React.useState<boolean>(false);
     const [curTargetId, setCurTargetId] = React.useState<string>('');
-    const [menuPos, setMenuPos] =  React.useState<POSITION>({ posX: 0, posY: 0 });
+    const [menuPos, setMenuPos] = React.useState<POSITION>({ posX: 0, posY: 0 });
 
     // Dragond(드래그 후 띄워줄 수정 메뉴) state
     const [openDragond, setOpenDragond] = React.useState<boolean>(false);
     const [dragondPos, setDragondPos] = React.useState<POSITION>({ posX: 0, posY: 0 });
+
+    React.useEffect(() => {
+        dispatch(resetImages({}));
+    }, []);
+
 
     function changeCurLine(id: string, posX?: number, posY?: number) {
         if (openMenu)
             return;
 
         if (posX !== undefined && posY !== undefined)
-            setMenuPos({posX, posY});
+            setMenuPos({ posX, posY });
         setCurTargetId(id);
     }
 
@@ -53,7 +60,7 @@ const Editor = () => {
 
     function mouseDown(_e: React.MouseEvent<HTMLDivElement>) {
         // e.preventDefault();
-        
+
         window.getSelection()?.removeAllRanges();
     }
 
@@ -67,16 +74,16 @@ const Editor = () => {
         }
 
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-    
+
         let selectionRect = sel.getRangeAt(0).getBoundingClientRect();
         const posX = selectionRect.x +
-                        (selectionRect.right - selectionRect.left) / 2 +
-                        0;      // offset 값
+            (selectionRect.right - selectionRect.left) / 2 +
+            0;      // offset 값
         const posY = selectionRect.bottom +
-                        scrollTop +
-                        16;     // offset 값
+            scrollTop +
+            16;     // offset 값
 
-        setDragondPos({posX, posY});
+        setDragondPos({ posX, posY });
         setOpenDragond(true);
 
         console.log(document.queryCommandState('createLink'));
@@ -114,7 +121,7 @@ const Editor = () => {
                 lockVertically
                 values={content}
                 onChange={({ oldIndex, newIndex }) => {
-                    return dispatch(updateContent( arrayMove(content, oldIndex, newIndex) ))
+                    return dispatch(updateContent(arrayMove(content, oldIndex, newIndex)))
                 }}
                 renderList={({ children, props, isDragged }) => (
                     <EditorContainer onMouseDown={mouseDown} onMouseUp={mouseUp}
@@ -132,9 +139,9 @@ const Editor = () => {
                         setOpenMenu={setOpenMenu}
                         changeCurLine={changeCurLine}
                         style={{
-                          ...props.style,
-                          marginTop: '10px',
-                          marginBottom: '10px',
+                            ...props.style,
+                            marginTop: '10px',
+                            marginBottom: '10px',
                         }}
                     ></EditLineBlock>
                 )}
@@ -144,11 +151,11 @@ const Editor = () => {
                 onClick={() => { dispatch(newLine()); }}
             />
 
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
         </>
     )
 }

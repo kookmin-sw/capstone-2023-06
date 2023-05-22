@@ -21,7 +21,7 @@ const Signup = () => {
     }
     try {
       const response = await signup({
-        nickname: name, password: password, email: email, pickture: 'https://deskit-bucket-1.s3.ap-northeast-2.amazonaws.com/base/logo_square.png'
+        nickname: name, password: password, email: email, picture: 'https://deskit-bucket-1.s3.ap-northeast-2.amazonaws.com/base/logo_square.png'
       });
       if (response.success) {
         navigate('/login');

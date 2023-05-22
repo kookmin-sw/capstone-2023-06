@@ -286,7 +286,11 @@ const NoneDataCol = styled.div`
   color: #aaa;
   min-height: 10rem;
   border-radius: 0.5rem;
-  margin: 0rem 1rem;
+  margin: 0rem;
+  
+  ${({ theme }) => theme.devices.tablet} {
+    // margin: 0rem 1rem;
+  }
 `;
 
 const InputImageButton = styled.button`

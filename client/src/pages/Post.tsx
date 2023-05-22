@@ -240,6 +240,8 @@ const PostDate = styled.p`
 const Content = styled.div`
   font-size: 1.25rem;
   padding-bottom: 10rem;
+  
+  color: #565353;
   // padding: 1rem;
 `;
 

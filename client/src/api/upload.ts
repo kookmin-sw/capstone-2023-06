@@ -191,12 +191,10 @@ export const getComments = async (id: string) => {
  */
 export const postComments = async (
   id: string,
-  parent: number | null,
   comment: string
 ) => {
   try {
     const res = await uploadAPI.post(`/${id}/comment`, {
-      parent,
       comment,
     });
     return res.data;
