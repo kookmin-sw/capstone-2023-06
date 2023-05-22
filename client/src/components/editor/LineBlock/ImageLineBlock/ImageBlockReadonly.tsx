@@ -114,6 +114,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
     price: "",
     detail: "",
     content: "",
+    brand: "",
   });
 
   const initProduct = async (product_id: string) => {
@@ -132,6 +133,7 @@ const ImageBlockReadonly = ({ id }: { id: string }) => {
           price: res.result.price,
           detail: res.result.description,
           content: res.result.content,
+          brand: res.result.authorNickname,
         });
       }
     } catch (err) {

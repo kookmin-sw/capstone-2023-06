@@ -59,6 +59,7 @@ const ReviewThumbnail = styled.img`
 const ReviewTags = styled.span`
     color: ${({ theme }) => theme.colors.primary};
     font-size: 0.75rem;
+    display: inline-flex;
 `;
 const ReviewTitle = styled.h3`
     font-size: 1.375rem;

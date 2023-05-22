@@ -68,7 +68,7 @@ export const logout = async () => {
 
 type UserSignupData = UserLoginData & {
   nickname: string;
-  pickture: string;
+  picture: string;
 };
 /**
  * 회원가입

@@ -16,20 +16,29 @@ const ProductCard = ({
   likeEvent?: any;
   isLike?: boolean;
 }) => {
+
+  const subHandler = (idx: number) => {
+    // const temp = product.subThumbnail;
+    // temp[idx] = product.thumbnail;
+    // setThumbnail(src);
+    // setSubThumbnail()
+  }
+
+
   return (
     <ProductCardContainer className="row" $summary={summary}>
       <div className="col-lg-6">
         <ProductImage src={product.thumbnail} alt=" " />
         <SubImageList>
           {product.subThumbnail.map((s, idx) => (
-            <ProductSub key={`sT-${idx}`}>
+            <ProductSub key={`sT-${idx}`} onClick={() => subHandler(idx)}>
               <ProductImage src={s} className="sub" />
             </ProductSub>
           ))}
         </SubImageList>
       </div>
       <div className="col-lg-6">
-        <ProductMakeInfo>제조사명 | 브랜드명명 | 등록일</ProductMakeInfo>
+        <ProductMakeInfo>{product.brand}</ProductMakeInfo>
         <ProductName>{product.name}</ProductName>
         {product.tags.map((tag) => (
           <ProductTag key={tag}>#{tag}</ProductTag>
@@ -88,7 +97,8 @@ const ProductImage = styled.img`
   }
 `;
 const ProductSub = styled.div`
-  flex: 1;
+  // flex: 1;
+  cursor: pointer;
   padding: 0.25rem;
 `;
 const SubImageList = styled.div`

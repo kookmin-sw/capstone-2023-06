@@ -9,7 +9,7 @@ type PostType = {
   authorNickname: string;
   author_id: string;
   authorEmail: string;
-  authorImagep: string;
+  authorImage: string;
   createdAt: string;
   hashtags: string;
 };
@@ -29,7 +29,7 @@ const InitPostList = ({ type }: { type: "user" | "date" | "like" }) => {
               nickname: post.authorNickname,
               id: post.author_id,
               email: post.authorEmail,
-              img: post.authorImagep,
+              img: post.authorImage,
             },
             date: post.createdAt,
             tags: post.hashtags,

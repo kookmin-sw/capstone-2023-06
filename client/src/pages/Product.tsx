@@ -35,6 +35,7 @@ const Product = () => {
     price: "",
     detail: "",
     content: "",
+    brand: "",
   });
   const [comments, setComments] = React.useState<CommentData[]>([]);
   const [reviews, setReviews] = React.useState<ReviewType[]>([]);
@@ -60,6 +61,8 @@ const Product = () => {
       const res = await getProduct(product_id);
 
       if (res.success) {
+        console.log(res);
+
         setProduct({
           name: res.result.title,
           tags: res.result.hashtags,
@@ -68,6 +71,7 @@ const Product = () => {
           price: res.result.price,
           detail: res.result.description,
           content: res.result.content,
+          brand: res.result.authorNickname,
         });
       }
     } catch (err) {
@@ -235,7 +239,7 @@ const ProductHeader = styled.div`
 const ProductNav = styled.div`
   display: flex;
 `;
-const ProductNavItem = styled(Link)<{ $active: boolean }>`
+const ProductNavItem = styled(Link) <{ $active: boolean }>`
   flex: 1;
   padding: 1rem;
   margin-bottom: 3rem;

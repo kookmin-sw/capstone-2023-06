@@ -50,6 +50,7 @@ const ProductCard = styled.div`
 const ProductTags = styled.span`
     color: ${({ theme }) => theme.colors.primary};
     font-size: 0.75rem;
+    display: inline-flex;
 `;
 const ProductThumbnail = styled.img`
   width: 100%;

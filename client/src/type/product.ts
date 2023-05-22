@@ -9,6 +9,7 @@ export type ProductData = {
   detail: string;
   price: string;
   content: string;
+  brand: string;
 };
 
 export type CommentData = {
