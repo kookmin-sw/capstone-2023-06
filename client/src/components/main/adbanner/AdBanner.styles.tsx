@@ -14,6 +14,7 @@ export const Slide = styled.div`
   width: 100%;
   height: 100%;
   transition: opacity 1s ease-in-out;
+  border-radius: 0px 0px 15px 15px;
 `;
 
 export const SlideIndicatorWrapper = styled.div`

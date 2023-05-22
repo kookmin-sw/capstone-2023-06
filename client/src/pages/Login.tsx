@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../api/users'; 
 import { ExtraLinkButton, SubmitButton } from '../components/common/Button';
 import { LoginInput } from '../components/common/Input';
+import logo from '../../src/assets/DESKIT.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,16 +23,20 @@ const Login = () => {
       if (res.success) {
         navigate('/');
       } else {
-        setAlertMessage(res.message); // Set the alert message if login fails
+        setAlertMessage(res.message); 
+        console.log("asdfasdfasdf");
       }
     } catch (err) {
+      alert('아이디 또는 비밀번호가 일치하지 않습니다.');
       console.error(err);
     }
   };
 
   return (
     <LoginLayout>
-      <Link to="/">홈(이미지)</Link>
+      <Link to="/">
+        <img src={logo} alt="logo" width={130} height={40}/>
+      </Link>
       <form onSubmit={submitLogin} method="post">
         <section>
           <LoginInput id="username" name="username" type="text" autoComplete="username" onChange={(e) => setEmail(e.target.value)} required autoFocus />
