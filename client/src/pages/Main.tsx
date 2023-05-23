@@ -105,10 +105,10 @@ const Main = () => {
       <AdBanner />
       {/* <TagScroller/> */}
       <div style={{ marginBottom: "3rem" }}></div>
-      <SubHeader style={{ color: "#386437" }}>추천 게시물
+      <SubHeader style={{ color: "#386437" }}>추천 스타일링
         <MoreLink to="/styling?type=user">더보기</MoreLink>
       </SubHeader>
-      <h5>당신을 위한 추천 게시물</h5>
+      <h5>당신을 위한 추천 스타일링</h5>
       <div style={{ marginBottom: "1rem" }}></div>
       <div className="row">
         {recommendPost?.map((post, index) => (
@@ -120,10 +120,10 @@ const Main = () => {
 
 
       <div style={{ marginBottom: "3rem" }}></div>
-      <SubHeader style={{ color: "#386437" }}>인기 게시물
+      <SubHeader style={{ color: "#386437" }}>인기 스타일링
         <MoreLink to="/styling?type=like">더보기</MoreLink>
       </SubHeader>
-      <h5>지금 인기있는 게시물</h5>
+      <h5>지금 인기있는 스타일링</h5>
       <div style={{ marginBottom: "1rem" }}></div>
       <div className="row">
         {popularPost?.map((post, index) => (
@@ -135,10 +135,10 @@ const Main = () => {
 
 
       <div style={{ marginBottom: "3rem" }}></div>
-      <SubHeader style={{ color: "#386437" }}>최신 게시물
+      <SubHeader style={{ color: "#386437" }}>최신 스타일링
         <MoreLink to="/styling?type=date">더보기</MoreLink>
       </SubHeader>
-      <h5>따끈따끈, 최근에 작성된 게시물</h5>
+      <h5>따끈따끈, 최근에 작성된 스타일링</h5>
       <div style={{ marginBottom: "1rem" }}></div>
       <div className="row">
         {celebPost?.map((post, index) => (

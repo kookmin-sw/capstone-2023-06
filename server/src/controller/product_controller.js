@@ -342,7 +342,7 @@ exports.getReviews = async (req, res) => {
                 });
             }
         }
-        sendResult(res, "상품 리뷰 조회", reviewList);
+        sendResult(res, "상품 스타일링 조회", reviewList);
         return;
     } catch (err) {
         console.error(err);

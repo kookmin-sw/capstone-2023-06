@@ -199,7 +199,7 @@ const User = () => {
         <p>{user?.email}</p>
       </UserCard>
       <PostWrapper>
-        <h2>작성 리뷰</h2>
+        <h2>작성 스타일링</h2>
         <div className="row">
           {reviews && reviews.length > 0 ? (
             reviews.map((review, index) => (

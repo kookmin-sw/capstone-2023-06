@@ -211,7 +211,7 @@ const Product = () => {
           제품 상세 정보
         </ProductNavItem>
         <ProductNavItem to="#review" $active={hash === "#review"}>
-          리뷰 {reviews.length}개
+          스타일링 {reviews.length}개
         </ProductNavItem>
         <ProductNavItem to="#comment" $active={hash === "#comment"}>
           댓글 {comments.length}개
