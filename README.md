@@ -32,9 +32,8 @@ How about using **DESK-IT**? We offer the following services.
 <br>
 
 ## 🖥️ DESK-IT을 사용해보시겠어요?
-<p align="center">
-  <img width="600" alt="김동원" src="https://github.com/kookmin-sw/capstone-2023-06/assets/63653473/054fe8cf-bfad-4d7e-ad99-91ba4f166dc5">
-</p>
+[![Video Lavel](https://img.youtube.com/vi/3H6TQfn8TNo/0.jpg)](https://youtu.be/3H6TQfn8TNo)
+
 <p align="center">
 	<a href="https://www.desksetup.kr">DESK-IT 홈페이지 바로가기</a>   👈  
 </p>
