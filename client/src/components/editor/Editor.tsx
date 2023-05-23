@@ -10,7 +10,7 @@ import { List as MovableContainer, arrayMove } from 'react-movable';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
-import { changeTag, newLine, updateContent } from '../../modules/editor';
+import { changeTag, newLine, resetContent, updateContent } from '../../modules/editor';
 import { resetImages } from '../../modules/images';
 
 export const EditorContainer = styled.div`
@@ -42,6 +42,7 @@ const Editor = () => {
 
     React.useEffect(() => {
         dispatch(resetImages({}));
+        dispatch(resetContent());
     }, []);
 
 

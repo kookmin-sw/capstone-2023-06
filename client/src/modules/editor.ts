@@ -1,6 +1,7 @@
 import { ElementType } from "react";
 import { LINE_TYPE } from "../components/editor/type";
 import { generateRandomID } from "../utils/randomID";
+import { Console } from "console";
 
 const UPDATE_HTML = `editor/UPDATE_HTML` as const;
 const CHANGE_TAG = `editor/CHANGE_TAG` as const;
@@ -8,6 +9,7 @@ const ADD_LINE = `editor/ADD_LINE` as const;
 const NEW_LINE = `editor/NEW_LINE` as const;
 const REMOVE_LINE = `editor/REMOVE_LINE` as const;
 const UPDATE_CONTENT = `editor/UPDATE_CONTENT` as const;
+const RESET_CONTENT = `editor/RESET_CONTENT` as const;
 
 export const updateHtml = (id:string, content: string) => ({
     type: UPDATE_HTML,
@@ -37,6 +39,9 @@ export const updateContent = (state: LINE_TYPE[]) => ({
     type: UPDATE_CONTENT,
     payload: state,
 });
+export const resetContent = () => ({
+    type: RESET_CONTENT
+});
 
 type EditorAction = 
     | ReturnType<typeof updateHtml>
@@ -44,7 +49,8 @@ type EditorAction =
     | ReturnType<typeof addLine>
     | ReturnType<typeof newLine>
     | ReturnType<typeof removeLine>
-    | ReturnType<typeof updateContent>;
+    | ReturnType<typeof updateContent>
+    | ReturnType<typeof resetContent>;
 
 const initState: LINE_TYPE = {
     id: generateRandomID(),
@@ -106,6 +112,9 @@ function editor(
 
         case UPDATE_CONTENT:
             return [...action.payload];
+
+        case RESET_CONTENT:
+            return [];
 
         default:
             return state;
