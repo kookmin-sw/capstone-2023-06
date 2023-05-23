@@ -28,12 +28,14 @@ How about using **DESK-IT**? We offer the following services.
 <br>
 
 ## 📹 DESK-IT 소개 영상
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3H6TQfn8TNo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+[![Video Lavel](https://img.youtube.com/vi/3H6TQfn8TNo/0.jpg)](https://youtu.be/3H6TQfn8TNo)
+
 <br>
 
 ## 🖥️ DESK-IT을 사용해보시겠어요?
-[![Video Lavel](https://img.youtube.com/vi/3H6TQfn8TNo/0.jpg)](https://youtu.be/3H6TQfn8TNo)
-
+<p align="center">
+  <img width="600" alt="김동원" src="https://github.com/kookmin-sw/capstone-2023-06/assets/63653473/054fe8cf-bfad-4d7e-ad99-91ba4f166dc5">
+</p>
 <p align="center">
 	<a href="https://www.desksetup.kr">DESK-IT 홈페이지 바로가기</a>   👈  
 </p>
