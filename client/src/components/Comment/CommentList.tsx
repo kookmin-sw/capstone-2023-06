@@ -48,8 +48,7 @@ const CommentList = ({
     }
 
     try {
-      if (product_id)
-        var res = await productComments(product_id, commentInput);
+      if (product_id) var res = await productComments(product_id, commentInput);
       else if (post_id) res = await postComments(post_id, commentInput);
       else return;
 
@@ -69,7 +68,8 @@ const CommentList = ({
 
   return (
     <CommentListStyled fluid={fluid}>
-      {isLoggedIn && (
+      <HR />
+      {isLoggedIn ? (
         <CommentForm onSubmit={submitComment} method="post">
           <Profile profileID={id} marginright="1.5rem" size={4} img={image} />
           <CommentInput
@@ -79,6 +79,15 @@ const CommentList = ({
           />
           <Button type="submit">작성</Button>
         </CommentForm>
+      ) : (
+        <>
+          <CommentInput
+            placeholder="댓글을 남기기위해 로그인이 필요합니다."
+            disabled
+          />
+          <br />
+          <br />
+        </>
       )}
       {comments.map((comment, idx) => (
         <Comment key={`c-${idx}`} {...comment} />
@@ -110,5 +119,16 @@ const CommentForm = styled.form`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: 3rem 0rem;
+  margin: 3rem 0rem 4rem 0rem;
+`;
+
+const HR = styled.hr`
+  --content: "</>";
+  text-align: center;
+  overflow: visible;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  padding: 0;
+  border: none;
+  border-top: 1px solid var(--border-color, #dcdcdc);
 `;
