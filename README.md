@@ -28,9 +28,7 @@ How about using **DESK-IT**? We offer the following services.
 <br>
 
 ## 📹 DESK-IT 소개 영상
-<p align="center">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/3H6TQfn8TNo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3H6TQfn8TNo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 <br>
 
 ## 🖥️ DESK-IT을 사용해보시겠어요?
