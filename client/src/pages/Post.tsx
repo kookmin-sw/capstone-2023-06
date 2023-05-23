@@ -19,6 +19,7 @@ import CommentList from "../components/Comment/CommentList";
 import { UserData } from "../type/user";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { RootState } from "../modules";
+import { getFollowerList } from "../api/users";
 // import { Line } from "../components/editor/LineBlock/EditLineBlock";
 // import { ImagesObjectType } from "../modules/images";
 
@@ -46,6 +47,7 @@ const Post = () => {
   const [comments, setComments] = React.useState<CommentData[]>([]);
   const [cntFollow, setCntFollow] = React.useState<number>(0);
   const [isFollowing, setIsFollowing] = React.useState<boolean>();
+  const [cntUserFollow, setCntUserFollow] = React.useState<number>(0);
 
   React.useEffect(() => {
     initPost();
@@ -70,7 +72,13 @@ const Post = () => {
           image: res.result.authorImage,
           email: res.result.authorEmail,
         });
+
         dispatch(resetImages(res.result.content.images));
+              
+        const userRes = await getFollowerList(res.result.author_id);
+        if (userRes.success) {
+          setCntUserFollow(userRes.result.length);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -165,7 +173,7 @@ const Post = () => {
                 profileID={author?.id}
                 nickname={author?.nickname}
                 activeFollow
-                subContent={`${3} 팔로워`}
+                subContent={`${cntUserFollow} 팔로워`}
                 marginright="1rem"
                 img={author?.image}
               ></ProfileBar>
