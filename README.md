@@ -1,3 +1,4 @@
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=10390430&assignment_repo_type=AssignmentRepo)
 # 캡스톤 디자인 6조 - DESK-IT
 <p align="center">
   <img width="300" alt="김동원" src="https://github.com/kookmin-sw/capstone-2023-06/assets/63653473/45a59c38-ad41-4a95-bf2c-cd460c9b5206">
